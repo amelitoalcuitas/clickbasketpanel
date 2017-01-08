@@ -497,11 +497,16 @@
       });
   }
 
+  $("#viewSubCat").on("shon.bs.modal", function () {
+    var id = $('#viewSubCat').attr('data-id');
+  });
+
   $("#viewSubCat").on("hidden.bs.modal", function () {
     $('#subCategoryTable').DataTable().clear().draw();
   });
 
   $("#addSubCategory").on("hidden.bs.modal", function () {
+    $('#subcatName').val('');
     $('#errorsubCat').html('<br>');
   });
 

@@ -173,7 +173,6 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-target="#viewSubCat" data-toggle="modal" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Add New Sub-category</h4>
       </div>
       <div class="modal-body">
