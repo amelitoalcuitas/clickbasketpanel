@@ -12,7 +12,7 @@ class Login extends CI_Controller {
 	public function index(){
 
 		if($this->session->userdata('logged_in') == TRUE && $this->session->userdata('restriction')=='superadmin') {
-			redirect('pagescontroller');
+			redirect('admin');
 		} else if($this->session->userdata('logged_in') == TRUE && $this->session->userdata('restriction')=='admin') {
 
 			redirect('vendor');

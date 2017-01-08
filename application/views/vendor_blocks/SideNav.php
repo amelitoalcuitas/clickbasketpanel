@@ -39,18 +39,18 @@
                      <li <?php if ($page == 'four' || $page == 'five' || $page =='six' || $page == 'categ') { echo 'class = "active"';}?> >
                         <a   href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">shop</i>
-                            <span>Product</span>
+                            <span>Products</span>
                         </a>
                         <ul class="ml-menu">
-                            <li  <?php if ($page == 'four') { echo 'class = "active"';} ?> >
-                                <a href="<?php echo site_url('vendor/viewproduct') ?>">View Products</a>
-                            </li>
-                            <li  <?php if ($page == 'categ') { echo 'class = "active"';} ?> >
-                                <a href="<?php echo site_url('vendor/viewcategories') ?>">View Categories</a>
-                            </li>
-                            <li  <?php if ($page == 'five') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('vendor/addproduct') ?>">Add New Product</a>
-                            </li>
+                          <li  <?php if ($page == 'five') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('vendor/addproduct') ?>">Add New Product</a>
+                          </li>
+                          <li  <?php if ($page == 'four') { echo 'class = "active"';} ?> >
+                              <a href="<?php echo site_url('vendor/viewproduct') ?>">View Products</a>
+                          </li>
+                          <li  <?php if ($page == 'categ') { echo 'class = "active"';} ?> >
+                              <a href="<?php echo site_url('vendor/viewcategories') ?>">View Categories</a>
+                          </li>
                         </ul>
                     </li>
 
@@ -60,16 +60,15 @@
                             <span>Orders</span>
                         </a>
                         <ul class="ml-menu">
-                            <li  <?php if ($page == 'seven') { echo 'class = "active"';} ?> >
-                                <a href="<?php echo site_url('vendor/viewOrders') ?>">View Orders</a>
-                            </li>
-                            <li  <?php if ($page == 'eight') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('vendor/deliveryStatus') ?>">Delivery Status</a>
-                            </li>
-                            <li  <?php if ($page == 'nine') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('vendor/orderHistory') ?>">Order History</a>
-                            </li>
-
+                          <li  <?php if ($page == 'seven') { echo 'class = "active"';} ?> >
+                              <a href="<?php echo site_url('vendor/viewOrders') ?>">View Orders</a>
+                          </li>
+                          <li  <?php if ($page == 'eight') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('vendor/deliveryStatus') ?>">Delivery Status</a>
+                          </li>
+                          <li  <?php if ($page == 'nine') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('vendor/orderHistory') ?>">Order History</a>
+                          </li>
                         </ul>
                     </li>
 

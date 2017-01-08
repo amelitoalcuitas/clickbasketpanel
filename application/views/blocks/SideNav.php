@@ -30,7 +30,7 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li <?php if ($page == 'one') { echo 'class = "active"';} ?> >
-                        <a  href="<?php echo site_url('pagescontroller/index');?>">
+                        <a  href="<?php echo site_url('admin');?>">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
@@ -42,16 +42,15 @@
                             <span>Vendors</span>
                         </a>
                         <ul class="ml-menu">
-                            <li  <?php if ($page == 'two') { echo 'class = "active"';} ?> >
-                                <a href="<?php echo site_url('pagescontroller/viewvendors');?>">View Vendors</a>
-                            </li>
-                            <li  <?php if ($page == 'three') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('pagescontroller/register');?>">Register Vendor</a>
-                            </li>
-                            <li  <?php if ($page == 'remVen') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('pagescontroller/viewremovedvendors');?>">Removed Vendors</a>
-                            </li>
-
+                          <li  <?php if ($page == 'three') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('admin/register');?>">Register Vendor</a>
+                          </li>
+                          <li  <?php if ($page == 'two') { echo 'class = "active"';} ?> >
+                              <a href="<?php echo site_url('admin/viewvendors');?>">View Vendors</a>
+                          </li>
+                          <li  <?php if ($page == 'remVen') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('admin/removedvendors');?>">Removed Vendors</a>
+                          </li>
                         </ul>
                     </li>
 
@@ -61,16 +60,15 @@
                             <span>Stores</span>
                         </a>
                         <ul class="ml-menu">
-                            <li <?php if ($page == 'four') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('pagescontroller/viewstores');?>">View Stores</a>
-                            </li>
-                            <li <?php if ($page == 'five') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('pagescontroller/storeregister');?>">Add New Store</a>
-                            </li>
-                            <li <?php if ($page == 'remStor') { echo 'class = "active"';} ?>>
-                                <a href="<?php echo site_url('pagescontroller/viewremovedstores');?>">Removed Stores</a>
-                            </li>
-
+                          <li <?php if ($page == 'five') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('admin/addstore');?>">Add Store</a>
+                          </li>
+                          <li <?php if ($page == 'four') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('admin/viewstores');?>">View Stores</a>
+                          </li>
+                          <li <?php if ($page == 'remStor') { echo 'class = "active"';} ?>>
+                              <a href="<?php echo site_url('admin/removedstores');?>">Removed Stores</a>
+                          </li>
                         </ul>
                     </li>
 

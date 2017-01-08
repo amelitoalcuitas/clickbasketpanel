@@ -4,8 +4,7 @@ class RegistrationController extends CI_Controller{
 
 	 protected  $storelistdata;
 
-	public function __construct()
-	{
+	public function __construct(){
 
 		parent::__construct();
 		$this->load->model('vendor');
