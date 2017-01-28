@@ -235,7 +235,7 @@
       $.ajax({
         type: 'post',
         data: {productid:id},
-        url: "deleteProduct",
+        url: "<?php echo base_url("addproductcontroller/deleteProduct"); ?>",
         success: function(result){
           table
             .row($('#product_'+id))
@@ -329,7 +329,7 @@
     $.ajax({
       type: 'post',
       data: {sproductid:sId, productid:id, pname:pname, psubcategory:psubcategory, pquantity:pquantity, pprice:pprice},
-      url: "updateProduct",
+      url: '<?php echo base_url("addproductcontroller/updateProduct"); ?>',
       success: function(result){
         if(result == 'true'){
           table.row($('#product_'+id)).data(myData).draw();
@@ -736,6 +736,49 @@
   </script>
 <!-- SMS SCRIPT END -->
 
+<script type="text/javascript">
+    function editThis(id){
+      $("#cancelbutt_"+id).show();
+      $("#donebutt_"+id).show();
+      $("#input_"+id).show();
+      $("#edit_"+id).hide();
+      $("#text_"+id).hide();
+    }
+
+    function cancelEdit(id){
+      $("#cancelbutt_"+id).hide();
+      $("#donebutt_"+id).hide();
+      $("#input_"+id).hide();
+      $("#edit_"+id).show();
+      $("#text_"+id).show();
+    }
+
+    function doneEdit(id){
+      var input = $('#input_'+id+' input').val();
+      var name = $('#input_'+id+' input').attr('name');
+
+      $.ajax({
+        type: 'POST',
+        url: '<?php echo base_url("registrationcontroller/updateUser") ;?>',
+        data: {input:input, name:name},
+        success: function(){
+          $("#cancelbutt_"+id).hide();
+          $("#donebutt_"+id).hide();
+          $("#input_"+id).hide();
+          $("#edit_"+id).show();
+          $("#text_"+id+" p").html(input);
+          $("#text_"+id).show();
+        }
+      });
+
+      // $("#cancelbutt_"+id).hide();
+      // $("#donebutt_"+id).hide();
+      // $("#input_"+id).hide();
+      // $("#edit_"+id).show();
+      // $("#text_"+id).show();
+    }
+</script>
+
 <!-- NOTIFICATION SCRIPT START -->
 <script>
   $(document).ready(function(){
@@ -765,6 +808,11 @@
       dataType: 'JSON',
       success: function(count){
         $('#notif_count').html(count.length);
+        if(count.length == 0){
+          $('#titleUpdate').html('ClickBasket Panel');
+        }else{
+          $('#titleUpdate').html('ClickBasket Panel (' + count.length +')');
+        }
       }
     });
   }
@@ -780,6 +828,87 @@
   }
 </script>
 <!-- NOTIFICATION SCRIPT END -->
+
+<!-- ORDER STATUS BUTTONS -->
+<script>
+  function changeStatus(id,currStat,stat){
+    $('#butt_'+id).removeClass();
+
+    if(stat == 'pending'){
+      $('#butt_'+id).addClass('btn btn-danger dropdown-toggle');
+    }else if(stat == 'processing'){
+      $('#butt_'+id).addClass('btn btn-primary dropdown-toggle');
+    }else if(stat == 'completed'){
+      $('#butt_'+id).addClass('btn btn-success dropdown-toggle');
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "<?php echo base_url('OrderController/changeOrderStatus'); ?>",
+      data: {id:id, stat:stat},
+      success: function(){
+        $('#butt_'+id).html(stat.toUpperCase() + " <span class='caret'>");
+      }
+    });
+  }
+</script>
+<!-- ORDER STATUS BUTTONS END -->
+
+<!-- EMAIL SCRIPT -->
+<script>
+  function sendEmail(){
+    $.ajax({
+      type: 'POST',
+      url: "<?php echo base_url('emailcontroller/sendEmail'); ?>",
+      data: {test:test},
+      success: function(data){
+        console.log(data);
+      }
+    });
+  }
+</script>
+<!-- EMAIL SCRIPT END -->
+
+<!-- UPLOAD IMAGE -->
+<script>
+  $('#donebutt_0').submit(function(e){
+    e.preventDefault();
+    alert('wew');
+    var filename = $('#uploadImage').val();
+
+    // $.ajax({
+    //   url: '<?= base_url("registrationcontroller/uploadProfPic"); ?>',
+    //   data: {filename:filename},
+    //   type: 'POST',
+    //   success: function(data){
+    //     console.log(data);
+    //   }
+    // });
+
+    // $.ajax({
+		// 	url : '<?= base_url("registrationcontroller/uploadProfPic"); ?>',
+		// //	secureuri :false,
+		// //	fileElementId	:'userfile',
+		// //	dataType : 'json',
+		// 	data : {filename:filename},
+		// 	success	: function (data){
+    //     console.log(data);
+		// 	}
+		// });
+  });
+
+  function PreviewImage() {
+      var oFReader = new FileReader();
+      oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+
+      oFReader.onload = function (oFREvent) {
+          document.getElementById("uploadPreview").src = oFREvent.target.result;
+      };
+  };
+
+</script>
+<!-- UPLOAD IMAGE END -->
+
 
 </body>
 

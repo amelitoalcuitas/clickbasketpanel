@@ -64,6 +64,10 @@ if($this->session->userdata('logged_in')==TRUE)
 			{
 				 $this->load->view('vendor_main_pages/orderhistory');
 			}
+			if($title == 'profile')
+			{
+				 $this->load->view('vendor_main_pages/profile');
+			}
 	 }
 
 }else {

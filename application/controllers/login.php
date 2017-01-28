@@ -39,11 +39,11 @@ class Login extends CI_Controller {
 
 					if ($credentials = $this->vendor->login($name, $pass)) {
 
-
 						if($credentials->restriction == 'admin')
 						{
 
 							$userdata = array('name'=> $credentials->vendor_fname.' '.$credentials->vendor_lname,
+								'vendor_id' => $credentials->vendor_id,
 								'email'=>$credentials->vendor_email,
 								'restriction'=>$credentials->restriction,
 								'store_id'=>$credentials->store_id,
@@ -64,7 +64,7 @@ class Login extends CI_Controller {
 
 							$this->session->set_userdata($userdata);
 
-							redirect('PagesController');
+							redirect('admin');
 						}
 
 
@@ -84,6 +84,28 @@ class Login extends CI_Controller {
 			}else{
 				echo 'failed';
 			}
+	}
+
+	public function changePassword(){
+		$key = $this->input->get('vendor_key');
+		$id = $this->input->get('vendor_id');
+
+		if($this->vendor->check_key($key,$id) == true && $key != NULL){
+			$data['vendorkey'] = $key;
+			$data['vendorid'] = $id;
+
+			$this->load->view('changepass',$data);
+		} else {
+			redirect('login');
+		}
+	}
+
+	public function changePass(){
+		$key = $this->input->post('key');
+		$id = $this->input->post('id');
+		$pass = md5($this->input->post('pass'));
+
+		$this->vendor->change_password($key,$id,$pass);
 	}
 
 }

@@ -33,7 +33,7 @@
     <!-- #END# Search Bar -->
 
     <!-- TOP NAVIGATION BAR-->
-    <?php $this->load->view('blocks/TopNav');?>
+    <?php $this->load->view('vendor_blocks/TopNav');?>
     <!-- END OF TOP BAR NAV-->
 
     <section>
@@ -47,7 +47,9 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-              <input type="button" name="" value="Send" onclick="sendEmail();">
+
+             <?php $this->load->view('vendor_content/profile') ?>
+
             </div>
         </div>
     </section>

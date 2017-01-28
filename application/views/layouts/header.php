@@ -13,7 +13,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>ClickBasket Panel</title>
+    <title id="titleUpdate"> ClickBasket Panel </title>
 
     <!-- Jquery Core Js -->
     <script src="<?php echo base_url().'assets/plugins/jquery/jquery.min.js';?>"></script>
@@ -79,6 +79,29 @@
 
      .prodExist{
        background-color: #fff9a5;
+     }
+
+     #anchor-element {
+       display: none;
+       text-transform: uppercase;
+     }
+
+     #anchor-div:hover #anchor-element {
+       display: block;
+     }
+
+     img {
+       display: inline-block;
+       vertical-align: middle;
+       max-height: 100%;
+       max-width: 100%;
+     }
+
+     .imageview {
+       font-size: 0;
+       text-align: center;
+       width: 150px;
+       height: 200px;
      }
    </style>
 

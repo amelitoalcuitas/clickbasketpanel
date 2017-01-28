@@ -25,8 +25,7 @@ class RegistrationController extends CI_Controller{
 		$this->form_validation->set_rules('fName','First Name', 'trim|required',TRUE);
 		$this->form_validation->set_rules('lName','Last Name', 'trim|required', TRUE);
 
-		if($this->form_validation->run() == FALSE)
-		{
+		if($this->form_validation->run() == FALSE){
 			$data['page'] = 'three';
 			$data['storelist'] = $this->storelistdata;
 			$this->load->view('layouts/header');
@@ -57,8 +56,7 @@ class RegistrationController extends CI_Controller{
 	public function check_username_if_exist() {
 		$this->form_validation->set_message('check_username_if_exist', 'Username already exist!');
 
-		if($this->vendor->check_username($this->input->post('uName')))
-		{
+		if($this->vendor->check_username($this->input->post('uName'))){
 			return true;
 		} else {
 			return false;
@@ -66,8 +64,7 @@ class RegistrationController extends CI_Controller{
 
 	} //end of check username
 
-	public function check_email_if_exist()
-	{
+	public function check_email_if_exist(){
 		$this->form_validation->set_message('check_email_if_exist', 'Email already exist!');
 
 		if($this->vendor->check_email($this->input->post('eMail')))
@@ -90,4 +87,47 @@ class RegistrationController extends CI_Controller{
 
 		$this->vendor->unblock_vendor($vendorid);
 	}
+
+	public function updateUser(){
+		$data =  $this->input->post('input');
+		$id = $this->input->post('id');
+		$name = $this->input->post('name');
+		$type = '';
+
+		if($name == 'firstname'){
+			$type = 'vendor_fname';
+		}else if($name == 'lastname'){
+			$type = 'vendor_lname';
+		}else if($name == 'email'){
+			$type = 'vendor_email';
+		}else if($name == 'username'){
+			$type = 'vendor_username';
+		}else if($name == 'password'){
+			$type = 'vendor_password';
+		}
+
+		if($type != ''){
+			$update = array($type => $data);
+			$this->vendor->update_user($update,$id);
+		}
+
+	}
+
+	public function uploadProfPic(){
+		$config['upload_path']          = './assets/images/prof_pic';
+    $config['allowed_types']        = 'gif|jpg|png';
+    $config['max_size']             = 100;
+    $config['max_width']            = 1024;
+    $config['max_height']           = 768;
+
+    $this->load->library('upload', $config);
+
+    if (!$this->upload->do_upload('userfile')){
+      echo $this->upload->display_errors();
+
+    } else {
+      echo $this->upload->data();
+    }
+  }
+
 }

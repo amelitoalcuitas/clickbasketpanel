@@ -55,4 +55,65 @@ class AddProductController extends CI_Controller {
 		}
 	}
 
+	public function deleteProduct(){
+		$prodid = $this->input->post('productid');
+
+		$data = array(
+		'storeprod_deleted' => 'true'
+		);
+
+		$this->product->deleteProduct($prodid,$data);
+	}
+
+	public function updateProduct(){
+		$sprodid = $this->input->post('sproductid');
+		$prodid = $this->input->post('productid');
+		$prodname = htmlspecialchars($this->input->post('pname'));
+		$prodcat = $this->input->post('pcategory');
+		$prodsubcat = $this->input->post('psubcategory');
+		$prodqty = $this->input->post('pquantity');
+		$prodprice = $this->input->post('pprice');
+
+		$this->form_validation->set_rules('pname','Product Name','trim|required',TRUE);
+		//$this->form_validation->set_rules('pname','Product Name','trim|required|callback_check_if_product_exist',TRUE);
+
+
+		if($this->form_validation->run()==false)
+		{
+			echo "false";
+		}else {
+			$products = array(
+			'prod_name' => $prodname
+			);
+
+			$storeprod =  array(
+			'storeprod_price' => $prodprice
+			);
+
+			$subcategory = array(
+			'subcategory_id' => $prodsubcat
+			);
+
+			$inventory =  array(
+			'inventory_stock' => $prodqty
+			);
+
+			if($this->product->updateProduct($sprodid,$prodid,$products,$storeprod,$inventory,$subcategory) == true)
+			{
+				echo "true";
+			}
+		}
+	}
+
+	public function check_if_product_exist(){
+		//$this->form_validation->set_message('check_if_product_exist', 'Product already exist!');
+
+		if($this->product->check_if_exist($this->input->post('pname'))) {
+			return true;
+		} else {
+			echo 'exist';
+			return false;
+		}
+	}
+
 }

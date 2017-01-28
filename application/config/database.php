@@ -75,9 +75,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => '192.168.0.41',
+	'username' => 'UBERFPS',
+	'password' => 'clickbasket',
 	'database' => 'clickbasket',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

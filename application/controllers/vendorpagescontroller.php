@@ -6,27 +6,25 @@ class VendorPagesController extends CI_Controller {
 	var $productlist;
 	var $productRow;
 	var $orderlist;
+	var $deliveredorders;
+	var $vendordata;
 
-	public function __construct()
-	{
+	public function __construct(){
 		parent::__construct();
 
 		if($this->session->userdata('logged_in') == false){
 			redirect('login');
-		}else if($this->session->userdata('restriction') != 'admin')
-      {
-        	redirect('login');
-      }
+		}else if($this->session->userdata('restriction') != 'admin'){
+    	redirect('login');
+    }
 
     	$this->load->model('category');
 
-    	if($data = $this->category->get_category())
-    	{
+    	if($data = $this->category->get_category()){
     		$this->categorylist = $data;
     	}
 
-			if($data = $this->category->get_subCategory())
-    	{
+			if($data = $this->category->get_subCategory()){
     		$this->subcategorylist = $data;
     	}
 
@@ -42,11 +40,18 @@ class VendorPagesController extends CI_Controller {
 				$this->orderlist = $orders;
 			}
 
+			if($delivered = $this->order->get_delivered_orders()){
+				$this->deliveredorders = $delivered;
+			}
 
+			$this->load->model('vendor');
+
+			if($vendor = $this->vendor->viewVendorByID()){
+				$this->vendordata = $vendor;
+			}
 	}
 
-	public function index()
-	{
+	public function index(){
 			$data['page'] = 'one';
 			$data['title'] = 'vendordashboard';
 
@@ -56,8 +61,7 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-	public function viewproduct()
-	{
+	public function viewproduct(){
 
 			$data['page'] = 'four';
 			$data['title'] = 'vendorviewproducts';
@@ -71,8 +75,7 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-	public function viewcategories()
-	{
+	public function viewcategories(){
 
 			$data['page'] = 'categ';
 			$data['title'] = 'vendorviewcategories';
@@ -85,8 +88,7 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-	public function addproduct()
-	{
+	public function addproduct(){
 			$data['page'] = 'five';
 			$data['title'] = 'vendoraddnewproduct';
 			$data['categorylist'] = $this->categorylist;
@@ -98,8 +100,7 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-	public function addcategory()
-	{
+	public function addcategory(){
 			$data['page'] = 'six';
 			$data['title'] = 'vendoraddcategory';
 
@@ -109,8 +110,7 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-	public function viewOrders()
-	{
+	public function viewOrders(){
 			$data['page'] = 'seven';
 			$data['title'] = 'vieworders';
 			$data['orderlist'] = $this->orderlist;
@@ -121,21 +121,10 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-	public function deliveryStatus()
-	{
-			$data['page'] = 'eight';
-			$data['title'] = 'deliverystatus';
-
-			$this->load->view('layouts/header');
-			$this->load->view('vendor_blocks/SideNav',$data);
-			$this->load->view('clickbasket',$data);
-			$this->load->view('layouts/footer');
-	}
-
-	public function orderHistory()
-	{
+	public function orderHistory(){
 			$data['page'] = 'nine';
 			$data['title'] = 'orderhistory';
+			$data['deliveredorders'] = $this->deliveredorders;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -143,71 +132,20 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
-		public function logout()
-		{
-			   $this->session->sess_destroy();
-			   redirect('login');
-		}
+	public function profile(){
+			$data['page'] = 'ten';
+			$data['title'] = 'profile';
+			$data['vendordata'] = $this->vendordata;
 
-		public function deleteProduct(){
-			$prodid = $this->input->post('productid');
+			$this->load->view('layouts/header');
+			$this->load->view('vendor_blocks/SideNav',$data);
+			$this->load->view('clickbasket',$data);
+			$this->load->view('layouts/footer');
+	}
 
-	    $data = array(
-	    'storeprod_deleted' => 'true'
-	    );
-
-	    $this->product->deleteProduct($prodid,$data);
-		}
-
-		public function updateProduct(){
-			$sprodid = $this->input->post('sproductid');
-			$prodid = $this->input->post('productid');
-			$prodname = htmlspecialchars($this->input->post('pname'));
-			$prodcat = $this->input->post('pcategory');
-			$prodsubcat = $this->input->post('psubcategory');
-			$prodqty = $this->input->post('pquantity');
-			$prodprice = $this->input->post('pprice');
-
-			$this->form_validation->set_rules('pname','Product Name','trim|required',TRUE);
-			//$this->form_validation->set_rules('pname','Product Name','trim|required|callback_check_if_product_exist',TRUE);
-
-
-			if($this->form_validation->run()==false)
-			{
-				echo "false";
-			}else {
-				$products = array(
-		    'prod_name' => $prodname
-		    );
-
-				$storeprod =  array(
-				'storeprod_price' => $prodprice
-		    );
-
-				$subcategory = array(
-				'subcategory_id' => $prodsubcat
-				);
-
-				$inventory =  array(
-				'inventory_stock' => $prodqty
-		    );
-
-				if($this->product->updateProduct($sprodid,$prodid,$products,$storeprod,$inventory,$subcategory) == true)
-				{
-					echo "true";
-				}
-			}
-		}
-
-		public function check_if_product_exist(){
-			//$this->form_validation->set_message('check_if_product_exist', 'Product already exist!');
-
-			if($this->product->check_if_exist($this->input->post('pname'))) {
-				return true;
-			} else {
-				echo 'exist';
-				return false;
-			}
-		}
+	public function logout(){
+		   $this->session->sess_destroy();
+		   redirect('login');
+	}
 
 }

@@ -18,7 +18,7 @@
                             <li class="header">NOTIFICATIONS</li>
                             <li class="body">
                                 <ul class="menu" id="notif_li">
-                                  
+
                                 </ul>
                             </li>
                             <li class="footer">
@@ -27,42 +27,12 @@
                         </ul>
                     </li>
                     <!-- #END# Notifications -->
-                    <!-- Tasks -->
-                    <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                            <i class="material-icons">flag</i>
-                            <span class="label-count">1</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">TASKS</li>
-                            <li class="body">
-                                <ul class="menu tasks">
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <h4>
-                                                Answer GitHub questions
-                                                <small>92%</small>
-                                            </h4>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-purple" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 92%">
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer">
-                                <a href="javascript:void(0);">View All Tasks</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- #END# Tasks -->
                     <li class="pull-right">
-                      <a href="javascript:void(0);" class="js-right-sidebar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <i class="material-icons">more_vert</i>
-                      </a>
+                        <a href="javascript:void(0);" class="js-right-sidebar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <?php echo $this->session->userdata('name'); ?>
+                        </a>
                         <ul class="dropdown-menu pull-right">
-                            <li><a hasdgref="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
+                            <li><a href="<?php echo site_url('vendor/profile');?>"><i class="material-icons">person</i>Profile</a></li>
                             <li role="seperator" class="divider"></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
                             <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>

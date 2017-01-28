@@ -3,7 +3,7 @@ class Vendor extends CI_Model{
 
   public function login($name, $pass){
 
-    $this->db->select('vendor_fname, vendor_lname ,vendor_email, restriction, store_vendor.store_id, store.store_name');
+    $this->db->select('*');
     $this->db->from('store_vendor');
     $this->db->join('vendor', 'vendor.vendor_id = store_vendor.vendor_id', 'left');
     $this->db->join('store', 'store.store_id = store_vendor.store_id', 'left');
@@ -43,6 +43,12 @@ class Vendor extends CI_Model{
     return $query->result();
   }
   //end of view users
+
+  public function viewVendorByID(){
+    $this->db->where('vendor_id', $this->session->userdata('vendor_id'));
+    $query = $this->db->get('vendor');
+    return $query->row();
+  }
 
   public function viewRemovedVendors(){
     $this->db->join('store_vendor','store_vendor.vendor_id = vendor.vendor_id','left');
@@ -102,12 +108,11 @@ class Vendor extends CI_Model{
   }
 
   public function forgot_pass($email,$key){
-    $query_str = "SELECT * from vendor WHERE vendor_email = ?";
+    $query_str = "SELECT * from vendor WHERE vendor_deleted = 'false' AND vendor_email = ?";
 
     $result = $this->db->query($query_str,$email);
 
-    if($result->num_rows() > 0)
-    {
+    if($result->num_rows() > 0){
       $update = array('vendor_key' => $key);
       $this->db->where('vendor_email',$email);
       $this->db->update('vendor',$update);
@@ -116,6 +121,39 @@ class Vendor extends CI_Model{
       return false;
     }
 
+  }
+
+  public function update_user($update){
+    $id = $this->session->userdata('vendor_id');
+
+    $this->db->where('vendor_id',$id);
+    $this->db->update('vendor',$update);
+  }
+
+  public function check_key($key,$id){
+    $this->db->where('vendor_id',$id);
+    $this->db->where('vendor_deleted','false');
+    $this->db->where('vendor_key',$key);
+
+    $result = $this->db->get('vendor');
+
+    if($result->num_rows() > 0){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  public function change_password($key,$id,$pass){
+    $this->db->where('vendor_id',$id);
+    $this->db->where('vendor_deleted','false');
+    $this->db->where('vendor_key',$key);
+
+    $this->db->update('vendor',array('vendor_password' => $pass, 'vendor_key' => NULL));
+  }
+
+  public function upload_profpic(){
+    
   }
 
 }

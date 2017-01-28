@@ -8,52 +8,53 @@
                             <h2>
                                 ORDER LIST
                             </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
                             <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
-                                <thead>
-                                    <tr>
-                                        <th>Customer</th>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Store</th>
-                                    </tr>
-                                </thead>
+                              <thead>
+                                <tr>
+                                  <th>Customer</th>
+                                  <th>Product</th>
+                                  <th>Quantity</th>
+                                  <th>Total</th>
+                                  <th>Store</th>
+                                  <th width="20px">Status</th>
+                                </tr>
+                              </thead>
 
-                                <tbody>
+                              <tbody>
 
-                                  <?php if (isset($orderlist)){
-                                      foreach($orderlist as $row)
-                                          { ?>
-                                          <tr id="order_<?php echo $row->order_id; ?>">
-                                          <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
-                                          <td><?php echo $row->prod_name;?></td>
-                                          <td><?php echo $row->order_qty;?></td>
-                                          <td>Php <?php echo $row->order_total;?></td>
-                                          <td><?php echo $row->order_status;?></td>
-                                          <td><?php echo $row->store_name;?></td>
+                                <?php if (isset($orderlist)){
+                                    foreach($orderlist as $row) { ?>
+                                        <tr id="order_<?php echo $row->order_id; ?>">
+                                        <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
+                                        <td><?php echo $row->prod_name;?></td>
+                                        <td><?php echo $row->order_qty;?></td>
+                                        <td>Php <?php echo $row->order_total;?></td>
+                                        <td><?php echo $row->store_name;?></td>
+                                        <?php if($row->order_status == 'pending'){
+                                          $buttcolor = 'danger';
+                                        }else{
+                                          $buttcolor = 'primary';
+                                        }
+                                          ?>
+                                        <td style="color:red;">
+                                          <div class="btn-group">
+                                              <button type="button" id="butt_<?php echo $row->order_id ?>" class="btn btn-<?php echo $buttcolor; ?> dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <?php echo strtoupper($row->order_status); ?> <span class="caret"></span>
+                                              </button>
+                                              <ul class="dropdown-menu">
+                                                  <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','pending')">PENDING</a></li>
+                                                  <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','processing')">PROCESSING</a></li>
+                                                  <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','completed')">COMPLETED</a></li>
+                                              </ul>
+                                          </div>
+                                        </td>
                                       </tr>
-                                    <?php }
-                                      } else {
+                                  <?php }
+                                    } ?>
 
-                                      }
-                                    ?>
-
-                                </tbody>
+                              </tbody>
                             </table>
                         </div>
                     </div>
