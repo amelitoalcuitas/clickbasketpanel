@@ -33,18 +33,19 @@
                              	<img id="uploadPreview"/>
                            </div>
                          </div>
-                         <?php echo form_open_multipart('registrationcontroller/uploadProfPic');?>
+                         <?php echo form_open_multipart('upload/do_upload','id="fileForm"');?>
                           <div class="col-sm-3">
-                            <input id="uploadImage" type="file" name="userfile" style="font-size:17px;margin-bottom:10px; margin-left: -1px;" onchange="PreviewImage();" accept="image/*" >
+                            <input id="file" type="file" name="userfile" style="font-size:17px;margin-bottom:10px; margin-left: -1px;" onchange="PreviewImage();" accept="image/*" >
                           </div>
 
                           <div class="col-sm-5">
                           <!--DONE BUTTON-->
-                          <button style="display:none; margin-left:12px;" type="submit" class="btn btn-primary pull-left" id="donebutt_0" onclick="uploadImage();"><span class="glyphicon glyphicon-ok"></span></button>
-                          <!--CANCEL BUTTON-->
-                          <button style="display:none;" type="button" class="btn btn-default pull-left" id="cancelbutt_0" onclick="cancelEdit(0); resetimg(); this.form.reset();"><span class="glyphicon glyphicon-remove"></span></button>
-                        </div>
-                         </form>
+                          <button style="display:none; margin-left:12px;" type="submit" class="btn btn-primary pull-left" id="donebutt_0"><span class="glyphicon glyphicon-ok"></span></button>
+                          <!-- CANCEL BUTTON -->
+                          <button style="display:none;" type="button" class="btn btn-default pull-left" id="cancelbutt_0" onclick="cancelEdit(0);"><span class="glyphicon glyphicon-remove"></span></button>
+                          </div>
+                          </form>
+
                         </div>
                         <!--FORM FIRSTNAME-->
                         <div id="anchor-div" class="row">

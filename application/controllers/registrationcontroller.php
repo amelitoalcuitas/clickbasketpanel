@@ -114,19 +114,30 @@ class RegistrationController extends CI_Controller{
 	}
 
 	public function uploadProfPic(){
-		$config['upload_path']          = './assets/images/prof_pic';
-    $config['allowed_types']        = 'gif|jpg|png';
-    $config['max_size']             = 100;
-    $config['max_width']            = 1024;
-    $config['max_height']           = 768;
+		//upload file
+    $config['upload_path'] = './assets/images/prof_pic/';
+    $config['allowed_types'] = 'jpg|png';
+    $config['max_filename'] = '255';
+    $config['encrypt_name'] = TRUE;
+    $config['max_size'] = '1024'; //1 MB
 
-    $this->load->library('upload', $config);
-
-    if (!$this->upload->do_upload('userfile')){
-      echo $this->upload->display_errors();
-
+    if (isset($_FILES['file']['name'])) {
+        if (0 < $_FILES['file']['error']) {
+            echo 'Error during file upload' . $_FILES['file']['error'];
+        } else {
+            if (file_exists('uploads/' . $_FILES['file']['name'])) {
+                echo 'File already exists : uploads/' . $_FILES['file']['name'];
+            } else {
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('file')) {
+                    echo $this->upload->display_errors();
+                } else {
+                    echo 'File successfully uploaded : uploads/' . $_FILES['file']['name'];
+                }
+            }
+        }
     } else {
-      echo $this->upload->data();
+        echo 'Please choose a file';
     }
   }
 

@@ -25,7 +25,7 @@
                                    <tr>
                                        <th>CATEGORY</th>
                                        <th>SUB-CATEGORIES</th>
-                                       <th>EDIT</th>
+                                       <th width="80px">EDIT</th>
                                    </tr>
                                </thead>
 
@@ -41,7 +41,7 @@
                                            <div class="form-line">
                                              <input type="text" name="catName" id="catNameInput_<?php echo $row->category_id; ?>" style="padding-left:5px;" class="form-control" value="<?php echo $row->category_name; ?>">
                                            </div>
-                                           <div style="color:red; font-size:13px; margin:5px 0 0px 0;" id="errorCatEdit_<?php echo $row->category_id; ?>"></div>
+                                           <div style="color:red; font-size:13px; margin:5px 0 0px 0;" id="errorCatEdit_<?php echo $row->category_id; ?>"><br></div>
                                          </div>
                                        </td>
                                        <td><button onclick="viewSubCatModal(<?php echo $row->category_id; ?>)" name="<?php echo $row->category_id; ?>" class="btn btn-success"><i class="material-icons">list</i>VIEW SUB-CATEGORY</button></td>

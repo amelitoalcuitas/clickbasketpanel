@@ -57,17 +57,6 @@ class AddCategoryController extends CI_Controller {
 		}
 	}//end of check_subcat_name
 
-	public function check_if_subcategory_exist(){
-		$this->form_validation->set_message('check_if_subcategory_exist', 'Sub-Category already exist!');
-
-		if($this->category->check_if_subcat_exist($this->input->post('subCatName'),$this->input->post('catId'))) {
-			return true;
-		} else {
-			echo 'exist';
-			return false;
-		}
-	}
-
 	public function deletecategory(){
 		$catid = $this->input->post('categoryid');
 
@@ -104,6 +93,48 @@ class AddCategoryController extends CI_Controller {
 		$catid = $this->input->post('subcatid');
 
 		$this->category->get_subCategoryById($catid);
+	}
+
+	public function deleteSubCategory(){
+		$subcatid = $this->input->post('subcategoryid');
+
+		$data = array(
+			'subcategory_deleted' => 'true'
+		);
+
+		$this->category->deleteSubCategory($subcatid, $data);
+	}
+
+	public function updateSubCategory(){
+		$subcatid = $this->input->post('subcatid');
+		$subcatname = htmlspecialchars(ucwords($this->input->post('subCatName')));
+		$catid = $this->input->post('catId');
+
+		$this->form_validation->set_rules('subCatName','Sub-Category Name','trim|required|callback_check_if_subcategory_exist',TRUE);
+
+		if($this->form_validation->run()==false){
+			echo "false";
+		} else {
+			$data = array(
+			'subcategory_name' => $subcatname,
+			);
+
+			if($this->category->updateSubCategory($subcatid,$data) == true){
+				echo "true";
+			}
+		}
+
+	}
+
+	public function check_if_subcategory_exist(){
+		$this->form_validation->set_message('check_if_subcategory_exist', 'Sub-Category already exist!');
+
+		if($this->category->check_if_subcat_exist($this->input->post('subCatName'),$this->input->post('catId'))) {
+			return true;
+		} else {
+			echo 'exist';
+			return false;
+		}
 	}
 
 }

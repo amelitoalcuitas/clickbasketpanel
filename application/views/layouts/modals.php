@@ -151,9 +151,10 @@
             <thead>
                 <tr>
                     <th>SUB-CATEGORY</th>
+                    <th width="80px">EDIT</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="subcatbody">
 
             </tbody>
         </table>

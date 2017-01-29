@@ -274,10 +274,6 @@
       document.getElementById('mCategory').value = $('#selectedcat_'+id).attr('value');
       document.getElementById('mQuantity').value = data[3];
       document.getElementById('mPrice').value = parseFloat(price).toFixed(2);
-      //--------EDIT THIS---------//
-      //$('#selectedcat_'+id).attr('value',catId);
-      $('#selectedsubcat_'+id).attr('value',subcatid);
-      //--------EDIT THIS---------//
   }
 
   $('#mCategory').on('changed.bs.select',function(){
@@ -332,6 +328,7 @@
       url: '<?php echo base_url("addproductcontroller/updateProduct"); ?>',
       success: function(result){
         if(result == 'true'){
+          $('#selectedsubcat_'+id).attr('value',psubcategory);
           table.row($('#product_'+id)).data(myData).draw();
           $('#editProductModal').modal('hide');
           swal('Success!','Product has been successfully updated!','success');
@@ -491,10 +488,103 @@
         dataType: 'JSON',
         success: function(qResult){
           for (var i = 0; i < qResult.length; i++) {
-            subCatTable.row.add([qResult[i].subcategory_name]).draw();
+            var editBtn = "<button id='editSubCat_"+qResult[i].subcategory_id+"' onclick='editSubCat("+qResult[i].subcategory_id+")' class='btn btn-warning'><i class='material-icons'>edit</i></button>";
+            var delBtn = "<button id='delSubCat_"+qResult[i].subcategory_id+"' name="+i+" onclick='delSubCat("+qResult[i].subcategory_id+","+"\""+qResult[i].subcategory_name+"\""+")' class='btn btn-danger'><i class='material-icons'>delete</i></button>";
+            var doneBtn = "<button id='doneBtn_"+qResult[i].subcategory_id+"' style='display: none;' onclick='SubCatDoneButt("+qResult[i].subcategory_id+")' class='btn btn-primary'><i class='material-icons'>done</i></button>";
+            var cancelBtn = "<button id='cancelBtn_"+qResult[i].subcategory_id+"' style='display: none;' onclick='SubCatCancelButt("+qResult[i].subcategory_id+")' class='btn btn-danger'><i class='material-icons'>close</i></button>";
+            var inputField = '<div class="form-group" id="SubCatNameDiv_'+qResult[i].subcategory_id+'" style="margin-bottom:0px; display: none;"><div class="form-line"><input type="text" name="SubCatName" id="SubCatNameInput_'+qResult[i].subcategory_id+'" style="padding-left:5px;" class="form-control" value="'+qResult[i].subcategory_name+'"></div><div style="color:red; font-size:13px; margin:5px 0 0px 0;" id="errorSubCatEdit_'+qResult[i].subcategory_id+'"></div></div>';
+            var paragField = '<p id="SubCatNameParag_'+qResult[i].subcategory_id+'">'+qResult[i].subcategory_name+'</p>';
+            var subCatError = '<div style="color:red; font-size:13px; margin:-20px 0 0px 0;" id="errorSubCatEdit_'+qResult[i].subcategory_id+'"><br></div>';
+
+            $('#subcatbody tr:eq('+i+')').attr('name',qResult[i].subcategory_name);
+            $('#subcatbody tr:eq('+i+')').attr('id',qResult[i].subcategory_id);
+
+            subCatTable.row.add([paragField + inputField + subCatError, editBtn + " " + delBtn + " " + doneBtn + " " + cancelBtn]).draw();
           }
         }
       });
+  }
+
+  function delSubCat(id,name){
+    var table = $('#subCategoryTable').DataTable();
+
+    swal({
+      title: "Are you sure you want to delete " + name + "?",
+      text: "You will not be able to recover this sub-category!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, delete it!",
+      closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          type: 'post',
+          data: {subcategoryid:id},
+          url: "<?php echo base_url('addcategorycontroller/deleteSubCategory'); ?>",
+          success: function(result){
+            table
+              .row($('#delSubCat_'+id).attr('name'))
+              .remove()
+              .draw();
+            swal("Deleted!", name + " has been deleted.", "success");
+          }
+        });
+    });
+  }
+
+  function editSubCat(id){
+    $('#SubCatNameParag_'+id).hide();
+    $('#editSubCat_'+id).hide();
+    $('#delSubCat_'+id).hide();
+
+    $('#SubCatNameDiv_'+id).show();
+    $('#doneBtn_'+id).show();
+    $('#cancelBtn_'+id).show();
+    $('#errorSubCatEdit_'+id).html('</br>');
+  }
+
+  function SubCatCancelButt(id){
+    $('#SubCatNameParag_'+id).show();
+    $('#editSubCat_'+id).show();
+    $('#delSubCat_'+id).show();
+
+    $('#SubCatNameDiv_'+id).hide();
+    $('#doneBtn_'+id).hide();
+    $('#cancelBtn_'+id).hide();
+    $('#errorSubCatEdit_'+id).html('</br>');
+  }
+
+  function SubCatDoneButt(id){
+    var table = $('#subCategoryTable').DataTable();
+    var subcatname = document.getElementById('SubCatNameInput_'+id).value;
+    var catid = $('#viewSubCat').attr('data-id');
+
+    $.ajax({
+      type: 'post',
+      data: {subcatid:id, subCatName:subcatname, catId:catid},
+      url: '<?php echo base_url("addcategorycontroller/updateSubCategory"); ?>',
+      success: function(result){
+        if(result == 'true'){
+          swal('Success!','Sub-Category has been successfully updated!','success');
+
+          $('#SubCatNameParag_'+id).html(subcatname);
+          $('#SubCatNameParag_'+id).show();
+          $('#editSubCat_'+id).show();
+          $('#delSubCat_'+id).show();
+
+          $('#SubCatNameDiv_'+id).hide();
+          $('#doneBtn_'+id).hide();
+          $('#cancelBtn_'+id).hide();
+          $('#errorSubCatEdit_'+id).html('</br>');
+
+        }else if (result === 'false') {
+          $('#errorSubCatEdit_'+id).html('Sub-Category Name field is required!')
+        }else if (result === 'existfalse') {
+          $('#errorSubCatEdit_'+id).html('No changes made or it already exists!');
+        }
+      }
+    });
   }
 
   $("#viewSubCat").on("shon.bs.modal", function () {
@@ -871,35 +961,27 @@
 
 <!-- UPLOAD IMAGE -->
 <script>
-  $('#donebutt_0').submit(function(e){
-    e.preventDefault();
-    alert('wew');
-    var filename = $('#uploadImage').val();
+  $('#fileForm').submit(function(e){
+      e.preventDefault();
 
-    // $.ajax({
-    //   url: '<?= base_url("registrationcontroller/uploadProfPic"); ?>',
-    //   data: {filename:filename},
-    //   type: 'POST',
-    //   success: function(data){
-    //     console.log(data);
-    //   }
-    // });
+      var form = $('#fileForm')[0]; // You need to use standart javascript object here
+      var formData = new FormData(form);
 
-    // $.ajax({
-		// 	url : '<?= base_url("registrationcontroller/uploadProfPic"); ?>',
-		// //	secureuri :false,
-		// //	fileElementId	:'userfile',
-		// //	dataType : 'json',
-		// 	data : {filename:filename},
-		// 	success	: function (data){
-    //     console.log(data);
-		// 	}
-		// });
+      $.ajax({
+        url: '<?php echo base_url("upload/do_upload"); ?>',
+        data: formData,
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        success: function(res){
+            console.log(res);
+          }
+      });
   });
 
   function PreviewImage() {
       var oFReader = new FileReader();
-      oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+      oFReader.readAsDataURL(document.getElementById("file").files[0]);
 
       oFReader.onload = function (oFREvent) {
           document.getElementById("uploadPreview").src = oFREvent.target.result;

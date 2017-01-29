@@ -119,4 +119,16 @@ class Category extends CI_Model{
 		}
 	}
 
+	public function deleteSubCategory($subcatid, $data){
+		$this->db->where('subcategory_id', $subcatid);
+		$this->db->update('subcategory',$data);
+	}
+
+	public function updateSubCategory($subcatid, $data){
+		$this->db->where('subcategory_id', $subcatid);
+		if($this->db->update('subcategory', $data)){
+			return true;
+		}
+	}
+
 }
