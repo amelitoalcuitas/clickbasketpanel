@@ -54,6 +54,7 @@ class VendorPagesController extends CI_Controller {
 	public function index(){
 			$data['page'] = 'one';
 			$data['title'] = 'vendordashboard';
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -68,6 +69,7 @@ class VendorPagesController extends CI_Controller {
 			$data['productlist'] = $this->productlist;
 			$data['categorylist'] = $this->categorylist;
 			$data['subcategorylist'] = $this->subcategorylist;
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header',$data);
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -81,6 +83,7 @@ class VendorPagesController extends CI_Controller {
 			$data['title'] = 'vendorviewcategories';
 			$data['categorylist'] = $this->categorylist;
 			$data['subcategorylist'] = $this->subcategorylist;
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -93,6 +96,7 @@ class VendorPagesController extends CI_Controller {
 			$data['title'] = 'vendoraddnewproduct';
 			$data['categorylist'] = $this->categorylist;
 			$data['subcategorylist'] = $this->subcategorylist;
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header',$data);
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -103,6 +107,7 @@ class VendorPagesController extends CI_Controller {
 	public function addcategory(){
 			$data['page'] = 'six';
 			$data['title'] = 'vendoraddcategory';
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -114,6 +119,7 @@ class VendorPagesController extends CI_Controller {
 			$data['page'] = 'seven';
 			$data['title'] = 'vieworders';
 			$data['orderlist'] = $this->orderlist;
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -125,6 +131,7 @@ class VendorPagesController extends CI_Controller {
 			$data['page'] = 'nine';
 			$data['title'] = 'orderhistory';
 			$data['deliveredorders'] = $this->deliveredorders;
+			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);

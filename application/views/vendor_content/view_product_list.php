@@ -13,12 +13,12 @@
                             <table id="productTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
-                                        <th>PRODUCT NAME</th>
-                                        <th>CATEGORY</th>
-                                        <th>SUB-CATEGORY</th>
-                                        <th>QUANTITY</th>
-                                        <th>PRICE</th>
-                                        <th>EDIT</th>
+                                        <th >PRODUCT NAME</th>
+                                        <th width="115px">CATEGORY</th>
+                                        <th width="115px">SUB-CATEGORY</th>
+                                        <th width="30px">QTY</th>
+                                        <th width="80px">PRICE</th>
+                                        <th width="80px">EDIT</th>
                                     </tr>
                                 </thead>
 

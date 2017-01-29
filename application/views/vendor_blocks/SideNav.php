@@ -2,7 +2,7 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="image">
-                    <a href="<?php echo base_url('vendor/profile'); ?>"><img src="<?php echo base_url().'assets/images/user.png';?>" width="48" height="48" alt="User" /></a>
+                    <a href="<?php echo base_url('vendor/profile'); ?>"><img src='<?php echo base_url("assets/images/prof_pic/".$vendordata->vendor_image);?>' width="48" height="48" alt="User" /></a>
                 </div>
 
                 <div class="info-container">

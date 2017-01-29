@@ -14,7 +14,7 @@
                          <div class="row">
                            <div id="text_0" style="margin-bottom:20px; margin-left:12px; width:150px; height:200px; border: 1px solid gray; position: relative;">
                               <div id="anchor-div">
-                               <img style="display:block; position:absolute; margin:auto; max-width:148px; height:100%; margin:0;" src="<?php echo base_url().'assets/images/user.png';?>" alt="User" />
+                               <img id="profpic" style="display:block; position:absolute; margin:auto; max-width:148px; height:100%; margin:0;" src="<?php echo base_url('assets/images/prof_pic/'.$vendordata->vendor_image);?>" alt="User" />
 
                                 <!--Edit Hover-->
                                 <a href="javascript:void(0)" id="edit_0" onclick="editThis(0)">
@@ -34,8 +34,9 @@
                            </div>
                          </div>
                          <?php echo form_open_multipart('upload/do_upload','id="fileForm"');?>
-                          <div class="col-sm-3">
+                          <div class="col-sm-4">
                             <input id="file" type="file" name="userfile" style="font-size:17px;margin-bottom:10px; margin-left: -1px;" onchange="PreviewImage();" accept="image/*" >
+                            <div id="error_0"  style="color:red;"><br></div>
                           </div>
 
                           <div class="col-sm-5">

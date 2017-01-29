@@ -24,9 +24,10 @@
                            <table class="table">
                                 <thead>
                                     <tr>
+                                        <th width="200px">IMAGE</th>
                                         <th>PRODUCT NAME</th>
-                                        <th>PRICE</th>
-                                        <th>QUANTITY</th>
+                                        <th width="100px">PRICE</th>
+                                        <th width="100px">QTY</th>
                                         <th width="170px">SUB-CATEGORY</th>
                                         <th width="15px"> DELETE </th>
                                     </tr>
@@ -50,6 +51,14 @@
                 </div>
 
             <div id="tableData" hidden>
+                  <div id="col1">
+                    <div class="form-group" style="margin-bottom:0px;">
+                      <input type="file" class="form-control" id="pImage" name="pImage[]" value="<?php echo set_value('pImage[]'); ?>" required>
+                    </div>
+                    <div id="prodNameError" style="color:red; font-size:13px; margin:2px 0 -5px 0;">
+                    <br>
+                    </div>
+                  </div>
                   <div id="col2">
                     <div class="form-group" style="margin-bottom:0px;">
                       <div class="form-line">

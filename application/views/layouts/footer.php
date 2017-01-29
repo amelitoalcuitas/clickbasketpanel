@@ -42,6 +42,18 @@
 </script>
 
 <script>
+
+  // TABLE PRIORITIES
+
+  $('#productTable').DataTable({
+        language: {
+            emptyTable: "No products found!",
+        }
+  });
+
+  // TABLE PRIORITIES END
+
+
   var reloadPrompt = true;
   // DISALLOW SPECIAL CHARACTERS TO ALL INPUTS
   $('input').on('keypress', function (event){
@@ -71,13 +83,15 @@
 
   $('#addButton').click(function(){
 
+
+    var data0 = document.getElementById("col1").innerHTML;
     var data1 = document.getElementById("col2").innerHTML;
     var data2 = document.getElementById("col3").innerHTML;
     var data3 = document.getElementById("col4").innerHTML;
     var data4 = '<div id="col5"><div class="form-group" style="margin-bottom:0px;"><select class="form-control show-tick selectsearch" data-live-search="true" name="pSubCategory[]" required><option value="">-- Please select --</option><?php if(isset($subcategorylist)){ foreach($subcategorylist as $row){ ?><option value="<?php echo $row->subcategory_id;?>"> <?php echo $row->subcategory_name; ?></option><?php }} ?></select></div></div>';
     var data5 = '<button type="button" id="delThisRow" onclick="deleteThisRow('+cnt+')" name="delThisRow" class="btn btn-danger"><i class="material-icons">remove</i></button>';
 
-    $('#addProductTable').append('<tr id="'+ cnt +'"><td>'+data1+'</td><td>'+data2+'</td><td>'+data3+'</td><td>'+data4+'</td><td>'+ data5 +'</td></tr>');
+    $('#addProductTable').append('<tr id="'+ cnt +'"><td>'+data0+'</td><td>'+data1+'</td><td>'+data2+'</td><td>'+data3+'</td><td>'+data4+'</td><td>'+ data5 +'</td></tr>');
     $('.selectsearch').selectpicker();
     cnt = cnt + 1;
 
@@ -168,6 +182,16 @@
     var emptyNum = 0;
     var count = (cnt-1)*4;
 
+    $("#addProductTable input[name='pImage[]']").each(function(){
+      if($(this).val().length > 0){
+        $(this).removeClass('emptyInput');
+        emptyNum = emptyNum + 1;
+      }else{
+        $(this).addClass('emptyInput');
+        emptyNum =  emptyNum - 1;
+      }
+    });
+
     $("#addProductTable input[name='pName[]']").each(function(){
       if($(this).val().length > 0){
         $(this).removeClass('emptyInput');
@@ -200,8 +224,10 @@
 
     $("#addProductTable select[name='pSubCategory[]']").each(function(){
       if($(this).val().length > 0){
+        $(this).removeClass('emptyInput');
         emptyNum = emptyNum + 1;
       }else{
+        $(this).removeClass('emptyInput');
         emptyNum =  emptyNum - 1;
       }
     });
@@ -346,12 +372,6 @@
 
   $('#editProductModal').on('hidden.bs.modal',function() {
     $('#errorProdEdit').html('<br>');
-  });
-
-  $('#productTable').DataTable( {
-      language: {
-          emptyTable: "No products found!",
-      }
   });
 
   $('#subCategoryTable').DataTable( {
@@ -974,13 +994,32 @@
         contentType: false,
         processData: false,
         success: function(res){
-            console.log(res);
+            if(res == "success"){
+              $("#cancelbutt_0").hide();
+              $("#donebutt_0").hide();
+              $("#input_0").hide();
+              $("#edit_0").show();
+              $("#text_0").show();
+              $('#error_0').html('<br>');
+
+              swal({
+                title: "Success!",
+                text: "Profile Picture has been updated!",
+                type: "success"},
+                function(){
+                  location.reload();
+                });
+
+            }else{
+              $('#error_0').html(res);
+            }
           }
       });
   });
 
   function PreviewImage() {
       var oFReader = new FileReader();
+
       oFReader.readAsDataURL(document.getElementById("file").files[0]);
 
       oFReader.onload = function (oFREvent) {

@@ -43,6 +43,7 @@
      <!-- JQuery DataTable Css -->
     <link href="<?php echo base_url().'assets/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet';?>">
 
+
     <!-- Sweet Alert -->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/plugins/sweetalert/sweetalert.css';?>">
     <script src="<?php echo base_url().'assets/plugins/sweetalert/sweetalert.min.js';?>"></script>

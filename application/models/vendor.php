@@ -152,8 +152,10 @@ class Vendor extends CI_Model{
     $this->db->update('vendor',array('vendor_password' => $pass, 'vendor_key' => NULL));
   }
 
-  public function upload_profpic(){
-    
+  public function upload_profpic($filename){
+    $this->db->where('vendor_id', $this->session->userdata('vendor_id'));
+
+    $this->db->update('vendor',array('vendor_image' => $filename));
   }
 
 }
