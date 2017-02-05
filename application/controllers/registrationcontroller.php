@@ -19,27 +19,29 @@ class RegistrationController extends CI_Controller{
 	public function check_user_credentials(){
 
 		$this->form_validation->set_rules('uName','Username', 'trim|required|alpha_numeric|callback_check_username_if_exist',TRUE);
-		$this->form_validation->set_rules('pass','Password', 'trim|required|alpha_numeric|min_length[6]',TRUE);
 		$this->form_validation->set_rules('eMail', 'Email', 'trim|required|valid_email|callback_check_email_if_exist',TRUE);
-		$this->form_validation->set_rules('cPass','Password confirmation', 'trim|required|alpha_numeric|min_length[6]|matches[pass]',TRUE);
 		$this->form_validation->set_rules('fName','First Name', 'trim|required',TRUE);
 		$this->form_validation->set_rules('lName','Last Name', 'trim|required', TRUE);
 
 		if($this->form_validation->run() == FALSE){
 			$data['page'] = 'three';
+			$data['title'] = 'vendoraddnewproduct';
 			$data['storelist'] = $this->storelistdata;
+
 			$this->load->view('layouts/header');
 			$this->load->view('blocks/sidenav',$data);
 			$this->load->view('main_pages/register');
 			$this->load->view('layouts/footer');
 		} else {
 
+		 $rand = md5(random_string('alnum', 16));
+
 			$vendor = array(
 				'vendor_fname' => htmlspecialchars($this->input->post('fName')),
 				'vendor_lname' => htmlspecialchars($this->input->post('lName')),
 				'vendor_username'=> htmlspecialchars($this->input->post('uName')),
-				'vendor_password'=> md5(htmlspecialchars($this->input->post('pass'))),
 				'vendor_email'=> htmlspecialchars($this->input->post('eMail')),
+				'vendor_key'=> $rand,
 				'restriction' => 'admin'
 			);
 
@@ -47,9 +49,38 @@ class RegistrationController extends CI_Controller{
 				'store_id' => $this->input->post('store_selected')
 			);
 
-				 $this->vendor->register_admin($vendor,$storeid);
-				 $this->session->set_flashdata('success', TRUE);
-				 redirect('pagescontroller/register',$success);
+		 $this->vendor->register_admin($vendor,$storeid);
+		 $this->sendEmail($this->input->post('eMail'),$rand,'true');
+		 $this->session->set_userdata('success', TRUE);
+		 redirect('pagescontroller/register',$success);
+		}
+	}
+
+	function sendEmail($email,$key,$type){
+		$this->load->library('email');
+
+		$this->email->from('clickbasketph@gmail.com', 'ClickBasket');
+		$this->email->to($email);
+
+		if($vendor = $this->vendor->getVendorByEmail($email)){
+			$this->vendordata = $vendor;
+		}
+
+		$data['vendordata'] = $this->vendordata;
+
+		$this->email->subject('ClickBasket: Forgot Password');
+
+		if($type == 'forgotpass'){
+			$body = $this->load->view('emails/forgotpassword',$data,TRUE);
+		}else{
+			$body = $this->load->view('emails/confirmation',$data,TRUE);
+		}
+
+		$this->email->message($body);
+		if($this->email->send()){
+			 echo 'Email sent. '.$this->email->print_debugger();
+		 }else{
+			 echo $this->email->print_debugger();
 		}
 	}
 
@@ -104,6 +135,7 @@ class RegistrationController extends CI_Controller{
 			$type = 'vendor_username';
 		}else if($name == 'password'){
 			$type = 'vendor_password';
+			$data = md5($this->input->post('input'));
 		}
 
 		if($type != ''){

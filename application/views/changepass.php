@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -46,6 +47,12 @@
 
 <body class="login-page">
    <?php $this->load->view('layouts/modals'); ?>
+
+   <?php
+     if($this->input->get('confirmation') == 'true'){
+       echo "<script> swal('Success!', 'Your account has been verified!', 'success'); </script>";
+     }
+   ?>
 
     <div class="login-box">
         <div class="logo">
@@ -117,6 +124,16 @@
 
 <!-- RESET PASSWORD -->
 <script>
+  $(document).ready(function(){
+    $.ajax({
+      type: 'POST',
+      url: '<?php echo base_url("login/changePassword") ?>',
+      data: {id:'test'},
+      success: function(res){
+      }
+    });
+  });
+
   $('#submitButton').click(function(){
     var pass = $('#pass').val();
     var pass2 = $('#pass2').val();

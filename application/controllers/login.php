@@ -2,6 +2,8 @@
 
 class Login extends CI_Controller {
 
+	var $vendordata;
+
 	public function __construct(){
 		parent::__construct();
 
@@ -78,17 +80,60 @@ class Login extends CI_Controller {
 	public function forgotPass(){
 			$email = $this->input->post('email');
 			$key = $this->input->post('key');
+			$type = 'forgotpass';
 
 			if($this->vendor->forgot_pass($email,$key) == true){
+				$this->sendEmail($email,$key,$type);
 				echo 'success';
 			}else{
 				echo 'failed';
 			}
 	}
 
+	function sendEmail($email,$key,$type){
+    $this->load->library('email');
+
+    $this->email->from('clickbasketph@gmail.com', 'ClickBasket');
+    $this->email->to($email);
+
+		if($vendor = $this->vendor->getVendorByEmail($email)){
+			$this->vendordata = $vendor;
+		}
+		$data['vendordata'] = $this->vendordata;
+
+    $this->email->subject('ClickBasket: Forgot Password');
+
+		if($type == 'forgotpass'){
+			$body = $this->load->view('emails/forgotpassword',$data,TRUE);
+		}else{
+			$body = $this->load->view('emails/confirmation',$data,TRUE);
+		}
+
+    $this->email->message($body);
+    if($this->email->send()){
+      echo 'Email sent. '.$this->email->print_debugger();
+     }else{
+       echo $this->email->print_debugger();
+    }
+  }
+
+	public function forgotpassword(){
+		$email = 'macsho10@gmail.com';
+		if($vendor = $this->vendor->getVendorByEmail($email)){
+			$this->vendordata = $vendor;
+		}
+
+		$data['vendordata'] = $this->vendordata;
+		$this->load->view('emails/confirmation',$data);
+	}
+
 	public function changePassword(){
 		$key = $this->input->get('vendor_key');
 		$id = $this->input->get('vendor_id');
+
+		if($this->input->get('confirmation')){
+			$this->vendor->confirm_account($id);
+		}
 
 		if($this->vendor->check_key($key,$id) == true && $key != NULL){
 			$data['vendorkey'] = $key;

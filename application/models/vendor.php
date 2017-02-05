@@ -10,6 +10,7 @@ class Vendor extends CI_Model{
     $this->db->where('vendor_username', $name);
     $this->db->where('vendor_password', $pass);
     $this->db->where('vendor_deleted', 'false');
+    $this->db->where('vendor_status', 'confirmed');
 
     $query = $this->db->get();
 
@@ -39,6 +40,7 @@ class Vendor extends CI_Model{
     $this->db->join('store_vendor','store_vendor.vendor_id = vendor.vendor_id','left');
     $this->db->join('store','store.store_id = store_vendor.store_id','left');
     $this->db->where('vendor_deleted', 'false');
+    $this->db->where('vendor_status', 'confirmed');
     $query = $this->db->get('vendor');
     return $query->result();
   }
@@ -46,6 +48,12 @@ class Vendor extends CI_Model{
 
   public function viewVendorByID(){
     $this->db->where('vendor_id', $this->session->userdata('vendor_id'));
+    $query = $this->db->get('vendor');
+    return $query->row();
+  }
+
+  public function getVendorByEmail($email){
+    $this->db->where('vendor_email', $email);
     $query = $this->db->get('vendor');
     return $query->row();
   }
@@ -131,17 +139,24 @@ class Vendor extends CI_Model{
   }
 
   public function check_key($key,$id){
-    $this->db->where('vendor_id',$id);
-    $this->db->where('vendor_deleted','false');
-    $this->db->where('vendor_key',$key);
+    $this->db->where('vendor_id', $id);
+    $this->db->where('vendor_deleted', 'false');
+    $this->db->where('vendor_key', $key);
 
     $result = $this->db->get('vendor');
 
     if($result->num_rows() > 0){
       return true;
     }else{
+
       return false;
     }
+  }
+
+  public function confirm_account($id){
+    $this->db->where('vendor_id',$id);
+
+    $this->db->update('vendor',array('vendor_status' => 'confirmed'));
   }
 
   public function change_password($key,$id,$pass){

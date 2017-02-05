@@ -1,20 +1,21 @@
 <!--success message-->
   <?php
-    if($this->session->flashdata('success') == TRUE){
+    if($this->session->userdata('success') == TRUE){
       echo "<script> swal('Success!', 'The admin has been registered!', 'success'); </script>";
+      $this->session->unset_userdata('success');
     }
   ?>
 
 <div class="container-fluid">
            <div class="block-header">
                <!-- Basic Examples -->
-             
+
            <div class="row clearfix">
                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                    <div class="card">
                        <div class="header">
                            <h2>
-                               REGISTER NEW ADMIN
+                               REGISTER NEW VENDOR
                            </h2>
                        </div>
                        <div class="body">
@@ -84,7 +85,7 @@
                                              </div>
                                          </div>
                                        </div>
-                                       <label style="font-weight: bold; font-size:15px;">Password</label><br>
+                                       <!-- <label style="font-weight: bold; font-size:15px;">Password</label><br>
                                        <div class="col-sm-12">
                                            <div class="form-group">
                                              <div class="form-line">
@@ -104,7 +105,7 @@
                                                <?php echo "<br>".form_error('cPass'); ?>
                                              </div>
                                            </div>
-                                       </div>
+                                       </div> -->
                                        <div class="form-group">
                                            <div class="col-sm-12">
                                                <input type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="Submit">

@@ -15,7 +15,6 @@
                                   <tr>
                                     <th>Customer</th>
                                     <th>Product</th>
-                                    <th>Quantity</th>
                                     <th>Total</th>
                                     <th>Store</th>
                                     <th>Status</th>
@@ -29,7 +28,6 @@
                                           <tr id="order_<?php echo $row->order_id; ?>">
                                           <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
                                           <td><?php echo $row->prod_name;?></td>
-                                          <td><?php echo $row->order_qty;?></td>
                                           <td>Php <?php echo $row->order_total;?></td>
                                           <td><?php echo $row->store_name;?></td>
                                           <td style="color:#00a808;">

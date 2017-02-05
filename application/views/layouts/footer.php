@@ -67,7 +67,7 @@
 
   // <!-- TAB CLOSE ALERT SCRIPT START -->
     window.onbeforeunload = function () {
-      var pagetitle = '<?php echo $title;?>'
+      var pagetitle = '<?php echo $title;?>';
 
       if(pagetitle == 'vendoraddnewproduct'){
         if(cnt-1 > 0 && reloadPrompt == true){
@@ -872,20 +872,18 @@
         url: '<?php echo base_url("registrationcontroller/updateUser") ;?>',
         data: {input:input, name:name},
         success: function(){
+          if(name == 'password'){
+            $("#text_"+id+" p").html('***********');
+          }else{
+            $("#text_"+id+" p").html(input);
+          }
           $("#cancelbutt_"+id).hide();
           $("#donebutt_"+id).hide();
           $("#input_"+id).hide();
           $("#edit_"+id).show();
-          $("#text_"+id+" p").html(input);
           $("#text_"+id).show();
         }
       });
-
-      // $("#cancelbutt_"+id).hide();
-      // $("#donebutt_"+id).hide();
-      // $("#input_"+id).hide();
-      // $("#edit_"+id).show();
-      // $("#text_"+id).show();
     }
 </script>
 
@@ -939,7 +937,7 @@
 </script>
 <!-- NOTIFICATION SCRIPT END -->
 
-<!-- ORDER STATUS BUTTONS -->
+<!-- ORDER BUTTONS -->
 <script>
   function changeStatus(id,currStat,stat){
     $('#butt_'+id).removeClass();
@@ -961,8 +959,40 @@
       }
     });
   }
+
+  function viewOrders(id){
+    $('#orderProducts').modal('show');
+    $('#orderProducts').attr('data-id',id);
+
+    var totalprice = 0;
+    var qty = 0;
+    var orderProdTable = $('#orderProductsTable').DataTable();
+
+    $.ajax({
+      type: 'post',
+      url: '<?php echo base_url("ordercontroller/getOrdersById"); ?>',
+      data: {id:id},
+      dataType: 'JSON',
+      success: function(res){
+        for (var i = 0; i < res.length; i++) {
+          orderProdTable.row.add([res[i].prod_name,res[i].order_qty,"Php "+res[i].storeprod_price]).draw();
+          totalprice += parseInt(res[i].order_qty) * parseFloat(res[i].storeprod_price);
+          qty += parseInt(res[i].order_qty);
+        }
+
+        total = qty * totalprice;
+
+        $('#totalprice').html('Php ' + parseFloat(totalprice).toFixed(2));
+        $('#totalitems').html(qty);
+      }
+    });
+  }
+
+  $("#orderProducts").on("hidden.bs.modal", function () {
+    $('#orderProductsTable').DataTable().clear().draw();
+  });
 </script>
-<!-- ORDER STATUS BUTTONS END -->
+<!-- ORDER BUTTONS END -->
 
 <!-- EMAIL SCRIPT -->
 <script>
@@ -1029,7 +1059,6 @@
 
 </script>
 <!-- UPLOAD IMAGE END -->
-
 
 </body>
 

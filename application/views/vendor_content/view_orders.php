@@ -13,12 +13,11 @@
                             <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                               <thead>
                                 <tr>
-                                  <th>Customer</th>
-                                  <th>Product</th>
-                                  <th>Quantity</th>
-                                  <th>Total</th>
-                                  <th>Store</th>
-                                  <th width="20px">Status</th>
+                                  <th>CUSTOMER</th>
+                                  <th width="80px">PRODUCTS</th>
+                                  <th width="100px">TOTAL PRICE</th>
+                                  <th>STORE</th>
+                                  <th width="20px">STATUS</th>
                                 </tr>
                               </thead>
 
@@ -28,8 +27,7 @@
                                     foreach($orderlist as $row) { ?>
                                         <tr id="order_<?php echo $row->order_id; ?>">
                                         <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
-                                        <td><?php echo $row->prod_name;?></td>
-                                        <td><?php echo $row->order_qty;?></td>
+                                        <td><button type="button" name="vieworders" onclick="viewOrders(<?php echo $row->order_id ?>);" class="btn btn-success"><i class="material-icons">list</i> PRODUCT LIST</button></td>
                                         <td>Php <?php echo $row->order_total;?></td>
                                         <td><?php echo $row->store_name;?></td>
                                         <?php if($row->order_status == 'pending'){

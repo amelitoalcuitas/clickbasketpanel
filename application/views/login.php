@@ -40,6 +40,26 @@
       .modal-open[style] {
         padding-right: 0px !important;
       }
+
+      .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 1s linear infinite;
+        animation: spin 1s linear infinite;
+      }
+
+      @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
     </style>
 
 </head>
@@ -144,15 +164,23 @@ setTimeout(function() {
     var email = $('#resetpassemail').val();
     var key = getKey();
 
-    if(email.length > 0){ //------------------------------ CHANGE THIS LINE ----------------------------------------//
+    if(email.length > 0){
+
+      $('#forgotpassbody').hide();
+      $('.loader').show();
+
       $.ajax({
         type: 'POST',
         data: {email:email, key:key},
         url: '<?php echo base_url("login/forgotPass"); ?>',
         success: function(data){
           if(data == 'failed'){
+            $('#forgotpassbody').show();
+            $('.loader').hide();
             $('#errorForgotPass').html('Email is invalid!');
           }else{
+            $('#forgotpassbody').show();
+            $('.loader').hide();
             $('#forgotPass').modal('hide');
             swal('Success!','Please check your email for the instructions.','success');
           }
@@ -165,6 +193,7 @@ setTimeout(function() {
   });
 
   $('#forgotPass').on('hidden.bs.modal',function(){
+    $('#resetpassemail').val('');
     $('#errorForgotPass').html('</br>');
   });
 </script>

@@ -79,22 +79,25 @@
       </div>
       <div class="modal-body">
         <div class="body">
-          <div class="msg" style="text-align:center;">
-              Enter the email address that you used to register. We'll send you an email with your username and a
-              link to reset your password.
-          </div>
-          <br>
-          <div class="input-group">
-              <span class="input-group-addon">
-                  <i class="material-icons">email</i>
-              </span>
-              <div class="form-line">
-                  <input type="email" class="form-control" name="resetpassemail" id="resetpassemail" placeholder="Enter your Email" required autofocus>
-              </div>
+          <div style="display:none; margin: 0 auto;" class="loader"> </div>
+          <div id="forgotpassbody">
+            <div class="msg" style="text-align:center;">
+                Enter the email address that you used to register. We'll send you an email with your username and a
+                link to reset your password.
+            </div>
+            <br>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="material-icons">email</i>
+                </span>
+                <div class="form-line">
+                    <input type="email" class="form-control" name="resetpassemail" id="resetpassemail" placeholder="Enter your Email" required autofocus>
+                </div>
 
-              <div style="color:red; font-size:13px; margin:0px 0 0px 0;" id="errorForgotPass"><br></div>
+                <div style="color:red; font-size:13px; margin:0px 0 0px 0;" id="errorForgotPass"><br></div>
+            </div>
+            <button class="btn btn-block btn-lg bg-pink waves-effect" id="resetPass" type="submit">RESET MY PASSWORD</button>
           </div>
-          <button class="btn btn-block btn-lg bg-pink waves-effect" id="resetPass" type="submit">RESET MY PASSWORD</button>
         </div>
       </div>
       <div class="modal-footer">
@@ -245,3 +248,58 @@
   </div>
 </div>
 <!-- Store Edit -->
+
+<!-- Order Product List -->
+<div id="orderProducts" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Ordered Products</h4>
+      </div>
+      <div class="modal-body">
+        <table id="orderProductsTable" class="table table-bordered table-striped table-hover js-basic-example dataTable">
+            <thead>
+                <tr>
+                    <th>PRODUCT NAME</th>
+                    <th width="30px">QTY</th>
+                    <th>PRICE</th>
+                </tr>
+            </thead>
+            <tbody id="orderprodbody">
+              
+            </tbody>
+        </table>
+
+        <div align="right" style="padding:5px;">
+          <b>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th width="20px"></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td> # of Items </td>
+                <td align="center">=</td>
+                <td id="totalitems" align="right"></td>
+              </tr>
+              <tr>
+                <td> Total Price </td>
+                <td align="center">=</td>
+                <td id="totalprice" align="right" style="color:red;"></td>
+              </tr>
+            </tbody>
+          </table>
+          </b>
+        </div>
+
+      </div>
+    </div>
+        <!-- Modal content-->
+  </div>
+</div>
+<!-- Order Product List END -->

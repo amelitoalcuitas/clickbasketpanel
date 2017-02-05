@@ -47,7 +47,6 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-              <input type="button" name="" value="Send" onclick="sendEmail();">
             </div>
         </div>
     </section>
