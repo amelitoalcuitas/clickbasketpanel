@@ -35,6 +35,9 @@
 <script src="<?php echo base_url().'assets/js/admin.js';?>"></script>
 <script src="<?php echo base_url().'assets/js/jquery.validate.min.js';?>"></script>
 
+<!--CHART JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+
 <!-- VENDOR SIDE SCRIPTS START -->
 <script>
   $('#sHourStart').bootstrapMaterialDatePicker({ date: false, shortTime: true, format: 'LT'});
@@ -1059,6 +1062,55 @@
 
 </script>
 <!-- UPLOAD IMAGE END -->
+
+<!--CHART JS START-->
+<script>
+$(document).ready(function(){
+  $.ajax({
+    url:'<?php echo base_url('ordercontroller/getOrdersbyStore');?>',
+    method: 'POST',
+    dataType: 'JSON',
+    success:function(data){
+      var product_name = [];
+      var order_qty = [];
+      for(var i = 0; i < data.length; i++){
+        product_name.push(data[i]['prod_name']);
+        order_qty.push(data[i]['qty']);
+      }
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: product_name,
+          datasets: [{
+            label: 'Quantity Ordered',
+            data: order_qty,
+            backgroundColor: [
+              'rgb(244,67,54)',
+              'rgb(96, 125, 139)',
+              'rgb(156, 39, 176)',
+              'rgb(103, 58, 183)',
+              'rgb(63, 81, 181)'
+                ]
+          }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        stepSize: 1
+                    }
+                }]
+            }
+        }
+      });
+    }
+  });
+});
+
+</script>
+<!--CHART JS END-->
 
 </body>
 

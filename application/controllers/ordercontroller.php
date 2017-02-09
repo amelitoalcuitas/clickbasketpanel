@@ -20,4 +20,8 @@ class OrderController extends CI_Controller{
     $this->order->get_orders_by_id($id);
   }
 
+  public function getOrdersbyStore(){
+    print_r(json_encode($this->order->get_order_products()));
+  }
+
 }

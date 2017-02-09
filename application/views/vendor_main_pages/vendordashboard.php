@@ -47,7 +47,9 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2></h2>
+
+              <?php $this->load->view('vendor_content/view_dashboard') ?>
+
             </div>
         </div>
     </section>
