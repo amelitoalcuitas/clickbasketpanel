@@ -27,7 +27,7 @@
 <table style="width: 538px; background-color: #393836;" align="center" cellspacing="0" cellpadding="0">
 	<tr>
 		<td style=" height: 65px; background-color: #000000; border-bottom: 1px solid #4d4b48;">
-			<a href="http://192.168.0.44/ClickBasketPanel/"><img src="<?php echo base_url('assets/images/email/header.png'); ?>" width="538" height="65" alt="ClickBasket"></a>
+			<a href="<?= base_url(); ?>"><img src="<?php echo base_url('assets/images/email/header.png'); ?>" width="538" height="65" alt="ClickBasket"></a>
 		</td>
 	</tr>
 	<tr>
@@ -47,7 +47,7 @@
 						Please click the link below to change your password:
 						<br><br><br>
 						<center>
-							<a style="color:#FF5722;" target="__new" href="http://192.168.0.44/ClickBasketPanel/login/changePassword?vendor_key=<?php echo $vendordata->vendor_key; ?>&vendor_id=<?php echo $vendordata->vendor_id; ?>">
+							<a style="color:#FF5722;" target="__new" href="<?= base_url(); ?>login/changePassword?vendor_key=<?php echo $vendordata->vendor_key; ?>&vendor_id=<?php echo $vendordata->vendor_id; ?>">
 								CHANGE PASSWORD
 							</a>
 						</center>

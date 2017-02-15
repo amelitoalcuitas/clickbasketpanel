@@ -14,7 +14,7 @@ class VendorPagesController extends CI_Controller {
 
 		if($this->session->userdata('logged_in') == false){
 			redirect('login');
-		}else if($this->session->userdata('restriction') != 'admin'){
+		}else if($this->session->userdata('restriction') != 'vendor'){
     	redirect('login');
     }
 

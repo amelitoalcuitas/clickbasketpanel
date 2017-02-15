@@ -74,7 +74,7 @@ class Product extends CI_Model {
 			$result = $this->db->query($query_str);
 
 			if($result->num_rows() > 0){
-				array_push($indexarray,$i);
+				$indexarray[] = $i;
 				$exist--;
 			} else {
 				$exist++;

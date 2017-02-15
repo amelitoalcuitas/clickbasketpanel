@@ -34,6 +34,7 @@
                                           <input type="hidden" id="timeClose_<?php echo $row->store_id; ?>" name="" value="<?php echo $row->time_close?>">
                                         </td>
                                         <td>
+                                          <input type="hidden" id="storeimage_<?php echo $row->store_id; ?>" name="" value="<?php echo $row->store_image?>">
                                           <button id="storeEdit_<?php echo $row->store_id; ?>" onclick="editStore(<?php echo $row->store_id; ?>)" name="<?php echo $row->store_id; ?>" class="btn btn-warning"><i class="material-icons">edit</i></button>
                                           <button id="storeDelete_<?php echo $row->store_id; ?>" onclick="deleteStore(<?php echo $row->store_id; ?>)" name="<?php echo $row->store_id; ?>" class="btn btn-danger"><i class="material-icons">delete</i></button>
                                         </td>

@@ -35,8 +35,6 @@
 <script src="<?php echo base_url().'assets/js/admin.js';?>"></script>
 <script src="<?php echo base_url().'assets/js/jquery.validate.min.js';?>"></script>
 
-<!--CHART JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
 
 <!-- VENDOR SIDE SCRIPTS START -->
 <script>
@@ -119,7 +117,6 @@
   }
 
   $('#submitProduct').click(function(event){
-    var result2 = "";
     event.preventDefault();
     $('#addProdError').html('<br>');
     $('#addProductTable #prodNameError').html('<br>');
@@ -142,7 +139,7 @@
         url: '<?php echo base_url("addproductcontroller/check_product_credentials"); ?>',
         data: {pname:pname, pprice:pprice, pqty:pqty, pscat:pscat, count:count},
         success: function(result){
-          var result2 = result;
+
           if(result == "existfalse"){
             swal('Error!','Product/s entered already exist!','error');
             $('#addProdError').append('*One or more product already exist');
@@ -183,7 +180,7 @@
   function inputEmpty(){
     var isEmpty = true;
     var emptyNum = 0;
-    var count = (cnt-1)*4;
+    var count = (cnt-1)*5;
 
     $("#addProductTable input[name='pImage[]']").each(function(){
       if($(this).val().length > 0){
@@ -724,9 +721,42 @@
       $('#mAddress').attr('value',myData[1]);
       $('#mTimeOpen').attr('value',$('#timeOpen_'+id).val());
       $('#mTimeClose').attr('value',$('#timeClose_'+id).val());
+      $('#uploadPreview').attr('src','<?php echo base_url('assets/images/store_image/');?>'+$('#storeimage_'+id).val());
     }
 
+    $('#imageupdatesubmit').submit(function(event){
+
+      event.preventDefault();
+
+      var id = $('#editStoreModal').attr('data-id');
+      var form = $('#imageupdatesubmit')[0]; // You need to use standart javascript object here
+      var formData = new FormData(form);
+      var imagename = $('#storeimage_'+id).val();
+
+      $('#uploadPreview').attr('src','');
+
+      $('#storeimageerror').html('<br>');
+
+      $.ajax({
+       url: '<?php echo base_url("storeregistercontroller/updateStoreImage"); ?>?imagename=' + imagename + '&storeid=' + id,
+       data: formData,
+       type: 'POST',
+       contentType: false,
+       processData: false,
+       success: function(res){
+           if(res == "success"){
+             swal('Success!','Store Image has been updated!', 'success');
+             $('#uploadPreview').attr('src','<?php echo base_url('assets/images/store_image/');?>' + imagename + '?' + new Date().getTime());
+           }else{
+             $('#storeimageerror').html(res);
+           }
+         }
+     });
+
+    });
+
     $('#modalStoreSubmit').click(function(){
+
       var id = $('#editStoreModal').attr('data-id');
       var storename = $('#mStoreName').val();
       var storeaddress = $('#mAddress').val();
@@ -740,20 +770,23 @@
       myData[1] = storeaddress;
       myData[2] = formatTime(timeopen) + ' - ' + formatTime(timeclose);
 
-      $.ajax({
-         type: 'post',
-         url: '<?php echo base_url("storeregistercontroller/updateStore"); ?>',
-         data: {storeid:id, storename:storename, storeaddress:storeaddress, timeopen:timeopen, timeclose:timeclose},
-         success: function(result){
-           if(result == 'true'){
-             table.row($('#storetablerow_'+id)).data(myData).draw();
-             $('#editStoreModal').modal('hide');
-             swal('Success!','Category has been successfully updated!','success');
-           }else if (result === 'false') {
-             $('#errorStoreEdit').html('Store Name field is required!')
-           }
-         }
-      });
+       $.ajax({
+          type: 'post',
+          url: '<?php echo base_url("storeregistercontroller/updateStore"); ?>',
+          data: {storeid:id, storename:storename, storeaddress:storeaddress, timeopen:timeopen, timeclose:timeclose},
+          success: function(result){
+            if(result == 'true'){
+              table.row($('#storetablerow_'+id)).data(myData).draw();
+              $('#editStoreModal').modal('hide');
+              swal('Success!','Category has been successfully updated!','success');
+            }else if (result === 'false') {
+              $('#errorStoreEdit').html('Store Name field is required!')
+            }else{
+              $('#editStoreModal').modal('hide');
+            }
+          }
+       });
+
     });
 
     function formatTime(time){
@@ -893,7 +926,10 @@
 <!-- NOTIFICATION SCRIPT START -->
 <script>
   $(document).ready(function(){
-    notifLoop();
+    var restriction = "<?php echo $this->session->userdata('restriction') ?>";
+    if(restriction == 'vendor'){
+      notifLoop();
+    }
   });
 
   function notifLoop(){
@@ -978,8 +1014,8 @@
       dataType: 'JSON',
       success: function(res){
         for (var i = 0; i < res.length; i++) {
-          orderProdTable.row.add([res[i].prod_name,res[i].order_qty,"Php "+res[i].storeprod_price]).draw();
-          totalprice += parseInt(res[i].order_qty) * parseFloat(res[i].storeprod_price);
+          orderProdTable.row.add([res[i].prod_name,res[i].order_qty,"Php "+res[i].product_total]).draw();
+          totalprice += parseInt(res[i].order_qty) * parseFloat(res[i].product_price);
           qty += parseInt(res[i].order_qty);
         }
 
@@ -993,6 +1029,8 @@
 
   $("#orderProducts").on("hidden.bs.modal", function () {
     $('#orderProductsTable').DataTable().clear().draw();
+    $('#totalprice').html('');
+    $('#totalitems').html('');
   });
 </script>
 <!-- ORDER BUTTONS END -->
@@ -1021,7 +1059,7 @@
       var formData = new FormData(form);
 
       $.ajax({
-        url: '<?php echo base_url("upload/do_upload"); ?>',
+        url: '<?php echo base_url("upload/userImageUpload"); ?>',
         data: formData,
         type: 'POST',
         contentType: false,
@@ -1066,47 +1104,55 @@
 <!--CHART JS START-->
 <script>
 $(document).ready(function(){
-  $.ajax({
-    url:'<?php echo base_url('ordercontroller/getOrdersbyStore');?>',
-    method: 'POST',
-    dataType: 'JSON',
-    success:function(data){
-      var product_name = [];
-      var order_qty = [];
-      for(var i = 0; i < data.length; i++){
-        product_name.push(data[i]['prod_name']);
-        order_qty.push(data[i]['qty']);
-      }
-      var ctx = document.getElementById('myChart').getContext('2d');
-      var myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: product_name,
-          datasets: [{
-            label: 'Quantity Ordered',
-            data: order_qty,
-            backgroundColor: [
-              'rgb(244,67,54)',
-              'rgb(96, 125, 139)',
-              'rgb(156, 39, 176)',
-              'rgb(103, 58, 183)',
-              'rgb(63, 81, 181)'
-                ]
-          }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        min: 0,
-                        stepSize: 1
-                    }
-                }]
-            }
+  var title = '<?= $title ?>';
+
+  if(title == 'vendordashboard'){
+
+    var product_name = [];
+    var order_qty = [];
+
+    $.ajax({
+      url: '<?php echo base_url('ordercontroller/getOrdersbyStore');?>',
+      type: 'POST',
+      dataType: 'JSON',
+      success: function(data){
+
+        for(var i = 0; i < data.length; i++){
+          product_name.push(data[i]['prod_name']);
+          order_qty.push(data[i]['qty']);
         }
-      });
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: product_name,
+            datasets: [{
+              label: 'Quantity Ordered',
+              data: order_qty,
+              backgroundColor: [
+                'rgb(244,67,54)',
+                'rgb(96, 125, 139)',
+                'rgb(156, 39, 176)',
+                'rgb(103, 58, 183)',
+                'rgb(63, 81, 181)'
+                  ]
+            }]
+          },
+          options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                          min: 0,
+                          stepSize: 1
+                      }
+                  }]
+              }
+          }
+        });
+      }
+    });
     }
-  });
 });
 
 </script>

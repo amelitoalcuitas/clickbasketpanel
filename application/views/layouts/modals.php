@@ -238,9 +238,32 @@
             <input type="time" id="mTimeClose" class="form-control" value="" required>
           </div>
         </div>
+        <br>
+        
+        <form id="imageupdatesubmit" action="" method="post" enctype="multipart/form-data">
+
+        <label style="font-weight: bold; font-size:15px;">Store Image</label>
+        <div class="form-group storeimageview" style="margin-bottom:0px; border:1px solid gray;">
+          <div class="form-line">
+            <div class="trick"></div>
+            <img id="uploadPreview" style="width:550px;height:273px;" src="" alt="Store Image" />
+          </div>
+        </div>
+        <br>
+
+        <i>Suggested dimension: 600x300px | Ratio: 2:1 | File size: not more than 2MB</i>
+        <div class="col-md-8">
+          <input id="file" type="file" name="mStoreimage" style="font-size:17px;margin-bottom:10px;" onchange="PreviewImage();" accept="image/*" >
+          <div id="storeimageerror" style="color:red;"><br></div>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" name="button" class="btn btn-success">Apply Image</button>
+        </div>
+        </form>
+        <br>
       </div>
       <div class="modal-footer">
-        <input type="button" id="modalStoreSubmit" class="btn btn-primary" value="Done">
+        <button type="button" id="modalStoreSubmit" class="btn btn-primary" name="button">Done Editing</button>
       </div>
 
     </div>
@@ -267,7 +290,7 @@
                 </tr>
             </thead>
             <tbody id="orderprodbody">
-              
+
             </tbody>
         </table>
 

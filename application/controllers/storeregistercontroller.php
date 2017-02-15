@@ -11,9 +11,23 @@ class StoreRegisterController extends CI_Controller {
 
 	  	$this->form_validation->set_rules('sName', 'Store Name', 'trim|required|callback_check_store_name',TRUE);
 	  	$this->form_validation->set_rules('sAddress', 'Store Address', 'trim|required',TRUE);
-	  	$this->form_validation->set_rules('sHourStart','Store Hours start', 'trim|required',TRUE);
+	  	$this->form_validation->set_rules('sHourStart','Store Hours open', 'trim|required',TRUE);
 	  	$this->form_validation->set_rules('sHourClose', 'Store Hours close', 'trim|required', TRUE);
+      if (empty($_FILES['storeimage']['name'])){
+          $this->form_validation->set_rules('storeimage', 'Store Image', 'trim|required', TRUE);
+      }
 
+      $new_name                       = 'store_image_'.mt_rand();
+      $config['upload_path']          = './assets/images/store_image/';
+      $config['allowed_types']        = 'jpg|png|gif';
+      $config['overwrite']            = TRUE;
+      $config['max_size']             = 1024;
+      $config['max_width']            = 1024;
+      $config['max_height']           = 768;
+      $config['file_name']            = $new_name;
+      $config['file_ext']             = 'image/jpeg';
+
+      $this->load->library('upload', $config);
 
 	  	if($this->form_validation->run() == FALSE){
         $data['page'] = 'five';
@@ -31,12 +45,24 @@ class StoreRegisterController extends CI_Controller {
           'time_close' => date("H:i", strtotime($this->input->post('sHourClose')))
 	  			);
 
-	  		if($this->store->register_store($data)==TRUE){
-	  			$this->session->set_flashdata('success', TRUE);
-	  			redirect('pagescontroller/storeregister');
-	  		}else {
-	 			     show_404(); //if query was unsucessful;
-	  		}
+          if ( ! $this->upload->do_upload('storeimage')){
+            $error = $this->upload->display_errors();
+
+            $data['page'] = 'five';
+            $data['title'] = 'storeregister';
+            $data['error'] = $error;
+
+            $this->load->view('layouts/header');
+            $this->load->view('blocks/sidenav',$data);
+            $this->load->view('clickbasket',$data);
+            $this->load->view('layouts/footer');
+          }else{
+            if($this->store->register_store($data)==TRUE){
+              $this->store->upload_storeimage($this->upload->data('file_name'));
+              $this->session->set_flashdata('success', TRUE);
+    	  			redirect('admin/addstore');
+            }
+        }
 	  	}
 
 	  }//end of check_store_credentials
@@ -83,8 +109,7 @@ class StoreRegisterController extends CI_Controller {
 
     $this->form_validation->set_rules('storename','Category Name','trim|required',TRUE);
 
-    if($this->form_validation->run()==false)
-    {
+    if($this->form_validation->run()==false){
       echo "false";
     }else {
       $data = array(
@@ -93,12 +118,33 @@ class StoreRegisterController extends CI_Controller {
       'time_open' => $timeopen,
       'time_close' => $timeclose
       );
-
       if($this->store->updateStore($storeid,$data) == true){
         echo "true";
       }
     }
 
+  }
+
+  public function updateStoreImage(){
+      $storeid                        = $this->input->get('storeid');
+      $new_name                       = $this->input->get('imagename');
+      $config['upload_path']          = './assets/images/store_image/';
+      $config['allowed_types']        = 'jpg|png';
+      $config['overwrite']            = TRUE;
+      $config['max_size']             = 1024;
+      $config['max_width']            = 1024;
+      $config['max_height']           = 768;
+      $config['file_name']            = $new_name;
+      $config['file_ext']             = 'image/jpeg';
+
+      $this->load->library('upload', $config);
+
+      if ( ! $this->upload->do_upload('mStoreimage')){
+        echo $this->upload->display_errors();
+      }else{
+        $this->store->update_storeimage($this->upload->data('file_name'), $storeid);
+        echo 'success';
+      }
   }
 
 }

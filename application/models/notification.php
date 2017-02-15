@@ -29,7 +29,7 @@ class Notification extends CI_Model{
 			foreach ($query->result() as $row) {
 				if($row->status == 'unread'){
 					echo '<li style="background:#e9e9e9;">
-									<a href="javascript:void(0);" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
+									<a href="'.base_url('vendor/viewOrders').'" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
 										<div class="icon-circle bg-purple">
 												<i class="material-icons">settings</i>
 										</div>
@@ -44,7 +44,7 @@ class Notification extends CI_Model{
 								</li>';
 				}else{
 					echo '<li>
-									<a href="javascript:void(0);" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
+									<a href="'.base_url('vendor/viewOrders').'" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
 										<div class="icon-circle bg-purple">
 												<i class="material-icons">settings</i>
 										</div>

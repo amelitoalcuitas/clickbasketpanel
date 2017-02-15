@@ -22,8 +22,7 @@
                          <div class="row clearfix">
                            <div class="col-lg-12">
                              <div class="form-panel">
-                                  <?php echo form_open('RegistrationController/check_user_credentials'); ?>
-
+                                  <?php echo form_open('admin/register/checkfields'); ?>
 
                                         <!--select-->
                                      <label style="font-weight: bold; font-size:15px;">Store</label><br>

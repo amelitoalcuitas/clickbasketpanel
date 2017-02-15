@@ -8,7 +8,7 @@ class AddCategoryController extends CI_Controller {
 		parent::__construct();
 		$this->load->model('category');
 
-		if($this->session->userdata('restriction')!='admin')
+		if($this->session->userdata('restriction')!='vendor')
 		{
 			redirect('login');
 		}

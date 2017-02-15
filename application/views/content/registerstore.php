@@ -20,7 +20,7 @@
                          <div class="row clearfix">
                            <div class="col-lg-12">
                              <div class="form-panel">
-                                  <?php echo form_open('StoreRegisterController/check_store_credentials'); ?>
+                                  <?php echo form_open_multipart('admin/addstore/checkfields'); ?>
                                      <label style="font-weight: bold; font-size:15px;">Store</label><br>
                                      <div class="col-xs-12" >
                                        <div class="form-group">
@@ -62,6 +62,24 @@
                                              <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;">
                                                <?php echo "<br>".form_error('sHourClose'); ?>
                                              </div>
+                                           </div>
+                                       </div>
+                                       <label style="font-weight: bold; font-size:15px;">Store Image</label><br>
+                                       <div class="col-sm-12">
+                                           <div class="form-group">
+                                             <div id="editImage" class="storeimageview" style="margin-bottom:10px;border:1px solid #999; margin-left:12px;">
+                                                 <div class="trick"></div>
+                                                 <img id="uploadPreview"/>
+                                             </div>
+                                             <input id="file" type="file" name="storeimage" style="font-size:17px;margin-bottom:10px; margin-left: -1px;" onchange="PreviewImage();" accept="image/*" >
+                                             <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;" id="storeimageerror">
+                                               <?php if(isset($error)){
+                                                  echo $error;
+                                               }else{
+                                                  echo "<br>".form_error('storeimage');
+                                               } ?>
+                                             </div>
+                                             <i>Suggested dimension: 600x300px | Ratio: 2:1 | File size: not more than 2MB</i>
                                            </div>
                                        </div>
                                        <div class="form-group">

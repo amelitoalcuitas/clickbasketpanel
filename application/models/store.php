@@ -69,8 +69,23 @@ class Store extends CI_Model {
 		$this->db->where('store_id', $storeid);
 
 		if($this->db->update('store',$data)){
-			return true;
+			if($this->db->affected_rows() > 0){
+				return true;
+			}
 		}
 	}
+
+	public function update_storeimage($filename,$storeid){
+    $this->db->where('store_id', $storeid);
+
+    $this->db->update('store',array('store_image' => $filename));
+  }
+
+	public function upload_storeimage($filename){
+		$id = $this->db->insert_id();
+    $this->db->where('store_id', $id);
+
+    $this->db->update('store',array('store_image' => $filename));
+  }
 
 }

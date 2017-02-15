@@ -115,10 +115,9 @@
             </div>
 
         </div>
-           <?php if(isset($error))
-            {
+           <?php if(isset($error)){
                  echo  '<div class="alert alert-danger" id = "error">
-                     <strong>Wrong Username or Password</strong>
+                     <strong>'.$error.'</strong>
                        </div>';
                 }?>
     </div>
@@ -126,7 +125,7 @@
 <script>
 setTimeout(function() {
   $("div #error").fadeOut();
-}, 5000);
+}, 10000);
 
 </script>
 

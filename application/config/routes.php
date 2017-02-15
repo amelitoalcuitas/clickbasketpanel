@@ -51,6 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 $route['admin'] = 'pagescontroller';
+$route['admin/addstore/checkfields'] = 'StoreRegisterController/check_store_credentials';
+$route['admin/register/checkfields'] = 'RegistrationController/check_user_credentials';
 $route['admin/register'] = 'pagescontroller/register';
 $route['admin/viewvendors'] = 'pagescontroller/viewvendors';
 $route['admin/removedvendors'] = 'pagescontroller/viewremovedvendors';

@@ -23,7 +23,7 @@ class Order extends CI_Model{
     return $query->result();
   }
 
-	public function get_orders_by_id(){
+	public function get_orders_by_id($id){
 		$this->db->select('*');
 		$this->db->from('store_products');
 		$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id');
@@ -33,6 +33,7 @@ class Order extends CI_Model{
 		$this->db->join('consumers','consumers.consumer_id = orders.consumer_id');
 		$this->db->join('store','store.store_id = store_products_subcategory.store_id');
 		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
+		$this->db->where('orders.order_id', $id);
 		$this->db->where('orders.order_status !=','completed');
 
 		$query = $this->db->get();

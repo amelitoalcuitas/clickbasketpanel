@@ -15,7 +15,7 @@ class Login extends CI_Controller {
 
 		if($this->session->userdata('logged_in') == TRUE && $this->session->userdata('restriction')=='superadmin') {
 			redirect('admin');
-		} else if($this->session->userdata('logged_in') == TRUE && $this->session->userdata('restriction')=='admin') {
+		} else if($this->session->userdata('logged_in') == TRUE && $this->session->userdata('restriction')=='vendor') {
 
 			redirect('vendor');
 
@@ -41,39 +41,39 @@ class Login extends CI_Controller {
 
 					if ($credentials = $this->vendor->login($name, $pass)) {
 
-						if($credentials->restriction == 'admin')
-						{
+							if($credentials->restriction == 'vendor') {
+								if($credentials->vendor_status == 'confirmed'){
+								$userdata = array('name'=> $credentials->vendor_fname.' '.$credentials->vendor_lname,
+									'vendor_id' => $credentials->vendor_id,
+									'email'=>$credentials->vendor_email,
+									'restriction'=>$credentials->restriction,
+									'store_id'=>$credentials->store_id,
+									'store_name'=>$credentials->store_name,
+									'logged_in'=> TRUE
+									);
 
-							$userdata = array('name'=> $credentials->vendor_fname.' '.$credentials->vendor_lname,
-								'vendor_id' => $credentials->vendor_id,
-								'email'=>$credentials->vendor_email,
-								'restriction'=>$credentials->restriction,
-								'store_id'=>$credentials->store_id,
-								'store_name'=>$credentials->store_name,
-								'logged_in'=> TRUE
-								);
+								$this->session->set_userdata($userdata);
+								redirect('vendor');
+								}else{
+									$data['error'] = "<center> Account is not yet verified! <br> Please check your email. </center>";
+									$this->load->view('login',$data);
+								}
+							} else if($credentials->restriction == 'superadmin') {
+								$userdata = array('name'=> $credentials->superadmin_fname.' '.$credentials->superadmin_lname,
+									'email'=>$credentials->superadmin_email,
+									'restriction'=>$credentials->restriction,
+									'logged_in'=> TRUE
+									);
 
-							$this->session->set_userdata($userdata);
-							redirect('vendor');
+								$this->session->set_userdata($userdata);
 
-						} else if($credentials->restriction == 'superadmin')
-						{
-							$userdata = array('name'=> $credentials->superadmin_fname.' '.$credentials->superadmin_lname,
-								'email'=>$credentials->superadmin_email,
-								'restriction'=>$credentials->restriction,
-								'logged_in'=> TRUE
-								);
+								redirect('admin');
+							}
 
-							$this->session->set_userdata($userdata);
-
-							redirect('admin');
-						}
-
-
-					} else {
-							$data['error'] = "*Incorrect username or password!";
+				} else {
+							$data['error'] = "<center> Incorrect username or password! </center>";
 							$this->load->view('login',$data);
-					}
+			 }
 		}
 	}	//end of check login
 
@@ -117,6 +117,7 @@ class Login extends CI_Controller {
     }
   }
 
+// DELETE THIS AFTER TESTING ---------------------------------------------------
 	public function forgotpassword(){
 		$email = 'macsho10@gmail.com';
 		if($vendor = $this->vendor->getVendorByEmail($email)){
@@ -126,6 +127,8 @@ class Login extends CI_Controller {
 		$data['vendordata'] = $this->vendordata;
 		$this->load->view('emails/confirmation',$data);
 	}
+// DELETE THIS AFTER TESTING ---------------------------------------------------
+
 
 	public function changePassword(){
 		$key = $this->input->get('vendor_key');

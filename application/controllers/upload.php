@@ -8,7 +8,7 @@ class Upload extends CI_Controller {
             $this->load->model('vendor');
     }
 
-    public function do_upload(){
+    public function userImageUpload(){
         $new_name = 'vendor_'.$this->session->userdata('vendor_id').'_ppic';
         $config['upload_path']          = './assets/images/prof_pic/';
         $config['allowed_types']        = 'jpg|png';

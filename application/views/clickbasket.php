@@ -4,7 +4,7 @@
 if($this->session->userdata('logged_in')==TRUE)
 {
 
-	if($this->session->userdata('restriction')=='superadmin' && $this->session->userdata('restriction')!= 'admin' )//parent if
+	if($this->session->userdata('restriction')=='superadmin' && $this->session->userdata('restriction')!= 'vendor' )//parent if
 	{
 			if ($title == 'dashboard'){
 				$this->load->view('main_pages/dashboard');
@@ -29,7 +29,7 @@ if($this->session->userdata('logged_in')==TRUE)
 			}
 	 }
 
-	 if($this->session->userdata('restriction')=='admin' && $this->session->userdata('restriction')!='superadmin')
+	 if($this->session->userdata('restriction')=='vendor' && $this->session->userdata('restriction')!='superadmin')
 	 {
 		 	if ($title == 'vendordashboard')
 			{

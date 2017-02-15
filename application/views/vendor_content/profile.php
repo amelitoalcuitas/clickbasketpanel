@@ -33,7 +33,7 @@
                              	<img id="uploadPreview"/>
                            </div>
                          </div>
-                         <?php echo form_open_multipart('upload/do_upload','id="fileForm"');?>
+                         <?php echo form_open_multipart('upload/userImageUpload','id="fileForm"');?>
                           <div class="col-sm-4">
                             <input id="file" type="file" name="userfile" style="font-size:17px;margin-bottom:10px; margin-left: -1px;" onchange="PreviewImage();" accept="image/*" >
                             <div id="error_0"  style="color:red;"><br></div>
@@ -45,7 +45,7 @@
                           <!-- CANCEL BUTTON -->
                           <button style="display:none;" type="button" class="btn btn-default pull-left" id="cancelbutt_0" onclick="cancelEdit(0);"><span class="glyphicon glyphicon-remove"></span></button>
                           </div>
-                          </form>
+                         </form>
 
                         </div>
                         <!--FORM FIRSTNAME-->

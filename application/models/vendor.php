@@ -10,7 +10,6 @@ class Vendor extends CI_Model{
     $this->db->where('vendor_username', $name);
     $this->db->where('vendor_password', $pass);
     $this->db->where('vendor_deleted', 'false');
-    $this->db->where('vendor_status', 'confirmed');
 
     $query = $this->db->get();
 

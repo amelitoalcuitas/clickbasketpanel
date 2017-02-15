@@ -32,9 +32,12 @@
                                         <th width="15px"> DELETE </th>
                                     </tr>
                                 </thead>
-                                <tbody id="addProductTable">
+                                <?php echo form_open_multipart('upload/userImageUpload','id="productForm"'); ?>
+                                  <tbody id="addProductTable">
 
-                                </tbody>
+
+                                  </tbody>
+                                </form>
                                 <tfoot>
                                   <tr>
                                 </tfoot>

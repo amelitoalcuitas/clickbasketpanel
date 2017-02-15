@@ -106,6 +106,13 @@
        width: 150px;
        height: 200px;
      }
+
+     .storeimageview {
+       font-size: 0;
+       text-align: center;
+       width: 550px;
+       height: 275px;
+     }
    </style>
 
 </head>

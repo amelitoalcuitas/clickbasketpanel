@@ -9,7 +9,7 @@ class AddProductController extends CI_Controller {
 
 		$this->load->model('product');
 
-		if($this->session->userdata('restriction')!='admin')
+		if($this->session->userdata('restriction')!='vendor')
 		{
 			redirect('login');
 		}
@@ -48,6 +48,15 @@ class AddProductController extends CI_Controller {
 
 	public function check_if_thisproduct_exist($product_name,$counter){
 		if($this->product->check_if_exist($product_name,$counter)) {
+			return true;
+		} else {
+			echo 'exist';
+			return false;
+		}
+	}
+
+  public function check_if_product_exist(){
+		if($this->product->check_if_exist($this->input->post('pname'))) {
 			return true;
 		} else {
 			echo 'exist';
@@ -102,17 +111,6 @@ class AddProductController extends CI_Controller {
 			{
 				echo "true";
 			}
-		}
-	}
-
-	public function check_if_product_exist(){
-		//$this->form_validation->set_message('check_if_product_exist', 'Product already exist!');
-
-		if($this->product->check_if_exist($this->input->post('pname'))) {
-			return true;
-		} else {
-			echo 'exist';
-			return false;
 		}
 	}
 
