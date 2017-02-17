@@ -32,17 +32,17 @@ class AddProductController extends CI_Controller {
 		$product_subcat = $this->input->post('pscat');
 	  $counter = $this->input->post('count');
 
-		$new_name                       = 'prod_image_'.mt_rand();
-		$config['upload_path']          = './assets/images/prod_image/';
-		$config['allowed_types']        = 'jpg|png';
-		$config['overwrite']            = TRUE;
-		$config['max_size']             = 1024;
-		$config['max_width']            = 1024;
-		$config['max_height']           = 768;
-		$config['file_name']            = $new_name;
-		$config['file_ext']             = 'image/jpeg';
-
-		$this->load->library('upload', $config);
+		// $new_name                       = 'prod_image_'.mt_rand();
+		// $config['upload_path']          = './assets/images/prod_image/';
+		// $config['allowed_types']        = 'jpg|png';
+		// $config['overwrite']            = TRUE;
+		// $config['max_size']             = 1024;
+		// $config['max_width']            = 1024;
+		// $config['max_height']           = 768;
+		// $config['file_name']            = $new_name;
+		// $config['file_ext']             = 'image/jpeg';
+		//
+		// $this->load->library('upload', $config);
 
 		// if ( ! $this->upload->do_upload('storeimage')){
 		// 	$error = $this->upload->display_errors();
@@ -172,6 +172,7 @@ class AddProductController extends CI_Controller {
 		$prodsubcat = $this->input->post('psubcategory');
 		$prodqty = $this->input->post('pquantity');
 		$prodprice = $this->input->post('pprice');
+		$proddesc = $this->input->post('desc');
 
 		$this->form_validation->set_rules('pname','Product Name','trim|required',TRUE);
 		$this->form_validation->set_rules('pname','Product Name','trim|required|callback_check_if_product_existsingle',TRUE);
@@ -180,6 +181,7 @@ class AddProductController extends CI_Controller {
 			echo "false";
 		}else {
 			$products = array(
+			'prod_desc' => $proddesc,
 			'prod_name' => $prodname
 			);
 

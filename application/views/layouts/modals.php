@@ -76,6 +76,17 @@
             <input type="number" id="mPrice" class="form-control" value="" required>
           </div>
         </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Description</label>
+        <div class="row clearfix">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea rows="4" id="mDesc" class="form-control" placeholder="Please type the description..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
       </div>
       <div class="modal-footer">
         <input type="button" id="modalSubmit" class="btn btn-primary" value="Submit">

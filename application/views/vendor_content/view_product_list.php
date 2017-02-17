@@ -33,6 +33,7 @@
                                           <td><?php echo $row->inventory_stock;?></td>
                                           <td>Php <?php echo $row->storeprod_price;?></td>
                                           <td>
+                                              <input type="hidden" id="desc_<?php echo $row->prod_id; ?>" value="<?php echo $row->prod_desc;?>">
                                               <input type="hidden" id="prodimage_<?php echo $row->storeprod_id; ?>" name="" value="<?php echo $row->storeprod_image?>">
                                               <button onclick="discountModal(<?php echo $row->storeprod_id;  ?>,'<?php echo $row->prod_name; ?>')" name="<?php echo $row->prod_id; ?>" class="btn btn-success"><i class="material-icons">money_off</i></button>
                                               <button onclick="editThisProductModal(<?php echo $row->prod_id.','.$row->storeprod_id.','.$row->category_id;  ?>)" name="<?php echo $row->prod_id; ?>" class="btn btn-warning"><i class="material-icons">edit</i></button>

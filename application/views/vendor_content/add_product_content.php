@@ -24,7 +24,7 @@
                            <table class="table">
                                 <thead>
                                     <tr>
-                                        <th width="200px">IMAGE</th>
+                                        <!-- <th width="200px">IMAGE</th> -->
                                         <th>PRODUCT NAME</th>
                                         <th>DESCRIPTION</th>
                                         <th width="100px">PRICE</th>
@@ -56,14 +56,14 @@
                 </div>
 
             <div id="tableData" hidden>
-                  <div id="col1">
+                  <!-- <div id="col1">
                     <div class="form-group" style="margin-bottom:0px;">
                       <input type="file" class="form-control" id="pImage" name="pImage[]" value="<?php echo set_value('pImage[]'); ?>" required>
                     </div>
                     <div id="fileError" style="color:red; font-size:13px; margin:2px 0 -5px 0;">
                     <br>
                     </div>
-                  </div>
+                  </div> -->
                   <div id="col2">
                     <div class="form-group" style="margin-bottom:0px;">
                       <div class="form-line">

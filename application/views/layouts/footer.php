@@ -92,7 +92,7 @@
   $('#addButton').click(function(){
 
 
-    var data0 = document.getElementById("col1").innerHTML;
+    // var data0 = document.getElementById("col1").innerHTML;
     var data1 = document.getElementById("col2").innerHTML;
     var desc = '<button type="button" id="changeDesc" style="width:100px" onclick="changeDesc('+cnt+')" name="changeDesc" class="btn btn-success"><i class="material-icons">view_headline</i></button> <input type="hidden" id="desc_'+cnt+'" name="pDescription[]" required>';
     var data2 = document.getElementById("col3").innerHTML;
@@ -100,7 +100,7 @@
     var data4 = '<div id="col5"><div class="form-group" style="margin-bottom:0px;"><select class="form-control show-tick selectsearch" data-live-search="true" name="pSubCategory[]" required><option value="">-- Please select --</option><?php if(isset($subcategorylist)){ foreach($subcategorylist as $row){ ?><option value="<?php echo $row->subcategory_id;?>"> <?php echo $row->subcategory_name; ?></option><?php }} ?></select></div></div>';
     var data5 = '<button type="button" id="delThisRow" onclick="deleteThisRow('+cnt+')" name="delThisRow" class="btn btn-danger"><i class="material-icons">remove</i></button>';
 
-    $('#addProductTable').append('<tr id="'+ cnt +'"><td>'+data0+'</td> <td>'+data1+'</td><td>'+desc+'</td><td>'+data2+'</td><td>'+data3+'</td><td>'+data4+'</td><td>'+ data5 +'</td></tr>');
+    $('#addProductTable').append('<tr id="'+ cnt +'"> <td>'+data1+'</td><td>'+desc+'</td><td>'+data2+'</td><td>'+data3+'</td><td>'+data4+'</td><td>'+ data5 +'</td></tr>');
     $('.selectsearch').selectpicker();
     cnt = cnt + 1;
 
@@ -227,7 +227,7 @@
   function inputEmpty(){
     var isEmpty = true;
     var emptyNum = 0;
-    var count = (cnt-1)*6;
+    var count = (cnt-1)*5;
 
     $("#addProductTable input[name='pImage[]']").each(function(){
       if($(this).val().length > 0){
@@ -389,6 +389,7 @@
       document.getElementById('mCategory').value = $('#selectedcat_'+id).attr('value');
       document.getElementById('mQuantity').value = data[3];
       document.getElementById('mPrice').value = parseFloat(price).toFixed(2);
+      document.getElementById('mDesc').value = $('#desc_'+id).val();
   }
 
   $('#mCategory').on('changed.bs.select',function(){
@@ -492,6 +493,7 @@
     var pquantity = document.getElementById('mQuantity').value;
     var pprice = document.getElementById('mPrice').value;
     var newprice = parseFloat(pprice).toFixed(2);
+    var desc = $('#mDesc').val();
     var myData = table.row($('#product_'+id)).data();
 
     myData[0] = pname;
@@ -502,7 +504,7 @@
 
     $.ajax({
       type: 'post',
-      data: {sproductid:sId, productid:id, pname:pname, psubcategory:psubcategory, pquantity:pquantity, pprice:pprice},
+      data: {sproductid:sId, productid:id, pname:pname, psubcategory:psubcategory, pquantity:pquantity, pprice:pprice, desc:desc},
       url: '<?php echo base_url("addproductcontroller/updateProduct"); ?>',
       success: function(result){
         if(result == 'true'){
@@ -1377,7 +1379,7 @@ function GET_PARAM(name, url) {
 $(document).ready(function(){
   var title = '<?= $title ?>';
   var id = 0;
-  var oTable = $('#orderTable').DataTable();
+  var oTable = $('#orderTable').DataTable({"order": [[ 2, "desc" ]]});
 
   if(title == 'vieworders'){
     if(id = GET_PARAM('id')){
