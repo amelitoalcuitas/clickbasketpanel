@@ -25,7 +25,7 @@
                         </a>
                     </li>
 
-                     <li <?php if ($page == 'four' || $page == 'five' || $page =='six' || $page == 'categ') { echo 'class = "active"';}?> >
+                     <li <?php if ($page == 'four' || $page == 'five' || $page =='six' || $page == 'categ' || $page == 'delprod' || $page == 'delcat') { echo 'class = "active"';}?> >
                         <a   href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">shop</i>
                             <span>Products</span>
@@ -37,15 +37,21 @@
                           <li  <?php if ($page == 'four') { echo 'class = "active"';} ?> >
                               <a href="<?php echo site_url('vendor/viewproduct') ?>">View Products</a>
                           </li>
+                          <li  <?php if ($page == 'delprod') { echo 'class = "active"';} ?> >
+                              <a href="<?php echo site_url('vendor/deletedproducts') ?>">Deleted Products</a>
+                          </li>
                           <li  <?php if ($page == 'categ') { echo 'class = "active"';} ?> >
                               <a href="<?php echo site_url('vendor/viewcategories') ?>">View Categories</a>
+                          </li>
+                          <li  <?php if ($page == 'delcat') { echo 'class = "active"';} ?> >
+                              <a href="<?php echo site_url('vendor/deletedcategories') ?>">Deleted Categories</a>
                           </li>
                         </ul>
                     </li>
 
                     <li <?php if ($page == 'seven' || $page == 'eight' || $page == 'nine') { echo 'class = "active"';}?> >
                         <a   href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">work</i>
+                            <i class="material-icons">shopping_cart</i>
                             <span>Orders</span>
                         </a>
                         <ul class="ml-menu">

@@ -14,11 +14,11 @@ class Product extends CI_Model {
 
 	}
 
-	public function addProduct($product_name,$product_price,$product_quantity,$product_subcat,$counter){
+	public function addProduct($product_name,$product_desc,$product_price,$product_quantity,$product_subcat,$counter){
 
 		for ($x = 0; $x <= $counter-1; $x++) {
 
-				$query_prod = array('prod_name' => $product_name[$x]);
+				$query_prod = array('prod_name' => $product_name[$x], 'prod_desc' => $product_desc[$x]);
 
 				$this->db->insert('products',$query_prod);
 
@@ -26,6 +26,7 @@ class Product extends CI_Model {
 				$row = $query->row();
 				if (isset($row)){
 					$query_storeprod = array(
+														// 'storeprod_image' => $prodimage[$x],
 														'storeprod_price' => $product_price[$x],
 														'prod_id' => $row->prod_id
 													);
@@ -113,10 +114,55 @@ class Product extends CI_Model {
 		}
 	}
 
+	public function viewdeletedproducts(){
+		$this->db->select('*');
+		$this->db->from('store_products');
+		$this->db->join('products', 'products.prod_id = store_products.prod_id', 'left');
+		$this->db->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left');
+		$this->db->join('store', 'store.store_id = store_products_subcategory.store_id', 'left');
+		$this->db->join('store_products_inventory', 'store_products_inventory.storeprod_id = store_products.storeprod_id', 'left');
+		$this->db->join('subcategory', 'subcategory.subcategory_id = store_products_subcategory.subcategory_id', 'left');
+		$this->db->join('category', 'category.category_id = subcategory.category_id', 'left');
+		$this->db->where('store_products.storeprod_deleted','true');
+		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
+		$this->db->order_by('products.prod_name');
+		$this->db->group_by('products.prod_name');
+
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0){
+			return $query->result();
+		}else{
+			return false;
+		}
+	}
+
+
 	public function deleteProduct($prodid, $data){
     $this->db->where('prod_id', $prodid);
     $this->db->update('store_products', $data);
   }
+
+	public function get_DiscountById($id){
+
+		$this->db->where('storeprod_id', $id);
+		$query = $this->db->get('store_products_discounts');
+
+		echo json_encode($query->row());
+	}
+
+	public function add_discount($prodid, $data){
+		$this->db->select('*');
+		$this->db->where('storeprod_id',$prodid);
+		$query = $this->db->get('store_products_discounts');
+
+		if($query->num_rows() >0){
+			$this->db->where('storeprod_id', $prodid);
+			$this->db->update('store_products_discounts',$data);
+		}else{
+			$this->db->insert('store_products_discounts', $data);
+		}
+	}
 
 	public function updateProduct($sprodid,$prodid,$products,$storeprod,$inventory,$subcategory){
 		$error = 1;
@@ -148,5 +194,28 @@ class Product extends CI_Model {
 		}
 
   }
+
+	public function check_if_existsingle($product,$prodid){
+
+	$query_str = "SELECT * FROM store_products_subcategory
+								LEFT JOIN store_products ON store_products.storeprod_id = store_products_subcategory.storeprod_id
+								LEFT JOIN products ON products.prod_id = store_products.prod_id
+								WHERE store_products_subcategory.store_id = ".$this->session->userdata('store_id')." AND prod_name = '".$product."' AND store_products.prod_id !=".$prodid."";
+
+	$result = $this->db->query($query_str);
+
+		if($result->num_rows() > 0){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+
+	public function update_prodimage($filename,$prodid){
+		$this->db->where('storeprod_id', $prodid);
+
+		$this->db->update('store_products',array('storeprod_image' => $filename));
+	}
 
 }

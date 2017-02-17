@@ -26,6 +26,7 @@
                                     <tr>
                                         <th width="200px">IMAGE</th>
                                         <th>PRODUCT NAME</th>
+                                        <th>DESCRIPTION</th>
                                         <th width="100px">PRICE</th>
                                         <th width="100px">QTY</th>
                                         <th width="170px">SUB-CATEGORY</th>
@@ -37,7 +38,7 @@
 
 
                                   </tbody>
-                                </form>
+
                                 <tfoot>
                                   <tr>
                                 </tfoot>
@@ -47,6 +48,7 @@
                             </div>
                             <input type="submit" class="btn btn-primary btn-lg pull-right" id="submitProduct" name="submitProduct" value="Submit">
                             <button type="button" class="btn btn-success pull-right" id="addButton" name="addButton"><i class="material-icons">add</i></button>
+                            </form>
                          </div>
                        </div>
                      </div>
@@ -58,7 +60,7 @@
                     <div class="form-group" style="margin-bottom:0px;">
                       <input type="file" class="form-control" id="pImage" name="pImage[]" value="<?php echo set_value('pImage[]'); ?>" required>
                     </div>
-                    <div id="prodNameError" style="color:red; font-size:13px; margin:2px 0 -5px 0;">
+                    <div id="fileError" style="color:red; font-size:13px; margin:2px 0 -5px 0;">
                     <br>
                     </div>
                   </div>
@@ -75,14 +77,14 @@
                   <div id="col3">
                     <div class="form-group" style="margin-bottom:0px;">
                       <div class="form-line">
-                        <input type="number" class="form-control" id="pPrice" min="0" name="pPrice[]" placeholder="Price" value="<?php echo set_value('pPrice[]'); ?>" required>
+                        <input type="number" class="form-control" id="pPrice" min="1" name="pPrice[]" placeholder="Price" value="<?php echo set_value('pPrice[]'); ?>" required>
                       </div>
                     </div>
                   </div>
                   <div id="col4">
                     <div class="form-group" style="margin-bottom:0px;">
                       <div class="form-line">
-                        <input type="number" class="form-control" id="pQuantity" min="0" name="pQuantity[]" placeholder="Quantity" value="<?php echo set_value('pQuantity[]'); ?>" required>
+                        <input type="number" class="form-control" id="pQuantity" min="1" name="pQuantity[]" placeholder="Quantity" value="<?php echo set_value('pQuantity[]'); ?>" required>
                       </div>
                     </div>
                   </div>

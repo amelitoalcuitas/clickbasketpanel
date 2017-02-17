@@ -67,6 +67,16 @@ class AddCategoryController extends CI_Controller {
 		$this->category->deletecategory($catid, $data);
 	}
 
+	public function restorecategory(){
+		$catid = $this->input->post('categoryid');
+
+		$data = array(
+			'category_deleted' => 'false'
+		);
+
+		$this->category->deletecategory($catid, $data);
+	}
+
 	public function updateCategory(){
 		$catid = $this->input->post('catid');
 		$catname = htmlspecialchars(ucwords($this->input->post('catName')));
@@ -100,6 +110,16 @@ class AddCategoryController extends CI_Controller {
 
 		$data = array(
 			'subcategory_deleted' => 'true'
+		);
+
+		$this->category->deleteSubCategory($subcatid, $data);
+	}
+
+	public function restoreSubCategory(){
+		$subcatid = $this->input->post('subcategoryid');
+
+		$data = array(
+			'subcategory_deleted' => 'false'
 		);
 
 		$this->category->deleteSubCategory($subcatid, $data);

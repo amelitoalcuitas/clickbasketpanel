@@ -42,6 +42,7 @@
 
      <!-- JQuery DataTable Css -->
     <link href="<?php echo base_url().'assets/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet';?>">
+    <link href="<?php echo base_url().'assets/css/scroller.dataTables.min.css" rel="stylesheet';?>">
 
     <!-- Sweet Alert -->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url().'assets/plugins/sweetalert/sweetalert.css';?>">
@@ -60,6 +61,10 @@
      <script src="<?php echo base_url().'assets/plugins/chartjs/chart/chart.bundle.js';?>"></script>
 
    <style media="screen">
+    .dtp-select-year-before, .dtp-select-year-after, .dtp-select-month-before, .dtp-select-month-after{
+      color: white !important;
+    }
+
      .modal {
        overflow-y: auto;
      }
@@ -113,8 +118,76 @@
        width: 550px;
        height: 275px;
      }
+
+     .prodimageview {
+       font-size: 0;
+       text-align: center;
+       width: 250px;
+       height: 250px;
+     }
+
+     .selectedRow{
+       background-color: #fffb8c !important;
+     }
    </style>
 
 </head>
 
+
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+    <!-- #END# Search Bar -->
+
+    <!-- TOP NAVIGATION BAR-->
+    <?php
+    if($this->session->userdata('restriction')=='vendor' && $this->session->userdata('restriction')!='superadmin'){
+        $this->load->view('vendor_blocks/TopNav');
+    }else{
+        $this->load->view('blocks/TopNav');
+    }
+    ?>
+    <!-- END OF TOP BAR NAV-->
+
+    <section>
+        <!-- Left Sidebar -->
+
+        <!-- #END# Left Sidebar -->
+    </section>
+
+<!-- LOAD MODALS  -->
+
  <?php $this->load->view('layouts/modals'); ?>
+
+
+     <section class="content">
+         <div class="container-fluid">
+             <div class="block-header">

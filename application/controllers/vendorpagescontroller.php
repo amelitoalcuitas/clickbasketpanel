@@ -2,8 +2,11 @@
 class VendorPagesController extends CI_Controller {
 
 	var $categorylist;
+	var $delcategorylist;
 	var $subcategorylist;
+	var $delsubcategorylist;
 	var $productlist;
+	var $delproductlist;
 	var $productRow;
 	var $orderlist;
 	var $deliveredorders;
@@ -28,10 +31,22 @@ class VendorPagesController extends CI_Controller {
     		$this->subcategorylist = $data;
     	}
 
+			if($data = $this->category->get_delcategory()){
+				$this->delcategorylist = $data;
+			}
+
+			if($data = $this->category->get_delsubCategory()){
+				$this->delsubcategorylist = $data;
+			}
+
     	$this->load->model('product');
 
     	if($products = $this->product->viewproductbystore()){
     		$this->productlist = $products;
+    	}
+
+			if($products1 = $this->product->viewdeletedproducts()){
+    		$this->delproductlist = $products1;
     	}
 
 			$this->load->model('order');
@@ -77,12 +92,39 @@ class VendorPagesController extends CI_Controller {
 			$this->load->view('layouts/footer');
 	}
 
+	public function viewdelproduct(){
+
+			$data['page'] = 'delprod';
+			$data['title'] = 'vendordeletedproducts';
+			$data['delproductlist'] = $this->delproductlist;
+			$data['vendordata'] = $this->vendordata;
+
+			$this->load->view('layouts/header',$data);
+			$this->load->view('vendor_blocks/SideNav',$data);
+			$this->load->view('clickbasket',$data);
+			$this->load->view('layouts/footer');
+	}
+
 	public function viewcategories(){
 
 			$data['page'] = 'categ';
 			$data['title'] = 'vendorviewcategories';
 			$data['categorylist'] = $this->categorylist;
 			$data['subcategorylist'] = $this->subcategorylist;
+			$data['vendordata'] = $this->vendordata;
+
+			$this->load->view('layouts/header');
+			$this->load->view('vendor_blocks/SideNav',$data);
+			$this->load->view('clickbasket',$data);
+			$this->load->view('layouts/footer');
+	}
+
+	public function deletedcategories(){
+
+			$data['page'] = 'delcat';
+			$data['title'] = 'deletedcategories';
+			$data['delcategorylist'] = $this->delcategorylist;
+			$data['delsubcategorylist'] = $this->delsubcategorylist;
 			$data['vendordata'] = $this->vendordata;
 
 			$this->load->view('layouts/header');

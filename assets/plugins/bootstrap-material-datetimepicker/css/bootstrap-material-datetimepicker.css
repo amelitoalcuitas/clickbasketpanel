@@ -25,14 +25,14 @@
 .dtp table.dtp-picker-days tr > td > a.selected{ background: #8BC34A; color: #fff; }
 .dtp table.dtp-picker-days tr > th { color: #757575; text-align: center; font-weight: 700; padding: 0.4em 0.3em; }
 
-.dtp .p10 > a { color: #EF6C02; text-decoration: none; }
+.dtp .p10 > a { color: #B71B1C; text-decoration: none; }
 .dtp .p10 { width: 10%; display: inline-block; }
 .dtp .p20 { width: 20%; display: inline-block; }
 .dtp .p60 { width: 60%; display: inline-block; }
 .dtp .p80 { width: 80%; display: inline-block; }
 
 .dtp a.dtp-meridien-am, .dtp a.dtp-meridien-pm { position: relative; top: 10px; color: #212121; font-weight: 500; padding: 0.7em 0.5em; border-radius: 50%!important;text-decoration: none; background: #eee; font-size:1em; }
-.dtp .dtp-actual-meridien a.selected { background: #EF6C02; color: #fff; }
+.dtp .dtp-actual-meridien a.selected { background: #B71B1C; color: #fff; }
 
 .dtp .dtp-picker-time > .dtp-select-hour { cursor: pointer; }
 .dtp .dtp-picker-time > .dtp-select-minute { cursor: pointer; }

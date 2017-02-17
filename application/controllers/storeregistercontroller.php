@@ -62,7 +62,7 @@ class StoreRegisterController extends CI_Controller {
               $this->session->set_flashdata('success', TRUE);
     	  			redirect('admin/addstore');
             }
-        }
+          }
 	  	}
 
 	  }//end of check_store_credentials
@@ -126,8 +126,16 @@ class StoreRegisterController extends CI_Controller {
   }
 
   public function updateStoreImage(){
+
+      $currentname 										= $this->input->get('imagename');
+
+      if($currentname == 'store_image_def.jpg'){
+        $new_name = 'store_image_'.mt_rand();
+      }else{
+        $new_name = $currentname;
+      }
+
       $storeid                        = $this->input->get('storeid');
-      $new_name                       = $this->input->get('imagename');
       $config['upload_path']          = './assets/images/store_image/';
       $config['allowed_types']        = 'jpg|png';
       $config['overwrite']            = TRUE;

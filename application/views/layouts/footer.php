@@ -1,3 +1,7 @@
+            </div>
+        </div>
+    </section>
+
 <!-- Bootstrap Core Js -->
 <script src="<?php echo base_url().'assets/plugins/bootstrap/js/bootstrap.js';?>"></script>
 
@@ -30,6 +34,8 @@
 <script src="<?php echo base_url().'assets/plugins/jquery-datatable/extensions/export/buttons.html5.min.js';?>"></script>
 <script src="<?php echo base_url().'assets/plugins/jquery-datatable/extensions/export/buttons.print.min.js';?>"></script>
 <script src="<?php echo base_url().'assets/js/pages/tables/jquery-datatable.js';?>"></script>
+<script src="<?php echo base_url().'assets/js/dataTables.row.show.js';?>"></script>
+<script src="<?php echo base_url().'assets/js/dataTables.scroller.min.js';?>"></script>
 
 <!-- Custom Js -->
 <script src="<?php echo base_url().'assets/js/admin.js';?>"></script>
@@ -38,6 +44,7 @@
 
 <!-- VENDOR SIDE SCRIPTS START -->
 <script>
+  $('.timeago').timeago();
   $('#sHourStart').bootstrapMaterialDatePicker({ date: false, shortTime: true, format: 'LT'});
   $('#sHourClose').bootstrapMaterialDatePicker({ date: false, shortTime: true, format: 'LT' });
 </script>
@@ -87,12 +94,13 @@
 
     var data0 = document.getElementById("col1").innerHTML;
     var data1 = document.getElementById("col2").innerHTML;
+    var desc = '<button type="button" id="changeDesc" style="width:100px" onclick="changeDesc('+cnt+')" name="changeDesc" class="btn btn-success"><i class="material-icons">view_headline</i></button> <input type="hidden" id="desc_'+cnt+'" name="pDescription[]" required>';
     var data2 = document.getElementById("col3").innerHTML;
     var data3 = document.getElementById("col4").innerHTML;
     var data4 = '<div id="col5"><div class="form-group" style="margin-bottom:0px;"><select class="form-control show-tick selectsearch" data-live-search="true" name="pSubCategory[]" required><option value="">-- Please select --</option><?php if(isset($subcategorylist)){ foreach($subcategorylist as $row){ ?><option value="<?php echo $row->subcategory_id;?>"> <?php echo $row->subcategory_name; ?></option><?php }} ?></select></div></div>';
     var data5 = '<button type="button" id="delThisRow" onclick="deleteThisRow('+cnt+')" name="delThisRow" class="btn btn-danger"><i class="material-icons">remove</i></button>';
 
-    $('#addProductTable').append('<tr id="'+ cnt +'"><td>'+data0+'</td><td>'+data1+'</td><td>'+data2+'</td><td>'+data3+'</td><td>'+data4+'</td><td>'+ data5 +'</td></tr>');
+    $('#addProductTable').append('<tr id="'+ cnt +'"><td>'+data0+'</td> <td>'+data1+'</td><td>'+desc+'</td><td>'+data2+'</td><td>'+data3+'</td><td>'+data4+'</td><td>'+ data5 +'</td></tr>');
     $('.selectsearch').selectpicker();
     cnt = cnt + 1;
 
@@ -116,13 +124,39 @@
     return same;
   }
 
-  $('#submitProduct').click(function(event){
+  function changeDesc(id){
+    $('#changeDesc').modal('show');
+    $('#changeDesc').attr('data-id',id);
+    $('#prod_descerror').html('');
+    $('#prod_desc').val('');
+
+    var value = $('#desc_'+id).val();
+
+    $('#prod_desc').val(value);
+  }
+
+  $('#descsubmit').click(function(){
+    var id = $('#changeDesc').attr('data-id');
+
+    if($('#prod_desc').val().length > 0 ){
+      $('#desc_'+id).attr('value',$('#prod_desc').val());
+      $('#changeDesc').modal('hide');
+    }else{
+      $('#prod_descerror').html('Text area is empty!');
+    }
+
+  });
+
+  $('#productForm').submit(function(event){
     event.preventDefault();
     $('#addProdError').html('<br>');
     $('#addProductTable #prodNameError').html('<br>');
     $('#addProductTable input[name="pName[]"]').removeClass('prodExist');
+    var form = $('#productForm')[0]; // You need to use standart javascript object here
+    var formData = new FormData(form);
 
     var pname = $("#addProductTable input[name='pName[]']").map(function(){return $(this).val();}).get();
+    var pdesc = $("#addProductTable input[name='pDescription[]']").map(function(){return $(this).val();}).get();
     var pprice = $("#addProductTable input[name='pPrice[]']").map(function(){return $(this).val();}).get();
     var pqty = $("#addProductTable input[name='pQuantity[]']").map(function(){return $(this).val();}).get();
     var pscat = $("#addProductTable select[name='pSubCategory[]']").map(function(){return $(this).val();}).get();
@@ -134,38 +168,51 @@
       event.preventDefault();
       swal('Error!','Add a row with product details!','error');
     } else if(inputEmpty() == false && sameProdName() == false){
-      $.ajax({
-        type: 'POST',
-        url: '<?php echo base_url("addproductcontroller/check_product_credentials"); ?>',
-        data: {pname:pname, pprice:pprice, pqty:pqty, pscat:pscat, count:count},
-        success: function(result){
-
-          if(result == "existfalse"){
-            swal('Error!','Product/s entered already exist!','error');
-            $('#addProdError').append('*One or more product already exist');
-
+      // $.ajax({
+      //   type: 'POST',
+      //   url: "<?php echo base_url('upload/userImageUpload') ?>",
+      //   data: formData,
+      //   success: function(data){
+      //     if(data == 'image'){
+      //
+      //     }else{
             $.ajax({
-              type:'POST',
-              url: '<?php echo base_url("addproductcontroller/getExistingProducts"); ?>',
-              data: {},
-              dataType: 'JSON',
-              success: function(index){
-                console.log(index);
-                for(var i = 0; i < index.length; i++){
-                  var indx = index[i]+1;
+              type: 'POST',
+              url: '<?php echo base_url("addproductcontroller/check_product_credentials"); ?>',
+              data: {pname:pname, pdesc:pdesc, pprice:pprice, pqty:pqty, pscat:pscat, count:count},
+              success: function(result){
 
-                  $('#addProductTable #'+indx+' #prodNameError').html('Product already exist!');
-                  $('#addProductTable #'+indx+' input[name="pName[]"]').addClass('prodExist');
+                if(result == "existfalse"){
+                  swal('Error!','Product/s entered already exist!','error');
+                  $('#addProdError').append('*One or more product already exist');
+
+                  $.ajax({
+                    type: 'POST',
+                    url: '<?php echo base_url("addproductcontroller/getExistingProducts"); ?>',
+                    data: {},
+                    dataType: 'JSON',
+                    success: function(index){
+
+                      for(var i = 0; i < index.length; i++){
+                        var indx = index[i]+1;
+
+                        $('#addProductTable #'+indx+' #prodNameError').html('Product already exist!');
+                        $('#addProductTable #'+indx+' input[name="pName[]"]').addClass('prodExist');
+                      }
+                    }
+                  });
+
+                }else if(result == "success"){
+                  reloadPrompt = false;
+                  location.reload();
                 }
               }
             });
+      //     }
+      //   }
+      // // });
 
-          }else if(result == "success"){
-            reloadPrompt = false;
-            location.reload();
-          }
-        }
-      });
+
     }
     if(sameProdName() == true){
       $('#addProdError').append('*There are duplicate product names <br>');
@@ -180,7 +227,7 @@
   function inputEmpty(){
     var isEmpty = true;
     var emptyNum = 0;
-    var count = (cnt-1)*5;
+    var count = (cnt-1)*6;
 
     $("#addProductTable input[name='pImage[]']").each(function(){
       if($(this).val().length > 0){
@@ -212,6 +259,16 @@
       }
     });
 
+    $("#addProductTable input[name='pDescription[]']").each(function(){
+      if($(this).val().length > 0){
+        $(this).closest('td').removeClass('emptyInput');
+        emptyNum = emptyNum + 1;
+      }else{
+        $(this).closest('td').addClass('emptyInput');
+        emptyNum =  emptyNum - 1;
+      }
+    });
+
     $("#addProductTable input[name='pQuantity[]']").each(function(){
       if($(this).val().length > 0){
         $(this).removeClass('emptyInput');
@@ -223,11 +280,13 @@
     });
 
     $("#addProductTable select[name='pSubCategory[]']").each(function(){
+
+
       if($(this).val().length > 0){
-        $(this).removeClass('emptyInput');
+        $(this).closest('td').removeClass('emptyInput');
         emptyNum = emptyNum + 1;
       }else{
-        $(this).removeClass('emptyInput');
+        $(this).closest('td').removeClass('emptyInput');
         emptyNum =  emptyNum - 1;
       }
     });
@@ -272,6 +331,34 @@
     });
   }
 
+  function restoreProduct(id){
+    var table = $('#delproductTable').DataTable();
+
+    swal({
+      title: "Are you sure you want to restore " + $("#product_"+id).attr("name") + "?",
+      text: "This product will be returned to the list!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, I'm sure!",
+      closeOnConfirm: false
+      },
+      function(){
+      swal("Success!", $("#product_"+id).attr("name") + " has been restored.", "success");
+      $.ajax({
+        type: 'post',
+        data: {productid:id},
+        url: "<?php echo base_url("addproductcontroller/restoreProduct"); ?>",
+        success: function(result){
+          table
+            .row($('#product_'+id))
+            .remove()
+            .draw();
+        }
+      });
+    });
+  }
+
   // ----- Product Edit ----- //
   function editThisProductModal(id,sId,catId){
       $('#editProductModal').modal('show');
@@ -280,6 +367,8 @@
       var data = $('#productTable').DataTable().row($('#product_'+id)).data();
       var price = data[4].substring(3);
       $('#mSubCategory').empty();
+      var imagename = $('#prodimage_'+id).val();
+      $('#uploadPreview3').attr('src','<?php echo base_url('assets/images/prod_image/');?>' + imagename + '?' + new Date());
 
       $.ajax({
         type: 'post',
@@ -313,7 +402,7 @@
       data: {subcatid:catid},
       dataType: 'JSON',
       success: function(qResult){
-        console.log(catid);
+
         for (var i = 0; i < qResult.length; i++) {
           $('#mSubCategory').append('<option value="' + qResult[i].subcategory_id + '">' + qResult[i].subcategory_name + '</option>');
           if($('#selectedsubcat_'+$('#editProductModal').attr('data-id')).attr('value') == qResult[i].subcategory_id) {
@@ -325,6 +414,69 @@
     });
 
   });
+
+  function discountModal(id,name){
+    $('#addDiscount').modal('show');
+    $('#addDiscount').attr('data-id',id);
+    $('#modaldiscounttitle').html('Add Discount to '+name);
+    $('#errordiscount').html('<br>');
+    $('#mDiscount').attr('value','');
+    $('#dateStart').attr('value','');
+    $('#dateEnd').attr('value','');
+    $('#currDiscount').html('');
+
+    $.ajax({
+      type: 'post',
+      data: {id:id},
+      url: '<?php echo base_url("addproductcontroller/getDiscountById"); ?>',
+      dataType: 'JSON',
+      success: function(result){
+        if(result){
+          $('#mDiscount').attr('value',result['discount']);
+          $('#dateStart').attr('value',result['date_start']);
+          $('#dateEnd').attr('value',result['date_end']);
+          $('#currDiscount').html('<b style="color:orange;"> Current Discount: '+result['discount']+'% </b>');
+        }
+      }
+    });
+
+  }
+
+  $('#discountForm').submit(function(event){
+    event.preventDefault();
+    var id = $('#addDiscount').attr('data-id');
+    var discount = $('#mDiscount').val();
+    var dateStart = $('#dateStart').val();
+    var dateEnd = $('#dateEnd').val();
+
+    $('#errordiscount').html('<br>');
+
+    if(discount.length > 0){
+      if(discount > 100){
+        $('#errordiscount').html('Discount should not be more than a hundred percent!');
+      }else{
+        $.ajax({
+          type: 'post',
+          data: {discount:discount, id:id, dateStart:dateStart, dateEnd:dateEnd},
+          url: '<?php echo base_url("addproductcontroller/addDiscount"); ?>',
+          success: function(result){
+            $('#addDiscount').modal('hide');
+            swal('Success!','Discount has been successfully set!','success');
+          }
+        });
+      }
+    }else{
+      $('#errordiscount').html('Discount field is empty!');
+    }
+
+  });
+
+  $(document).ready(function(){
+    $('#dateEnd').bootstrapMaterialDatePicker({ weekStart : 0, time: false, minDate: new Date() });
+    $('#dateStart').bootstrapMaterialDatePicker({ weekStart : 0, time: false, minDate: new Date()});
+  });
+
+
   // ----- Product Edit ----- //
 
   $("#modalSubmit").click(function(){
@@ -370,6 +522,34 @@
 
   });
 
+  $('#prodimageupdatesubmit').submit(function(event){
+
+    event.preventDefault();
+
+    var id = $('#editProductModal').attr('data-id');
+    var form = $('#prodimageupdatesubmit')[0]; // You need to use standart javascript object here
+    var formData = new FormData(form);
+    var imagename = $('#prodimage_'+id).val();
+
+    $('#prodimageerror').html('<br>');
+
+    $.ajax({
+     url: '<?php echo base_url("addproductcontroller/updateProductImage"); ?>?imagename=' + imagename + '&prodid=' + id,
+     data: formData,
+     type: 'POST',
+     contentType: false,
+     processData: false,
+     success: function(res){
+         if(res == "success"){
+           swal('Success!','Product Image has been updated!', 'success');
+         }else{
+           $('#prodimageerror').html(res);
+         }
+       }
+   });
+
+  });
+
   $('#editProductModal').on('hidden.bs.modal',function() {
     $('#errorProdEdit').html('<br>');
   });
@@ -406,7 +586,7 @@
         }
       },
       error: function(result){
-        console.log(result);
+
       }
     });
   });
@@ -434,6 +614,39 @@
             .row($('#category_'+id))
             .remove()
             .draw();
+        }
+      });
+    });
+  }
+
+  function restoreCategory(id){
+    var table = $('#delcategoryTable').DataTable();
+
+    swal({
+      title: "Are you sure you want to restore " + $("#category_"+id).attr("name") + "?",
+      text: "This category will be added back to the list!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, I'm sure!",
+      closeOnConfirm: false
+      },
+      function(){
+      swal("Success!!", $("#category_"+id).attr("name") + " has been restored.", "success");
+      $.ajax({
+        type: 'post',
+        data: {categoryid:id},
+        url: "<?php echo base_url(); ?>addcategorycontroller/restorecategory",
+        success: function(result){
+          table
+            .row($('#category_'+id))
+            .remove()
+            .draw();
+
+            $('.subcatbtn_'+id).each(function(){
+              $(this).prop("disabled", false);
+              $(this).attr('title','');
+            });
         }
       });
     });
@@ -553,6 +766,34 @@
     });
   }
 
+  function restoreSubCat(id,name){
+    var table = $('#delsubcategoryTable').DataTable();
+
+    swal({
+      title: "Are you sure you want to restore " + name + "?",
+      text: "This subcategory will be added back to the list!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, I'm sure!",
+      closeOnConfirm: false
+      },
+      function(){
+        $.ajax({
+          type: 'post',
+          data: {subcategoryid:id},
+          url: "<?php echo base_url('addcategorycontroller/restoreSubCategory'); ?>",
+          success: function(result){
+            table
+              .row($('#delSubCat_'+id))
+              .remove()
+              .draw();
+            swal("Success!", name + " has been restored.", "success");
+          }
+        });
+    });
+  }
+
   function editSubCat(id){
     $('#SubCatNameParag_'+id).hide();
     $('#editSubCat_'+id).hide();
@@ -640,7 +881,7 @@
         }
       },
       error: function(result){
-        console.log(result);
+
       }
     });
   });
@@ -721,7 +962,7 @@
       $('#mAddress').attr('value',myData[1]);
       $('#mTimeOpen').attr('value',$('#timeOpen_'+id).val());
       $('#mTimeClose').attr('value',$('#timeClose_'+id).val());
-      $('#uploadPreview').attr('src','<?php echo base_url('assets/images/store_image/');?>'+$('#storeimage_'+id).val());
+      $('#uploadPreview2').attr('src','<?php echo base_url('assets/images/store_image/');?>'+$('#storeimage_'+id).val() + '?' + new Date());
     }
 
     $('#imageupdatesubmit').submit(function(event){
@@ -732,8 +973,6 @@
       var form = $('#imageupdatesubmit')[0]; // You need to use standart javascript object here
       var formData = new FormData(form);
       var imagename = $('#storeimage_'+id).val();
-
-      $('#uploadPreview').attr('src','');
 
       $('#storeimageerror').html('<br>');
 
@@ -746,7 +985,6 @@
        success: function(res){
            if(res == "success"){
              swal('Success!','Store Image has been updated!', 'success');
-             $('#uploadPreview').attr('src','<?php echo base_url('assets/images/store_image/');?>' + imagename + '?' + new Date().getTime());
            }else{
              $('#storeimageerror').html(res);
            }
@@ -875,7 +1113,7 @@
         url: '<?php echo base_url('smscontroller/sendSMS'); ?>',
 
         success: function(data){
-          console.log(data);
+
         }
       });
     });
@@ -1043,7 +1281,7 @@
       url: "<?php echo base_url('emailcontroller/sendEmail'); ?>",
       data: {test:test},
       success: function(data){
-        console.log(data);
+
       }
     });
   }
@@ -1089,22 +1327,82 @@
   });
 
   function PreviewImage() {
-      var oFReader = new FileReader();
+    var title = '<?php echo $title ?>';
+      if(title == 'storeregister'){
+        var imageId = "uploadImage";
+        var previewId = "uploadPreview1";
+      }else if(title == 'viewstores'){
+        var imageId = "editStoreimage";
+        var previewId = "uploadPreview2";
+      }else if(title=="vendorviewproducts"){
+        var imageId = "editProdimage";
+        var previewId = "uploadPreview3";
+      }else{
+        var imageId = "file";
+        var previewId = "uploadPreview";
+      }
 
-      oFReader.readAsDataURL(document.getElementById("file").files[0]);
+
+      var oFReader = new FileReader();
+      oFReader.readAsDataURL(document.getElementById(imageId).files[0]);
 
       oFReader.onload = function (oFREvent) {
-          document.getElementById("uploadPreview").src = oFREvent.target.result;
+          document.getElementById(previewId).src = oFREvent.target.result;
       };
   };
+
 
 </script>
 <!-- UPLOAD IMAGE END -->
 
 <!--CHART JS START-->
 <script>
+
+// GET URL PARAMETERS
+
+function GET_PARAM(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+// GET URL PARAMETERS
+
 $(document).ready(function(){
   var title = '<?= $title ?>';
+  var id = 0;
+  var oTable = $('#orderTable').DataTable();
+
+  if(title == 'vieworders'){
+    if(id = GET_PARAM('id')){
+      if(oTable.row('#order_'+id).length){
+        oTable.row('#order_'+id).show().draw(false);
+
+        $('#order_'+id).addClass('selectedRow');
+
+        var y = $('#order_'+id).position().top;
+
+            $("body").animate({
+                  scrollTop: y
+              }, 500);
+
+          $('tr').click(function(){
+            if($(this).hasClass('selectedRow')==true){
+              $('#order_'+id).removeClass('selectedRow');
+            }
+          });
+      }
+
+    }
+  }
+
+
 
   if(title == 'vendordashboard'){
 
@@ -1152,7 +1450,7 @@ $(document).ready(function(){
         });
       }
     });
-    }
+  }
 });
 
 </script>

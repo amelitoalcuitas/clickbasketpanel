@@ -37,6 +37,8 @@ class Category extends CI_Model{
 	public function deleteCategory($catid, $data){
     $this->db->where('category_id', $catid);
 		$this->db->update('category',$data);
+		$this->db->where('category_id', $catid);
+		$this->db->update('subcategory',['subcategory_deleted' => 'true']);
   }
 
 	public function check_if_exist($category)
@@ -85,12 +87,42 @@ class Category extends CI_Model{
 		}
 	}
 
+	public function get_delcategory(){
+		$this->db->select('category.category_id, category.category_name, category.category_deleted');
+		$this->db->join('store_category', 'store_category.category_id = category.category_id', 'left');
+		$this->db->join('subcategory', 'subcategory.category_id = category.category_id', 'left');
+  	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
+		$this->db->where('category_deleted','true');
+		$this->db->group_by('category.category_name');
+
+		$query = $this->db->get('category');
+
+		if($query){
+			return $query->result();
+		}
+	}
+
 	public function get_subCategory(){
 		$this->db->select('*');
 		$this->db->join('category', 'category.category_id = subcategory.category_id');
 		$this->db->join('store_category', 'store_category.category_id = category.category_id');
   	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
 		$this->db->where('subcategory_deleted','false');
+		$this->db->order_by('subcategory_name');
+
+		$query = $this->db->get('subcategory');
+
+		if($query){
+			return $query->result();
+		}
+	}
+
+	public function get_delsubCategory(){
+		$this->db->select('*');
+		$this->db->join('category', 'category.category_id = subcategory.category_id');
+		$this->db->join('store_category', 'store_category.category_id = category.category_id');
+  	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
+		$this->db->where('subcategory_deleted','true');
 		$this->db->order_by('subcategory_name');
 
 		$query = $this->db->get('subcategory');
@@ -113,8 +145,7 @@ class Category extends CI_Model{
 
 	public function updateCategory($catid, $data){
 		$this->db->where('category_id', $catid);
-		if($this->db->update('category', $data))
-		{
+		if($this->db->update('category', $data)){
 			return true;
 		}
 	}

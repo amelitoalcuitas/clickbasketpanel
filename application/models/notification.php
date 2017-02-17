@@ -22,14 +22,14 @@ class Notification extends CI_Model{
   public function getNotification(){
 		$this->db->order_by('notif_time','desc');
 
-    $query = $this->db->get('notification');
+    $query = $this->db->limit(8)->get('notification');
 
     if($query->num_rows() > 0){
 
 			foreach ($query->result() as $row) {
 				if($row->status == 'unread'){
 					echo '<li style="background:#e9e9e9;">
-									<a href="'.base_url('vendor/viewOrders').'" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
+									<a href="'.base_url('vendor/viewOrders?id=14').'" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
 										<div class="icon-circle bg-purple">
 												<i class="material-icons">settings</i>
 										</div>
@@ -44,7 +44,7 @@ class Notification extends CI_Model{
 								</li>';
 				}else{
 					echo '<li>
-									<a href="'.base_url('vendor/viewOrders').'" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
+									<a href="'.base_url('vendor/viewOrders?id=14').'" onclick="notifRead('.$row->notif_id.')" class=" waves-effect waves-block">
 										<div class="icon-circle bg-purple">
 												<i class="material-icons">settings</i>
 										</div>

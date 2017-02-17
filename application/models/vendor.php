@@ -166,6 +166,14 @@ class Vendor extends CI_Model{
     $this->db->update('vendor',array('vendor_password' => $pass, 'vendor_key' => NULL));
   }
 
+  public function set_unamepass($key,$id,$pass,$uname){
+    $this->db->where('vendor_id',$id);
+    $this->db->where('vendor_deleted','false');
+    $this->db->where('vendor_key',$key);
+
+    $this->db->update('vendor',['vendor_username' => $uname, 'vendor_password' => $pass, 'vendor_key' => NULL]);
+  }
+
   public function upload_profpic($filename){
     $this->db->where('vendor_id', $this->session->userdata('vendor_id'));
 

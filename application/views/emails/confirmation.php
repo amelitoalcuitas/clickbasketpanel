@@ -47,7 +47,7 @@
 						Please click the link below to verify your account and change your password:
 						<br><br><br>
 						<center>
-							<a style="color:#FF5722;" target="__new" href="<?= base_url(); ?>login/changePassword?vendor_key=<?php echo $vendordata->vendor_key; ?>&confirmation=true&vendor_id=<?php echo $vendordata->vendor_id; ?>">
+							<a style="color:#FF5722;" target="__new" href="<?= base_url(); ?>login/confirmAccount?vendor_key=<?php echo $vendordata->vendor_key; ?>&confirmation=true&vendor_id=<?php echo $vendordata->vendor_id; ?>">
 								VERIFY ACCOUNT
 							</a>
 						</center>

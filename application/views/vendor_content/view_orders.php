@@ -10,13 +10,13 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table id="orderTable" class="table table-bordered table-striped table-hover">
                               <thead>
                                 <tr>
                                   <th>CUSTOMER</th>
-                                  <th width="80px">PRODUCTS</th>
+                                  <th>PRODUCTS</th>
+                                  <th>DATE</th>
                                   <th width="100px">TOTAL PRICE</th>
-                                  <th>STORE</th>
                                   <th width="20px">STATUS</th>
                                 </tr>
                               </thead>
@@ -28,8 +28,8 @@
                                         <tr id="order_<?php echo $row->order_id; ?>">
                                         <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
                                         <td><button type="button" name="vieworders" onclick="viewOrders(<?php echo $row->order_id ?>);" class="btn btn-success"><i class="material-icons">list</i> PRODUCT LIST</button></td>
+                                        <td><?php echo $row->order_date; ?></td>
                                         <td>Php <?php echo $row->order_total;?></td>
-                                        <td><?php echo $row->store_name;?></td>
                                         <?php if($row->order_status == 'pending'){
                                           $buttcolor = 'danger';
                                         }else{

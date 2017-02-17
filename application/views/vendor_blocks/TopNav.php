@@ -22,7 +22,7 @@
                                 </ul>
                             </li>
                             <li class="footer">
-                                <a href="javascript:void(0);">View All Notifications</a>
+                                <a href="<?php echo base_url('vendor/viewOrders'); ?>">View All Orders</a>
                             </li>
                         </ul>
                     </li>

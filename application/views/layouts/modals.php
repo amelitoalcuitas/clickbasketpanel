@@ -8,6 +8,28 @@
         <h4 class="modal-title">Edit Product</h4>
       </div>
       <div class="modal-body">
+
+        <form id="prodimageupdatesubmit" action="" method="post" enctype="multipart/form-data">
+
+        <label style="font-weight: bold; font-size:15px;">Product Image</label>
+        <div class="form-group prodimageview" style="margin-bottom:0px; margin:0 auto !important; border:1px solid gray;">
+          <div class="form-line">
+            <div class="trick"></div>
+            <img id="uploadPreview3" style="width:250px;height:250px;" src="" alt="Store Image" />
+          </div>
+        </div>
+        <br>
+
+        <i>Suggested dimension: 500x500px | File size: not more than 2MB</i>
+        <div class="col-md-8">
+          <input id="editProdimage" type="file" name="mProdImage" style="font-size:17px;margin-bottom:10px;" onchange="PreviewImage();" accept="image/*" >
+          <div id="prodimageerror" style="color:red;"><br></div>
+        </div>
+        <div class="col-md-4">
+          <button type="submit" name="button" class="btn btn-success">Apply Image</button>
+        </div>
+        </form>
+        <br><br><br>
         <label style="font-weight: bold; font-size:15px;">Product Name</label>
         <div class="form-group" style="margin-bottom:0px;">
           <div class="form-line">
@@ -64,6 +86,91 @@
   </div>
 </div>
 <!-- Product Edit -->
+
+
+<!-- Add Product Discount List -->
+<div id="addDiscount" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modaldiscounttitle"></h4>
+      </div>
+      <div class="modal-body">
+
+        <p id="currDiscount" style="font-size:20px"></p>
+
+        <br>
+        <form id="discountForm">
+        <label style="font-weight: bold; font-size:15px;">Discount</label>
+        <div class="input-group" style="margin-bottom:0px;">
+            <span class="input-group-addon">
+                %
+            </span>
+          <div class="form-line">
+            <input type="number" id="mDiscount" min="0" max="100" class="form-control" value="" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errordiscount">
+            <br>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Date Start</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="datepicker form-control" id="dateStart" name="dateStart" placeholder="Choose a starting date" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCat">
+            <br>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Date End</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="datepicker form-control" id="dateEnd" name="dateEnd" placeholder="Choose an ending date" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCat">
+            <br>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="discountsubmit" class="btn btn-success" name="button">Set Discount</button>
+      </div>
+      </form>
+    </div>
+        <!-- Modal content-->
+  </div>
+</div>
+<!-- Add Product Discount END -->
+
+<!-- CHANGE DESCRIPTION -->
+<div id="changeDesc" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+
+    <div class="modal-content" style="margin:auto;width:80%">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" align="center">ADD DESCRIPTION</h4>
+      </div>
+      <div class="modal-body">
+        <div class="body">
+          <textarea id="prod_desc" name="prod_desc" rows="8" cols="58"></textarea>
+          <div style="color:red; font-size:13px; margin:0px 0 0px 0;" id="prod_descerror"><br></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="descsubmit" type="button" class="btn btn-primary" name="button">DONE</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- CHANGE DESCRIPTION -->
 
 
 <!-- FORGOT PASSWORD -->
@@ -239,21 +346,21 @@
           </div>
         </div>
         <br>
-        
+
         <form id="imageupdatesubmit" action="" method="post" enctype="multipart/form-data">
 
         <label style="font-weight: bold; font-size:15px;">Store Image</label>
         <div class="form-group storeimageview" style="margin-bottom:0px; border:1px solid gray;">
           <div class="form-line">
             <div class="trick"></div>
-            <img id="uploadPreview" style="width:550px;height:273px;" src="" alt="Store Image" />
+            <img id="uploadPreview2" style="width:550px;height:273px;" src="" alt="Store Image" />
           </div>
         </div>
         <br>
 
         <i>Suggested dimension: 600x300px | Ratio: 2:1 | File size: not more than 2MB</i>
         <div class="col-md-8">
-          <input id="file" type="file" name="mStoreimage" style="font-size:17px;margin-bottom:10px;" onchange="PreviewImage();" accept="image/*" >
+          <input id="editStoreimage" type="file" name="mStoreimage" style="font-size:17px;margin-bottom:10px;" onchange="PreviewImage();" accept="image/*" >
           <div id="storeimageerror" style="color:red;"><br></div>
         </div>
         <div class="col-md-4">

@@ -134,10 +134,6 @@ class Login extends CI_Controller {
 		$key = $this->input->get('vendor_key');
 		$id = $this->input->get('vendor_id');
 
-		if($this->input->get('confirmation')){
-			$this->vendor->confirm_account($id);
-		}
-
 		if($this->vendor->check_key($key,$id) == true && $key != NULL){
 			$data['vendorkey'] = $key;
 			$data['vendorid'] = $id;
@@ -146,6 +142,31 @@ class Login extends CI_Controller {
 		} else {
 			redirect('login');
 		}
+	}
+
+	public function confirmAccount(){
+		$key = $this->input->get('vendor_key');
+		$id = $this->input->get('vendor_id');
+
+		$this->vendor->confirm_account($id);
+
+		if($this->vendor->check_key($key,$id) == true && $key != NULL){
+			$data['vendorkey'] = $key;
+			$data['vendorid'] = $id;
+
+			$this->load->view('confirmation',$data);
+		} else {
+			redirect('login');
+		}
+	}
+
+	public function setUnamePass(){
+		$key = $this->input->post('key');
+		$id = $this->input->post('id');
+		$uname =  $this->input->post('uname');
+		$pass = md5($this->input->post('pass'));
+
+		$this->vendor->set_unamepass($key,$id,$pass,$uname);
 	}
 
 	public function changePass(){

@@ -61,18 +61,7 @@
                                         </div>
                                        </div>
                                      </div>
-
-                                       <label style="font-weight: bold; font-size:15px;">Username</label><br>
-                                       <div class="col-sm-12">
-                                           <div class="form-group">
-                                             <div class="form-line">
-                                               <input type="text" class="form-control" id="uName" name="uName" placeholder="Username" value="<?php echo set_value('uName'); ?>">
-                                             </div>
-                                             <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;">
-                                               <?php echo "<br>".form_error('uName'); ?>
-                                             </div>
-                                           </div>
-                                       </div>
+                                     
                                        <label style="font-weight: bold; font-size:15px;">Email</label><br>
                                        <div class="col-sm-12">
                                          <div class="form-group">
@@ -84,27 +73,6 @@
                                              </div>
                                          </div>
                                        </div>
-                                       <!-- <label style="font-weight: bold; font-size:15px;">Password</label><br>
-                                       <div class="col-sm-12">
-                                           <div class="form-group">
-                                             <div class="form-line">
-                                               <input type="password" class="form-control" placeholder="Password" id="pass" name="pass">
-                                             </div>
-                                             <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;">
-                                               <?php echo "<br>".form_error('pass'); ?>
-                                             </div>
-                                           </div>
-                                       </div>
-                                       <div class="col-sm-12">
-                                           <div class="form-group">
-                                             <div class="form-line">
-                                               <input type="password" class="form-control" id="cPass" placeholder="Confirm Password" name="cPass">
-                                             </div>
-                                             <div style="color:red; font-size:13px; margin:-10px 0 -15px 0; padding-bottom:10px;">
-                                               <?php echo "<br>".form_error('cPass'); ?>
-                                             </div>
-                                           </div>
-                                       </div> -->
                                        <div class="form-group">
                                            <div class="col-sm-12">
                                                <input type="submit" class="btn btn-primary btn-lg btn-block" name="submit" value="Submit">

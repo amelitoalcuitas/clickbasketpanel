@@ -69,9 +69,9 @@
                                            <div class="form-group">
                                              <div id="editImage" class="storeimageview" style="margin-bottom:10px;border:1px solid #999; margin-left:12px;">
                                                  <div class="trick"></div>
-                                                 <img id="uploadPreview"/>
+                                                 <img id="uploadPreview1" />
                                              </div>
-                                             <input id="file" type="file" name="storeimage" style="font-size:17px;margin-bottom:10px; margin-left: -1px;" onchange="PreviewImage();" accept="image/*" >
+                                             <input id="uploadImage" type="file" name="storeimage" style="font-size:17px;margin-bottom:10px; margin-left:-1px;" onchange="PreviewImage();" accept="image/*" >
                                              <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;" id="storeimageerror">
                                                <?php if(isset($error)){
                                                   echo $error;

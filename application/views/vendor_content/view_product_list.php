@@ -18,7 +18,7 @@
                                         <th width="115px">SUB-CATEGORY</th>
                                         <th width="30px">QTY</th>
                                         <th width="80px">PRICE</th>
-                                        <th width="80px">EDIT</th>
+                                        <th width="120px">EDIT</th>
                                     </tr>
                                 </thead>
 
@@ -33,6 +33,8 @@
                                           <td><?php echo $row->inventory_stock;?></td>
                                           <td>Php <?php echo $row->storeprod_price;?></td>
                                           <td>
+                                              <input type="hidden" id="prodimage_<?php echo $row->storeprod_id; ?>" name="" value="<?php echo $row->storeprod_image?>">
+                                              <button onclick="discountModal(<?php echo $row->storeprod_id;  ?>,'<?php echo $row->prod_name; ?>')" name="<?php echo $row->prod_id; ?>" class="btn btn-success"><i class="material-icons">money_off</i></button>
                                               <button onclick="editThisProductModal(<?php echo $row->prod_id.','.$row->storeprod_id.','.$row->category_id;  ?>)" name="<?php echo $row->prod_id; ?>" class="btn btn-warning"><i class="material-icons">edit</i></button>
                                               <button onclick="deleteThis(<?php echo $row->prod_id; ?>)" name="<?php echo $row->prod_id; ?>" class="btn btn-danger"><i class="material-icons">delete</i></button>
                                           </td>
@@ -51,4 +53,4 @@
             </div>
             <!-- #END# Basic Examples -->
             </div>
-        </div>
+</div>
