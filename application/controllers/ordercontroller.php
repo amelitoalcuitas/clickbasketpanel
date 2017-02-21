@@ -24,4 +24,7 @@ class OrderController extends CI_Controller{
     print_r(json_encode($this->order->get_order_products()));
   }
 
+  public function getMonthlyOrdersbyStore(){
+    print_r(json_encode($this->order->get_monthly_order()));
+  }
 }

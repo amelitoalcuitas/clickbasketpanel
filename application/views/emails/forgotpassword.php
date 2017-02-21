@@ -27,7 +27,7 @@
 <table style="width: 538px; background-color: #393836;" align="center" cellspacing="0" cellpadding="0">
 	<tr>
 		<td style=" height: 65px; background-color: #000000; border-bottom: 1px solid #4d4b48;">
-			<a href="<?= base_url(); ?>"><img src="<?php echo base_url('assets/images/email/header.png'); ?>" width="538" height="65" alt="ClickBasket"></a>
+			<a href="<?= base_url(); ?>"><img src="http://i.imgur.com/lpqOg2v.png" width="538" height="65" alt="ClickBasket"></a>
 		</td>
 	</tr>
 	<tr>

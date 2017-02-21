@@ -82,7 +82,7 @@
                             <i class="material-icons">person</i>
                         </span>
                         <div class="form-line">
-                            <input type="text" class="form-control" name="username" placeholder="Username"  autofocus>
+                            <input type="text" class="form-control" name="username" placeholder="Email"  autofocus>
                         </div>
                          <?php echo form_error('username','<div id="error" style="color:red; margin-bottom:-20px">','</div>');?>
                     </div>

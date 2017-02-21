@@ -177,11 +177,11 @@ class Product extends CI_Model {
 			$this->db->update('store_products', $storeprod);
 			$error = 0;
 		}
-		if($inventory){
-			$this->db->where('storeprod_id', $sprodid);
-			$this->db->update('store_products_inventory', $inventory);
-			$error = 0;
-		}
+		// if($inventory){
+		// 	$this->db->where('storeprod_id', $sprodid);
+		// 	$this->db->update('store_products_inventory', $inventory);
+		// 	$error = 0;
+		// }
 
 		if($subcategory){
 			$this->db->where('storeprod_id', $sprodid);

@@ -15,6 +15,8 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Address</th>
+                                        <th>Branch</th>
+                                        <th>Store Days</th>
                                         <th>Store Hours</th>
                                         <th width="75px"></th>
 
@@ -28,6 +30,8 @@
                                     <tr id="storetablerow_<?php echo $row->store_id; ?>" name="<?php echo $row->store_name; ?>">
                                         <td><?php echo $row->store_name; ?></td>
                                         <td><?php echo $row->store_address;?></td>
+                                        <td><?php echo $row->store_branch;?></td>
+                                        <td><?php echo $row->store_days;?></td>
                                         <td>
                                           <?php echo date('h:i A', strtotime($row->time_open)).' - '.date('h:i A', strtotime($row->time_close));?>
                                           <input type="hidden" id="timeOpen_<?php echo $row->store_id; ?>" name="" value="<?php echo $row->time_open?>">

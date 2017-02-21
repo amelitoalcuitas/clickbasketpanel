@@ -7,7 +7,7 @@ class Vendor extends CI_Model{
     $this->db->from('store_vendor');
     $this->db->join('vendor', 'vendor.vendor_id = store_vendor.vendor_id', 'left');
     $this->db->join('store', 'store.store_id = store_vendor.store_id', 'left');
-    $this->db->where('vendor_username', $name);
+    $this->db->where('vendor_email', $name);
     $this->db->where('vendor_password', $pass);
     $this->db->where('vendor_deleted', 'false');
 
@@ -19,7 +19,7 @@ class Vendor extends CI_Model{
 
     $this->db->select('superadmin_fname, superadmin_lname , superadmin_email, restriction');
     $this->db->from('superadmin');
-    $this->db->where('superadmin_username', $name);
+    $this->db->where('superadmin_email', $name);
     $this->db->where('superadmin_password', $pass);
 
     $rs_str = $this->db->get();

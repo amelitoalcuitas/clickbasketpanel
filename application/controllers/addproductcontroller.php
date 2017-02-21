@@ -110,8 +110,10 @@ class AddProductController extends CI_Controller {
 		$prodid = $this->input->post('id');
 		$dateStart = $this->input->post('dateStart');
 		$dateEnd = $this->input->post('dateEnd');
+		$dType = $this->input->post('dType');
 
 		$data = array(
+			'discount_type' => $dType,
 			'discount' => $discount,
 			'storeprod_id' => $prodid,
 			'date_start' => $dateStart,
@@ -137,11 +139,11 @@ class AddProductController extends CI_Controller {
 
       $prodid                        	= $this->input->get('prodid');
       $config['upload_path']          = './assets/images/prod_image/';
-      $config['allowed_types']        = 'jpg|png';
+      $config['allowed_types']        = 'jpg|png|jpeg|gif';
       $config['overwrite']            = TRUE;
-      $config['max_size']             = 1024;
+      $config['max_size']             = 2048;
       $config['max_width']            = 1024;
-      $config['max_height']           = 768;
+      $config['max_height']           = 1024;
       $config['file_name']            = $new_name;
       $config['file_ext']             = 'image/jpeg';
 

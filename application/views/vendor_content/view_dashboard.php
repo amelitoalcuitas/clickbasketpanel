@@ -10,7 +10,12 @@
                            </h2>
                        </div>
                        <div class="body">
+                         <div class="row">
                            <canvas id="myChart"></canvas>
+                         </div>
+                           <div class="row">
+                             <canvas id="myLineChart"></canvas>
+                           </div>
                        </div>
                    </div>
                </div>

@@ -42,6 +42,29 @@
                                         </div>
                                        </div>
                                      </div>
+                                     <label style="font-weight: bold; font-size:15px;">Branch</label><br>
+                                     <div class="col-xs-12" >
+                                       <div class="form-group">
+                                         <div class="form-line">
+                                           <input type="text" class="form-control" id="sBranch" name="sBranch" placeholder="Branch" value = "<?php echo set_value('sBranch'); ?>">
+                                         </div>
+                                         <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;">
+                                          <?php echo "<br>".form_error('sBranch'); ?>
+                                        </div>
+                                       </div>
+                                     </div>
+                                     <label style="font-weight: bold; font-size:15px;">Days of Operation</label><br>
+                                     <div class="col-xs-12" >
+                                       <div class="form-group">
+                                         <div class="form-line">
+                                           <input type="text" class="form-control" id="sDays" name="sDays" placeholder="e.g., Mon-Fri | Mon-Wed-Fri | Everyday" value = "<?php echo set_value('sDays'); ?>">
+                                         </div>
+                                         <div style="color:red; font-size:13px; margin:-10px 0 -15px 0;">
+                                          <?php echo "<br>".form_error('sDays'); ?>
+                                        </div>
+                                       </div>
+                                     </div>
+
                                      </div>
                                        <label style="font-weight: bold; font-size:15px;">Store Hours</label><br>
                                        <div class="col-sm-12">

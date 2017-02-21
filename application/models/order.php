@@ -83,4 +83,13 @@ class Order extends CI_Model{
 		return $query->result();
 	}
 
+	public function get_monthly_order()
+	{
+	  $this->db->select('date(date_created) as month, count(1) as monthlyscore')
+						 ->from('orders')
+						 ->group_by('1');
+						 $query = $this->db->get();
+		 				return $query->result();
+	}
+
 }

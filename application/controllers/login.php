@@ -118,8 +118,8 @@ class Login extends CI_Controller {
   }
 
 // DELETE THIS AFTER TESTING ---------------------------------------------------
-	public function forgotpassword(){
-		$email = 'macsho10@gmail.com';
+	public function emailtest(){
+		$email = 'test22@gmail.com';
 		if($vendor = $this->vendor->getVendorByEmail($email)){
 			$this->vendordata = $vendor;
 		}
@@ -166,8 +166,23 @@ class Login extends CI_Controller {
 		$uname =  $this->input->post('uname');
 		$pass = md5($this->input->post('pass'));
 
-		$this->vendor->set_unamepass($key,$id,$pass,$uname);
+		if($this->check_username_if_exist($uname) == true){
+			$this->vendor->set_unamepass($key,$id,$pass,$uname);
+			echo 'true';
+		}else{
+			echo 'false';
+		}
+
 	}
+
+	public function check_username_if_exist($uname) {
+		if($this->vendor->check_username($uname)){
+			return true;
+		} else {
+			return false;
+		}
+
+	} //end of check username
 
 	public function changePass(){
 		$key = $this->input->post('key');

@@ -11,6 +11,8 @@ class StoreRegisterController extends CI_Controller {
 
 	  	$this->form_validation->set_rules('sName', 'Store Name', 'trim|required|callback_check_store_name',TRUE);
 	  	$this->form_validation->set_rules('sAddress', 'Store Address', 'trim|required',TRUE);
+      $this->form_validation->set_rules('sBranch', 'Store Branch', 'trim|required',TRUE);
+      $this->form_validation->set_rules('sDays', 'Days of Operation', 'trim|required',TRUE);
 	  	$this->form_validation->set_rules('sHourStart','Store Hours open', 'trim|required',TRUE);
 	  	$this->form_validation->set_rules('sHourClose', 'Store Hours close', 'trim|required', TRUE);
       if (empty($_FILES['storeimage']['name'])){
@@ -104,6 +106,8 @@ class StoreRegisterController extends CI_Controller {
     $storeid = $this->input->post('storeid');
     $storename = htmlspecialchars($this->input->post('storename'));
     $storeaddress = htmlspecialchars($this->input->post('storeaddress'));
+    $branch = $this->input->post('branch');
+    $days = $this->input->post('days');
     $timeopen = $this->input->post('timeopen');
     $timeclose = $this->input->post('timeclose');
 
@@ -115,6 +119,8 @@ class StoreRegisterController extends CI_Controller {
       $data = array(
       'store_name' => $storename,
       'store_address' => $storeaddress,
+      'store_days' => $days,
+      'store_branch' => $branch,
       'time_open' => $timeopen,
       'time_close' => $timeclose
       );

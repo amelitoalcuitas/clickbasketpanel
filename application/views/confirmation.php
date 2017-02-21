@@ -144,6 +144,7 @@
 
     $('#passError').html('<br>');
     $('#pass2Error').html('<br>');
+    $('#unameError').html('<br>');
 
     if(pass.length > 5){
       if(pass == pass2){
@@ -152,13 +153,17 @@
           data: {pass:pass, id:id, key:key, uname:uname},
           url: '<?php echo base_url("login/setUnamePass") ?>',
           success: function(data){
-            swal({
-              title: 'Success!',
-              text:'Password has been changed! You may now log in using your new password!',
-              type: 'success'},
-            function(){
-              window.location.replace('<?php echo base_url(); ?>');
-            });
+            if(data == 'true'){
+              swal({
+                title: 'Success!',
+                text:'Password has been changed! You may now log in using your new password!',
+                type: 'success'},
+              function(){
+                window.location.replace('<?php echo base_url(); ?>');
+              });
+            }else{
+              $('#unameError').html('Username already exists!');
+            }
           }
         });
       }else{

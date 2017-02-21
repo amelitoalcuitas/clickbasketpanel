@@ -20,7 +20,7 @@
         </div>
         <br>
 
-        <i>Suggested dimension: 500x500px | File size: not more than 2MB</i>
+        <i>Suggested dimension: 800x800px | File size: not more than 2MB</i>
         <div class="col-md-8">
           <input id="editProdimage" type="file" name="mProdImage" style="font-size:17px;margin-bottom:10px;" onchange="PreviewImage();" accept="image/*" >
           <div id="prodimageerror" style="color:red;"><br></div>
@@ -113,9 +113,20 @@
 
         <br>
         <form id="discountForm">
+
+        <label style="font-weight: bold; font-size:15px;" for="dType">Discount Type</label>
+        <div id="discounttype" class="demo-radio-button">
+            <input name="dType" type="radio" class="with-gap radio-col-red" id="dType_1" />
+            <label for="dType_1">Percentage</label>
+            <input name="dType" type="radio" id="dType_2" class="with-gap radio-col-red" />
+            <label for="dType_2">Amount</label>
+        </div>
+
+        <br>
+
         <label style="font-weight: bold; font-size:15px;">Discount</label>
         <div class="input-group" style="margin-bottom:0px;">
-            <span class="input-group-addon">
+            <span class="input-group-addon" id="mSign">
                 %
             </span>
           <div class="form-line">
@@ -340,6 +351,20 @@
         <div class="form-group" style="margin-bottom:0px;">
           <div class="form-line">
             <input type="text" id="mAddress" class="form-control" value="" required>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Branch</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" id="mBranch" class="form-control" value="" required>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Days of Operation</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" id="mDays" class="form-control" placeholder="e.g., Mon-Fri | Mon-Wed-Fri | Everyday" value="" required>
           </div>
         </div>
         <br>

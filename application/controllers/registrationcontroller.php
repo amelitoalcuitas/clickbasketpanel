@@ -18,7 +18,7 @@ class RegistrationController extends CI_Controller{
 
 	public function check_user_credentials(){
 
-		$this->form_validation->set_rules('uName','Username', 'trim|required|alpha_numeric|callback_check_username_if_exist',TRUE);
+		// $this->form_validation->set_rules('uName','Username', 'trim|required|alpha_numeric|callback_check_username_if_exist',TRUE);
 		$this->form_validation->set_rules('eMail', 'Email', 'trim|required|valid_email|callback_check_email_if_exist',TRUE);
 		$this->form_validation->set_rules('fName','First Name', 'trim|required',TRUE);
 		$this->form_validation->set_rules('lName','Last Name', 'trim|required', TRUE);
@@ -30,7 +30,7 @@ class RegistrationController extends CI_Controller{
 
 			$this->load->view('layouts/header');
 			$this->load->view('blocks/sidenav',$data);
-			$this->load->view('main_pages/register');
+			$this->load->view('content/registeradmin');
 			$this->load->view('layouts/footer');
 		} else {
 
@@ -84,16 +84,7 @@ class RegistrationController extends CI_Controller{
 		}
 	}
 
-	public function check_username_if_exist() {
-		$this->form_validation->set_message('check_username_if_exist', 'Username already exist!');
 
-		if($this->vendor->check_username($this->input->post('uName'))){
-			return true;
-		} else {
-			return false;
-		}
-
-	} //end of check username
 
 	public function check_email_if_exist(){
 		$this->form_validation->set_message('check_email_if_exist', 'Email already exist!');

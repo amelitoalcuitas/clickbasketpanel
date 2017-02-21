@@ -416,9 +416,10 @@
 
   });
 
-  function discountModal(id,name){
+  function discountModal(id,name,price){
     $('#addDiscount').modal('show');
     $('#addDiscount').attr('data-id',id);
+    $('#addDiscount').attr('data-price',price);
     $('#modaldiscounttitle').html('Add Discount to '+name);
     $('#errordiscount').html('<br>');
     $('#mDiscount').attr('value','');
@@ -433,39 +434,65 @@
       dataType: 'JSON',
       success: function(result){
         if(result){
-          $('#mDiscount').attr('value',result['discount']);
           $('#dateStart').attr('value',result['date_start']);
           $('#dateEnd').attr('value',result['date_end']);
-          $('#currDiscount').html('<b style="color:orange;"> Current Discount: '+result['discount']+'% </b>');
+          if(result['discount_type'] == 'percentage'){
+            $('#currDiscount').html('<b style="color:orange;"> Current Discount: '+Math.round(result['discount'])+'% </b>');
+            $('#mDiscount').attr('value',Math.round(result['discount']));
+            $('#mDiscount').attr('step',1);
+            $('#mDiscount').attr('max',100);
+            $('#dType_1').attr('checked','true');
+          }else {
+            $('#currDiscount').html('<b style="color:orange;"> Current Discount: Php '+result['discount']+' </b>');
+            $('#mDiscount').attr('value',result['discount']);
+            $('#mDiscount').attr('step',0.1);
+            $('#mDiscount').attr('max',$('#addDiscount').attr('data-price'));
+            $('#dType_2').attr('checked','true');
+          }
         }
       }
     });
 
   }
 
+  $('#discounttype').click(function() {
+   if($('#dType_1').is(':checked')) {
+     $('#mSign').html('%');
+     $('#mDiscount').attr('max',100);
+     $('#mDiscount').attr('value','');
+   }else if($('#dType_2').is(':checked')){
+     $('#mSign').html('Php');
+     $('#mDiscount').attr('max',$('#addDiscount').attr('data-price'));
+     $('#mDiscount').attr('value','');
+   }
+ });
+
   $('#discountForm').submit(function(event){
     event.preventDefault();
+    var dType = '';
     var id = $('#addDiscount').attr('data-id');
     var discount = $('#mDiscount').val();
     var dateStart = $('#dateStart').val();
     var dateEnd = $('#dateEnd').val();
 
+    if($('#dType_1').is(':checked')) {
+      dType = 'percentage';
+    }else if($('#dType_2').is(':checked')){
+      dType = 'amount';
+    }
+
     $('#errordiscount').html('<br>');
 
     if(discount.length > 0){
-      if(discount > 100){
-        $('#errordiscount').html('Discount should not be more than a hundred percent!');
-      }else{
-        $.ajax({
-          type: 'post',
-          data: {discount:discount, id:id, dateStart:dateStart, dateEnd:dateEnd},
-          url: '<?php echo base_url("addproductcontroller/addDiscount"); ?>',
-          success: function(result){
-            $('#addDiscount').modal('hide');
-            swal('Success!','Discount has been successfully set!','success');
-          }
-        });
-      }
+      $.ajax({
+        type: 'post',
+        data: {discount:discount, id:id, dateStart:dateStart, dateEnd:dateEnd, dType:dType},
+        url: '<?php echo base_url("addproductcontroller/addDiscount"); ?>',
+        success: function(result){
+          $('#addDiscount').modal('hide');
+          swal('Success!','Discount has been successfully set!','success');
+        }
+      });
     }else{
       $('#errordiscount').html('Discount field is empty!');
     }
@@ -962,6 +989,8 @@
 
       $('#mStoreName').attr('value',myData[0]);
       $('#mAddress').attr('value',myData[1]);
+      $('#mBranch').attr('value',myData[2]);
+      $('#mDays').attr('value',myData[3]);
       $('#mTimeOpen').attr('value',$('#timeOpen_'+id).val());
       $('#mTimeClose').attr('value',$('#timeClose_'+id).val());
       $('#uploadPreview2').attr('src','<?php echo base_url('assets/images/store_image/');?>'+$('#storeimage_'+id).val() + '?' + new Date());
@@ -1000,6 +1029,8 @@
       var id = $('#editStoreModal').attr('data-id');
       var storename = $('#mStoreName').val();
       var storeaddress = $('#mAddress').val();
+      var branch = $('#mBranch').val();
+      var days = $('#mDays').val();
       var timeopen = $('#mTimeOpen').val();
       var timeclose = $('#mTimeClose').val();
 
@@ -1013,7 +1044,7 @@
        $.ajax({
           type: 'post',
           url: '<?php echo base_url("storeregistercontroller/updateStore"); ?>',
-          data: {storeid:id, storename:storename, storeaddress:storeaddress, timeopen:timeopen, timeclose:timeclose},
+          data: {storeid:id, storename:storename, storeaddress:storeaddress, days:days, branch:branch, timeopen:timeopen, timeclose:timeclose},
           success: function(result){
             if(result == 'true'){
               table.row($('#storetablerow_'+id)).data(myData).draw();
@@ -1404,9 +1435,41 @@ $(document).ready(function(){
     }
   }
 
+if(title == 'vendordashboard'){
+
+  var month = [];
+  var monthlyorder = [];
+
+  $.ajax({
+    url: '<?php echo base_url('ordercontroller/getMonthlyOrdersbyStore');?>',
+    type: 'POST',
+    dataType: 'JSON',
+    success: function(data){
+
+      for(var i = 0; i < data.length; i++){
+        month.push(data[i]['month']);
+        monthlyorder.push(data[i]['monthlyscore']);
+      }
+
+      var ctx = document.getElementById('myLineChart').getContext('2d');
+      var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: month,
+          datasets: [{
+            label: 'Daily Orders',
+            data: monthlyorder,
+             backgroundColor: [
+                      'rgba(193, 66, 66, 0.2)'
+                  ]
+          }]
+        }
+      });
+    }
+  });
 
 
-  if(title == 'vendordashboard'){
+
 
     var product_name = [];
     var order_qty = [];
@@ -1457,6 +1520,7 @@ $(document).ready(function(){
 
 </script>
 <!--CHART JS END-->
+
 
 </body>
 
