@@ -433,6 +433,7 @@
       dataType: 'JSON',
       success: function(result){
         if(result){
+          $('#discButton').show();
           $('#dateStart').attr('value',result['date_start']);
           $('#dateEnd').attr('value',result['date_end']);
           if(result['discount_type'] == 'percentage'){
@@ -464,6 +465,7 @@
     $('#dateStart').attr('value','');
     $('#dateEnd').attr('value','');
     $('#currDiscount').html('');
+    $('#discButton').hide();
   });
 
   $('#discounttype').click(function() {

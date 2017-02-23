@@ -103,8 +103,10 @@
       <div class="modal-body">
 
         <p id="currDiscount" style="font-size:20px"></p>
-
-        <br>
+        <div id="discButton" style="display:none;" >
+          <button class="btn btn-block btn-sm btn-danger waves-effect">Remove Discount</button>
+          <br><br>
+        </div>
 
         <form id="discountForm">
 
