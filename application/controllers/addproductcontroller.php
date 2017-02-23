@@ -26,40 +26,20 @@ class AddProductController extends CI_Controller {
 	public function check_product_credentials(){
 
 		$product_name = $this->input->post('pname');
-	  $product_price = $this->input->post('pprice');
+	  	$product_price = $this->input->post('pprice');
 		$product_desc = $this->input->post('pdesc');
 		$product_quantity = $this->input->post('pqty');
 		$product_subcat = $this->input->post('pscat');
-	  $counter = $this->input->post('count');
+	  	$counter = $this->input->post('count');
 
-		// $new_name                       = 'prod_image_'.mt_rand();
-		// $config['upload_path']          = './assets/images/prod_image/';
-		// $config['allowed_types']        = 'jpg|png';
-		// $config['overwrite']            = TRUE;
-		// $config['max_size']             = 1024;
-		// $config['max_width']            = 1024;
-		// $config['max_height']           = 768;
-		// $config['file_name']            = $new_name;
-		// $config['file_ext']             = 'image/jpeg';
-		//
-		// $this->load->library('upload', $config);
-
-		// if ( ! $this->upload->do_upload('storeimage')){
-		// 	$error = $this->upload->display_errors();
-		// 	echo 'image';
-		// }else{
-			if($this->check_if_thisproduct_exist($product_name,$counter) == true) {
-				if($this->product->addProduct($product_name,$product_desc,$product_price,$product_quantity,$product_subcat,$counter) == true)	{
-					// $this->product->upload_storeimage($this->upload->data('file_name'));
-					$this->session->set_flashdata('success', TRUE);
-					echo 'success';
-				}
-			} else {
-				echo "false";
+		if($this->check_if_thisproduct_exist($product_name,$counter) == true) {
+			if($this->product->addProduct($product_name,$product_desc,$product_price,$product_quantity,$product_subcat,$counter) == true)	{
+				$this->session->set_flashdata('success', TRUE);
+				echo 'success';
 			}
-		// }
-
-
+		} else {
+			echo "false";
+		}
 
 	}
 
@@ -92,7 +72,7 @@ class AddProductController extends CI_Controller {
 		'storeprod_deleted' => 'true'
 		);
 
-		$this->product->deleteProduct($prodid,$data);
+		$this->product->deleteProduct($prodid,$data,'delete');
 	}
 
 	public function restoreProduct(){
@@ -102,7 +82,7 @@ class AddProductController extends CI_Controller {
 		'storeprod_deleted' => 'false'
 		);
 
-		$this->product->deleteProduct($prodid,$data);
+		$this->product->deleteProduct($prodid,$data,'restore');
 	}
 
 	public function addDiscount(){
@@ -172,7 +152,6 @@ class AddProductController extends CI_Controller {
 		$prodname = htmlspecialchars($this->input->post('pname'));
 		$prodcat = $this->input->post('pcategory');
 		$prodsubcat = $this->input->post('psubcategory');
-		$prodqty = $this->input->post('pquantity');
 		$prodprice = $this->input->post('pprice');
 		$proddesc = $this->input->post('desc');
 
@@ -195,11 +174,7 @@ class AddProductController extends CI_Controller {
 			'subcategory_id' => $prodsubcat
 			);
 
-			$inventory =  array(
-			'inventory_stock' => $prodqty
-			);
-
-			if($this->product->updateProduct($sprodid,$prodid,$products,$storeprod,$inventory,$subcategory) == true)
+			if($this->product->updateProduct($sprodid,$prodid,$products,$storeprod,$subcategory) == true)
 			{
 				echo "true";
 			}

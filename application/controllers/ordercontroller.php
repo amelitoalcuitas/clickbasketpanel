@@ -10,8 +10,9 @@ class OrderController extends CI_Controller{
   public function changeOrderStatus(){
     $id = $this->input->post('id');
     $stat = $this->input->post('stat');
-
-    $this->order->change_order_status($id,$stat);
+    $decline = $this->input->post('inputValue');
+    
+    $this->order->change_order_status($id,$stat,$decline);
   }
 
   public function getOrdersById(){

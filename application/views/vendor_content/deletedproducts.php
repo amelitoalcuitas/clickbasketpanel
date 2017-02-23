@@ -32,7 +32,7 @@
                                          <td><?php echo $row->prod_name; ?></td>
                                          <td id="selectedcat_<?php echo $row->prod_id; ?>" value="<?php echo $row->category_id;?>"><?php echo $row->category_name;?></td>
                                          <td id="selectedsubcat_<?php echo $row->prod_id; ?>" value="<?php echo $row->subcategory_id;?>"><?php echo $row->subcategory_name;?></td>
-                                         <td><?php echo $row->inventory_stock;?></td>
+                                         <td><?php echo $row->balance;?></td>
                                          <td>Php <?php echo $row->storeprod_price;?></td>
                                          <td>
                                             <button onclick="restoreProduct(<?php echo $row->prod_id; ?>)" class="btn btn-danger"><i class="material-icons">undoshopping_basket</i></button>

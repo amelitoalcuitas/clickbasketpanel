@@ -344,16 +344,21 @@
       closeOnConfirm: false
       },
       function(){
-      swal("Success!", $("#product_"+id).attr("name") + " has been restored.", "success");
+      
       $.ajax({
         type: 'post',
         data: {productid:id},
         url: "<?php echo base_url("addproductcontroller/restoreProduct"); ?>",
         success: function(result){
-          table
-            .row($('#product_'+id))
-            .remove()
-            .draw();
+          if(result == 'success'){
+            swal("Success!", $("#product_"+id).attr("name") + " has been restored.", "success");
+            table
+              .row($('#product_'+id))
+              .remove()
+              .draw();
+          }else{
+            swal('Error!','Product subcategory does not exist or deleted!','error');
+          }
         }
       });
     });
@@ -387,7 +392,6 @@
 
       document.getElementById('mProductName').value = data[0];
       document.getElementById('mCategory').value = $('#selectedcat_'+id).attr('value');
-      document.getElementById('mQuantity').value = data[3];
       document.getElementById('mPrice').value = parseFloat(price).toFixed(2);
       document.getElementById('mDesc').value = $('#desc_'+id).val();
   }
@@ -421,11 +425,6 @@
     $('#addDiscount').attr('data-id',id);
     $('#addDiscount').attr('data-price',price);
     $('#modaldiscounttitle').html('Add Discount to '+name);
-    $('#errordiscount').html('<br>');
-    $('#mDiscount').attr('value','');
-    $('#dateStart').attr('value','');
-    $('#dateEnd').attr('value','');
-    $('#currDiscount').html('');
 
     $.ajax({
       type: 'post',
@@ -441,19 +440,31 @@
             $('#mDiscount').attr('value',Math.round(result['discount']));
             $('#mDiscount').attr('step',1);
             $('#mDiscount').attr('max',100);
-            $('#dType_1').attr('checked','true');
-          }else {
+            $('#mSign').html('%');
+            $('#dType_1').attr('checked',true);
+          }else if(result['discount_type'] == 'amount'){
             $('#currDiscount').html('<b style="color:orange;"> Current Discount: Php '+result['discount']+' </b>');
             $('#mDiscount').attr('value',result['discount']);
             $('#mDiscount').attr('step',0.1);
             $('#mDiscount').attr('max',$('#addDiscount').attr('data-price'));
-            $('#dType_2').attr('checked','true');
+            $('#mSign').html('Php');
+            $('#dType_2').attr('checked',true);
           }
         }
       }
     });
 
   }
+
+  $('#addDiscount').on('hidden.bs.modal',function(){
+    $('#dType_1').removeAttr('checked');
+    $('#dType_2').removeAttr('checked');
+    $('#errordiscount').html('<br>');
+    $('#mDiscount').attr('value','');
+    $('#dateStart').attr('value','');
+    $('#dateEnd').attr('value','');
+    $('#currDiscount').html('');
+  });
 
   $('#discounttype').click(function() {
    if($('#dType_1').is(':checked')) {
@@ -517,7 +528,6 @@
     var psubcategory = document.getElementById('mSubCategory').value;
     var catname = $("#mCategory>option:selected").html();
     var subcatname = $("#mSubCategory>option:selected").html();
-    var pquantity = document.getElementById('mQuantity').value;
     var pprice = document.getElementById('mPrice').value;
     var newprice = parseFloat(pprice).toFixed(2);
     var desc = $('#mDesc').val();
@@ -526,12 +536,11 @@
     myData[0] = pname;
     myData[1] = catname;
     myData[2] = subcatname
-    myData[3] = pquantity;
     myData[4] = "Php " + newprice;
 
     $.ajax({
       type: 'post',
-      data: {sproductid:sId, productid:id, pname:pname, psubcategory:psubcategory, pquantity:pquantity, pprice:pprice, desc:desc},
+      data: {sproductid:sId, productid:id, pname:pname, psubcategory:psubcategory, pprice:pprice, desc:desc},
       url: '<?php echo base_url("addproductcontroller/updateProduct"); ?>',
       success: function(result){
         if(result == 'true'){
@@ -625,7 +634,7 @@
 
     swal({
       title: "Are you sure you want to delete " + $("#category_"+id).attr("name") + "?",
-      text: "You will not be able to recover this category!",
+      text: "You can still restore this category from the Deleted Categories page!",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
@@ -639,10 +648,14 @@
         data: {categoryid:id},
         url: "<?php echo base_url(); ?>addcategorycontroller/deletecategory",
         success: function(result){
-          table
-            .row($('#category_'+id))
-            .remove()
-            .draw();
+          if(result == 'success'){
+            table
+              .row($('#category_'+id))
+              .remove()
+              .draw();
+          }else{
+            swal('Error!','Sub-Categories must be emptied first!','error');
+          }
         }
       });
     });
@@ -772,7 +785,7 @@
 
     swal({
       title: "Are you sure you want to delete " + name + "?",
-      text: "You will not be able to recover this sub-category!",
+      text: "This sub-category will be removed and transfered to the Deleted Categories page!",
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
@@ -785,11 +798,15 @@
           data: {subcategoryid:id},
           url: "<?php echo base_url('addcategorycontroller/deleteSubCategory'); ?>",
           success: function(result){
+            if(result == 'failed'){
+              swal('Error!','This subcategory still have products!','error');
+            }else{
             table
               .row($('#delSubCat_'+id).attr('name'))
               .remove()
               .draw();
             swal("Deleted!", name + " has been deleted.", "success");
+            }
           }
         });
     });
@@ -1250,24 +1267,61 @@
 <!-- ORDER BUTTONS -->
 <script>
   function changeStatus(id,currStat,stat){
-    $('#butt_'+id).removeClass();
 
     if(stat == 'pending'){
-      $('#butt_'+id).addClass('btn btn-danger dropdown-toggle');
+      $('#butt_'+id).removeClass();
+      $('#butt_'+id).addClass('btn btn-warning dropdown-toggle');
     }else if(stat == 'processing'){
+      $('#butt_'+id).removeClass();
       $('#butt_'+id).addClass('btn btn-primary dropdown-toggle');
     }else if(stat == 'completed'){
+      $('#butt_'+id).removeClass();
       $('#butt_'+id).addClass('btn btn-success dropdown-toggle');
+    }else if(stat == 'declined'){
+      swal({
+        title: "Decline Order",
+        text: "Reason for declining order:",
+        type: "input",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        animation: "slide-from-top",
+        inputPlaceholder: "Write something..."
+      },
+      function(inputValue){
+        if (inputValue === false){
+          return false;
+        } 
+        
+        if (inputValue === "") {
+          swal.showInputError("You need to write something!");
+          return false
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "<?php echo base_url('OrderController/changeOrderStatus'); ?>",
+          data: {id:id, stat:stat, inputValue:inputValue},
+          success: function(){
+            $('#butt_'+id).removeClass();
+            $('#butt_'+id).addClass('btn btn-danger dropdown-toggle');  
+            $('#butt_'+id).html(stat.toUpperCase() + " <span class='caret'>");
+          }
+        });
+        swal("Order Declined!", "The order has been declined for this reason: " + inputValue, "success");
+      });
     }
 
-    $.ajax({
-      type: "POST",
-      url: "<?php echo base_url('OrderController/changeOrderStatus'); ?>",
-      data: {id:id, stat:stat},
-      success: function(){
-        $('#butt_'+id).html(stat.toUpperCase() + " <span class='caret'>");
-      }
-    });
+    if(stat != 'declined'){
+      $.ajax({
+        type: "POST",
+        url: "<?php echo base_url('OrderController/changeOrderStatus'); ?>",
+        data: {id:id, stat:stat},
+        success: function(){
+          $('#butt_'+id).html(stat.toUpperCase() + " <span class='caret'>");
+        }
+      });
+    }
+    
   }
 
   function viewOrders(id){

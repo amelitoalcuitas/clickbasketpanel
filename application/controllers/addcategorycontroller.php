@@ -112,7 +112,7 @@ class AddCategoryController extends CI_Controller {
 			'subcategory_deleted' => 'true'
 		);
 
-		$this->category->deleteSubCategory($subcatid, $data);
+		$this->category->deleteSubCategory($subcatid, $data, 'delete');
 	}
 
 	public function restoreSubCategory(){
@@ -122,7 +122,7 @@ class AddCategoryController extends CI_Controller {
 			'subcategory_deleted' => 'false'
 		);
 
-		$this->category->deleteSubCategory($subcatid, $data);
+		$this->category->deleteSubCategory($subcatid, $data, 'restore');
 	}
 
 	public function updateSubCategory(){

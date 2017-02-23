@@ -14,7 +14,7 @@
                               <thead>
                                 <tr>
                                   <th>CUSTOMER</th>
-                                  <th>PRODUCTS</th>
+                                  <th width="120px">PRODUCTS</th>
                                   <th>DATE</th>
                                   <th width="100px">TOTAL PRICE</th>
                                   <th width="20px">STATUS</th>
@@ -31,11 +31,12 @@
                                         <td><?php echo $row->order_date; ?></td>
                                         <td>Php <?php echo $row->order_total;?></td>
                                         <?php if($row->order_status == 'pending'){
-                                          $buttcolor = 'danger';
-                                        }else{
+                                          $buttcolor = 'warning';
+                                        }else if($row->order_status == 'processing'){
                                           $buttcolor = 'primary';
-                                        }
-                                          ?>
+                                        }else if($row->order_status == 'declined'){
+                                          $buttcolor = 'danger';      
+                                        } ?>
                                         <td style="color:red;">
                                           <div class="btn-group">
                                               <button type="button" id="butt_<?php echo $row->order_id ?>" class="btn btn-<?php echo $buttcolor; ?> dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,6 +46,7 @@
                                                   <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','pending')">PENDING</a></li>
                                                   <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','processing')">PROCESSING</a></li>
                                                   <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','completed')">COMPLETED</a></li>
+                                                  <li><a href="javascript:void(0);" onclick="changeStatus(<?php echo $row->order_id; ?>,'<?php echo $row->order_status; ?>','declined')">DECLINED</a></li>
                                               </ul>
                                           </div>
                                         </td>

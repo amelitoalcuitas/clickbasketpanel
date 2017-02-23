@@ -60,13 +60,6 @@
           </div>
         </div>
         <br>
-        <label style="font-weight: bold; font-size:15px;">Quantity</label>
-        <div class="form-group" style="margin-bottom:0px;">
-          <div class="form-line">
-            <input id="mQuantity" type="number" min="0" class="form-control" value="" required>
-          </div>
-        </div>
-        <br>
         <label style="font-weight: bold; font-size:15px;">Price</label>
         <div class="input-group" style="margin-bottom:0px;">
             <span class="input-group-addon">
@@ -82,7 +75,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea rows="4" id="mDesc" class="form-control" placeholder="Please type the description..."></textarea>
+                        <textarea rows="4" id="mDesc" class="form-control" style="max-width:100%;" placeholder="Please type the description..."></textarea>
                     </div>
                 </div>
             </div>
@@ -112,13 +105,14 @@
         <p id="currDiscount" style="font-size:20px"></p>
 
         <br>
+
         <form id="discountForm">
 
         <label style="font-weight: bold; font-size:15px;" for="dType">Discount Type</label>
         <div id="discounttype" class="demo-radio-button">
-            <input name="dType" type="radio" class="with-gap radio-col-red" id="dType_1" />
+            <input name="dType" type="radio" class="with-gap radio-col-red" id="dType_1" required />
             <label for="dType_1">Percentage</label>
-            <input name="dType" type="radio" id="dType_2" class="with-gap radio-col-red" />
+            <input name="dType" type="radio" class="with-gap radio-col-red" id="dType_2" required />
             <label for="dType_2">Amount</label>
         </div>
 
@@ -127,7 +121,7 @@
         <label style="font-weight: bold; font-size:15px;">Discount</label>
         <div class="input-group" style="margin-bottom:0px;">
             <span class="input-group-addon" id="mSign">
-                %
+                
             </span>
           <div class="form-line">
             <input type="number" id="mDiscount" min="0" max="100" class="form-control" value="" required>
@@ -181,7 +175,7 @@
       </div>
       <div class="modal-body">
         <div class="body">
-          <textarea id="prod_desc" name="prod_desc" rows="8" cols="58"></textarea>
+          <textarea id="prod_desc" name="prod_desc" style="max-width:100%;" rows="8" cols="58"></textarea>
           <div style="color:red; font-size:13px; margin:0px 0 0px 0;" id="prod_descerror"><br></div>
         </div>
       </div>

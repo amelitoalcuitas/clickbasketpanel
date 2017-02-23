@@ -35,14 +35,25 @@ class Category extends CI_Model{
 	}
 
 	public function deleteCategory($catid, $data){
-    $this->db->where('category_id', $catid);
-		$this->db->update('category',$data);
-		$this->db->where('category_id', $catid);
-		$this->db->update('subcategory',['subcategory_deleted' => 'true']);
-  }
+		$this->db->select('subcategory_name');
+		$this->db->join('subcategory','subcategory.category_id = category.category_id','left');
+		$this->db->where('category.category_id',$catid);
+		$this->db->where('subcategory_deleted','false');
+		$subcat = $this->db->get('category');
 
-	public function check_if_exist($category)
-	{
+		if($subcat->num_rows() > 0){
+			echo 'failed';
+		}else{
+			$this->db->where('category_id', $catid);
+			$this->db->update('category',$data);
+			$this->db->where('category_id', $catid);
+			$this->db->update('subcategory',['subcategory_deleted' => 'true']);
+			echo 'success';
+		}
+    	
+  	}
+
+	public function check_if_exist($category){
 		$storeid = $this->session->userdata('store_id');
 		$query_str = "SELECT * from store_category LEFT JOIN category ON category.category_id = store_category.category_id
 		 							WHERE category_name = ? AND store_id = '".$this->session->userdata('store_id')."'";
@@ -57,8 +68,7 @@ class Category extends CI_Model{
 		}
 	}
 
-	public function check_if_subcat_exist($subcatname,$catid)
-	{
+	public function check_if_subcat_exist($subcatname,$catid){
 		$storeid = $this->session->userdata('store_id');
 		$query_str = "SELECT * FROM subcategory WHERE subcategory_name = ? AND category_id = '".$catid."'";
 
@@ -76,7 +86,7 @@ class Category extends CI_Model{
 		$this->db->select('category.category_id, category.category_name, category.category_deleted');
 		$this->db->join('store_category', 'store_category.category_id = category.category_id', 'left');
 		$this->db->join('subcategory', 'subcategory.category_id = category.category_id', 'left');
-  	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
+  		$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
 		$this->db->where('category_deleted','false');
 		$this->db->group_by('category.category_name');
 
@@ -91,7 +101,7 @@ class Category extends CI_Model{
 		$this->db->select('category.category_id, category.category_name, category.category_deleted');
 		$this->db->join('store_category', 'store_category.category_id = category.category_id', 'left');
 		$this->db->join('subcategory', 'subcategory.category_id = category.category_id', 'left');
-  	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
+  		$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
 		$this->db->where('category_deleted','true');
 		$this->db->group_by('category.category_name');
 
@@ -106,7 +116,7 @@ class Category extends CI_Model{
 		$this->db->select('*');
 		$this->db->join('category', 'category.category_id = subcategory.category_id');
 		$this->db->join('store_category', 'store_category.category_id = category.category_id');
-  	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
+  		$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
 		$this->db->where('subcategory_deleted','false');
 		$this->db->order_by('subcategory_name');
 
@@ -121,7 +131,7 @@ class Category extends CI_Model{
 		$this->db->select('*');
 		$this->db->join('category', 'category.category_id = subcategory.category_id');
 		$this->db->join('store_category', 'store_category.category_id = category.category_id');
-  	$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
+  		$this->db->where('store_category.store_id', $this->session->userdata('store_id'));
 		$this->db->where('subcategory_deleted','true');
 		$this->db->order_by('subcategory_name');
 
@@ -150,9 +160,27 @@ class Category extends CI_Model{
 		}
 	}
 
-	public function deleteSubCategory($subcatid, $data){
-		$this->db->where('subcategory_id', $subcatid);
-		$this->db->update('subcategory',$data);
+	public function deleteSubCategory($subcatid, $data, $state){
+		$this->db->select('prod_name');
+		$this->db->join('store_products','store_products.storeprod_id = store_products_subcategory.storeprod_id','left');
+		$this->db->join('products','products.prod_id = store_products.prod_id','left');
+		$this->db->where('subcategory_id',$subcatid);
+		$this->db->where('storeprod_deleted','false');
+		$subcatprod = $this->db->get('store_products_subcategory');
+
+		if($state == 'delete'){
+			if($subcatprod->num_rows() > 0){
+				echo 'failed';
+			}else{
+				$this->db->where('subcategory_id', $subcatid);
+				$this->db->update('subcategory',$data);
+				echo 'success';
+			}
+		}else{
+			$this->db->where('subcategory_id', $subcatid);
+			$this->db->update('subcategory',$data);
+			echo 'success';
+		}		
 	}
 
 	public function updateSubCategory($subcatid, $data){

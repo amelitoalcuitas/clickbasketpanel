@@ -5,7 +5,7 @@ class Product extends CI_Model {
 	public function __construct(){
 		parent::__construct();
 
-		$this->db->select('*');
+		$this->db->select('*, SUM(trans_quantity) AS balance');
 		$this->db->from('store_products');
 		$this->db->join('products', 'products.prod_id = store_products.prod_id', 'left');
 		$this->db->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left');
@@ -26,10 +26,9 @@ class Product extends CI_Model {
 				$row = $query->row();
 				if (isset($row)){
 					$query_storeprod = array(
-														// 'storeprod_image' => $prodimage[$x],
-														'storeprod_price' => $product_price[$x],
-														'prod_id' => $row->prod_id
-													);
+											'storeprod_price' => $product_price[$x],
+											'prod_id' => $row->prod_id
+										);
 
 					$this->db->insert('store_products',$query_storeprod);
 				}
@@ -38,15 +37,17 @@ class Product extends CI_Model {
 				$row2 = $query2->row();
 				if (isset($row2)){
 					$query_storeinv = array(
-														'inventory_stock' => $product_quantity[$x],
-														'storeprod_id' => $row2	->storeprod_id
-													);
+											'inventorytrans_type' => 'replenish',
+											'trans_quantity' => $product_quantity[$x],
+											'storeprod_id' => $row2	->storeprod_id,
+											'inventory_balance' => $product_quantity[$x]
+										);
 
 					$query_subcat = array(
-														'subcategory_id' => $product_subcat[$x],
-														'storeprod_id' => $row2	->storeprod_id,
-														'store_id' => $this->session->userdata('store_id')
-													);
+										'subcategory_id' => $product_subcat[$x],
+										'storeprod_id' => $row2	->storeprod_id,
+										'store_id' => $this->session->userdata('store_id')
+									);
 
 					$this->db->insert('store_products_subcategory',$query_subcat);
 					$this->db->insert('store_products_inventory',$query_storeinv);
@@ -115,7 +116,7 @@ class Product extends CI_Model {
 	}
 
 	public function viewdeletedproducts(){
-		$this->db->select('*');
+		$this->db->select('*, SUM(trans_quantity) AS balance');
 		$this->db->from('store_products');
 		$this->db->join('products', 'products.prod_id = store_products.prod_id', 'left');
 		$this->db->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left');
@@ -138,13 +139,30 @@ class Product extends CI_Model {
 	}
 
 
-	public function deleteProduct($prodid, $data){
-    $this->db->where('prod_id', $prodid);
-    $this->db->update('store_products', $data);
-  }
+	public function deleteProduct($prodid, $data, $state){
+		if($state == 'delete'){
+			$this->db->where('prod_id', $prodid);
+			$this->db->update('store_products', $data);
+			echo 'success';
+		}else if($state == 'restore'){
+			$this->db->select('*');
+			$this->db->join('store_products_subcategory','store_products_subcategory.subcategory_id = subcategory.subcategory_id','left');			
+			$this->db->join('store_products','store_products.storeprod_id = store_products_subcategory.storeprod_id','left');
+			$this->db->where('store_products.prod_id', $prodid);
+			$this->db->where('subcategory.subcategory_deleted','false');
+			$subcat = $this->db->get('subcategory');
+
+			if($subcat->num_rows() > 0){
+				$this->db->where('prod_id', $prodid);
+				$this->db->update('store_products', $data);
+				echo 'success';
+			}else{
+				echo 'failed';
+			}
+		}
+	}
 
 	public function get_DiscountById($id){
-
 		$this->db->where('storeprod_id', $id);
 		$query = $this->db->get('store_products_discounts');
 
@@ -164,7 +182,7 @@ class Product extends CI_Model {
 		}
 	}
 
-	public function updateProduct($sprodid,$prodid,$products,$storeprod,$inventory,$subcategory){
+	public function updateProduct($sprodid,$prodid,$products,$storeprod,$subcategory){
 		$error = 1;
 
 		if($products){
@@ -177,11 +195,6 @@ class Product extends CI_Model {
 			$this->db->update('store_products', $storeprod);
 			$error = 0;
 		}
-		// if($inventory){
-		// 	$this->db->where('storeprod_id', $sprodid);
-		// 	$this->db->update('store_products_inventory', $inventory);
-		// 	$error = 0;
-		// }
 
 		if($subcategory){
 			$this->db->where('storeprod_id', $sprodid);

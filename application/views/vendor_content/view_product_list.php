@@ -18,7 +18,7 @@
                                         <th width="115px">SUB-CATEGORY</th>
                                         <th width="30px">QTY</th>
                                         <th width="80px">PRICE</th>
-                                        <th width="120px">EDIT</th>
+                                        <th width="130px">EDIT</th>
                                     </tr>
                                 </thead>
 
@@ -30,7 +30,7 @@
                                           <td><?php echo $row->prod_name; ?></td>
                                           <td id="selectedcat_<?php echo $row->prod_id; ?>" value="<?php echo $row->category_id;?>"><?php echo $row->category_name;?></td>
                                           <td id="selectedsubcat_<?php echo $row->prod_id; ?>" value="<?php echo $row->subcategory_id;?>"><?php echo $row->subcategory_name;?></td>
-                                          <td><?php echo $row->inventory_stock;?></td>
+                                          <td><?php echo $row->balance;?></td>
                                           <td>Php <?php echo $row->storeprod_price;?></td>
                                           <td>
                                               <input type="hidden" id="desc_<?php echo $row->prod_id; ?>" value="<?php echo $row->prod_desc;?>">

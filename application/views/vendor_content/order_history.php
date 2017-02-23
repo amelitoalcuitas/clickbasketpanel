@@ -13,11 +13,11 @@
                             <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                   <tr>
-                                    <th>Customer</th>
-                                    <th>Product</th>
-                                    <th>Total</th>
-                                    <th>Store</th>
-                                    <th>Status</th>
+                                    <th>CUSTOMER</th>
+                                    <th width="120px">PRODUCTS</th>
+                                    <th>STORE</th>
+                                    <th>REASON</th>
+                                    <th width="50px">STATUS</th>
                                   </tr>
                                 </thead>
 
@@ -27,10 +27,10 @@
                                       foreach($deliveredorders as $row) { ?>
                                           <tr id="order_<?php echo $row->order_id; ?>">
                                           <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
-                                          <td><?php echo $row->prod_name;?></td>
-                                          <td>Php <?php echo $row->order_total;?></td>
+                                          <td><button type="button" name="vieworders" onclick="viewOrders(<?php echo $row->order_id ?>);" class="btn btn-success"><i class="material-icons">list</i> PRODUCT LIST</button></td>
                                           <td><?php echo $row->store_name;?></td>
-                                          <td style="color:#00a808;">
+                                          <td><?php echo $row->decline_reason;?></td>
+                                          <td <?= $row->order_status == 'completed' ? 'style="color:#00a808;"' : 'style="color:#FB483A;"'; ?>>
                                             <?php echo ucfirst($row->order_status);?>
                                           </td>
                                       </tr>
