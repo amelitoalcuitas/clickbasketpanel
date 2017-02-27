@@ -396,6 +396,36 @@
       document.getElementById('mDesc').value = $('#desc_'+id).val();
   }
 
+  function editQty(id,qty){
+      $('#editQuantity').modal('show');
+      $('#editQuantity').attr('data-id',id);
+      $('#errorQty').html('<br>');
+      $('#curqty').html(qty);
+      $('#mQty').attr('min',-(qty));
+  }
+
+  $('#qtyForm').submit(function(e){
+    e.preventDefault();
+
+    qty = parseInt($('#mQty').val());
+    id = $('#editQuantity').attr('data-id');
+    curqty = parseInt($('#curqty').html());
+    newbal = curqty + qty;
+
+    if(qty == 0){
+      $('#errorQty').html('Quantity should not be zero.')
+    }else{
+      $.ajax({
+        type: 'POST',
+        data: {id:id, qty:qty, newbal:newbal},
+        url: '<?php echo base_url("addproductcontroller/addQty") ?>',
+        success: function(){
+          location.reload();
+        }
+      });
+    }
+  });  
+
   $('#mCategory').on('changed.bs.select',function(){
     var catid = $("#mCategory>option:selected").attr('value');
     $('#mSubCategory').empty();
@@ -456,6 +486,7 @@
     });
 
   }
+
 
   $('#addDiscount').on('hidden.bs.modal',function(){
     $('#dType_1').removeAttr('checked');
@@ -641,16 +672,18 @@
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Yes, delete it!",
-      closeOnConfirm: false
+      closeOnConfirm: false,
+      showLoaderOnConfirm: true
       },
       function(){
-      swal("Deleted!", $("#category_"+id).attr("name") + " has been deleted.", "success");
+      
       $.ajax({
         type: 'post',
         data: {categoryid:id},
         url: "<?php echo base_url(); ?>addcategorycontroller/deletecategory",
         success: function(result){
           if(result == 'success'){
+            swal("Deleted!", $("#category_"+id).attr("name") + " has been deleted.", "success");
             table
               .row($('#category_'+id))
               .remove()
@@ -792,7 +825,8 @@
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Yes, delete it!",
-      closeOnConfirm: false
+      closeOnConfirm: false,
+      showLoaderOnConfirm: true
       },
       function(){
         $.ajax({
@@ -1494,17 +1528,20 @@ $(document).ready(function(){
 if(title == 'vendordashboard'){
 
   var month = [];
-  var monthlyorder = [];
+  var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var monthlyorders = [];
 
   $.ajax({
     url: '<?php echo base_url('ordercontroller/getMonthlyOrdersbyStore');?>',
     type: 'POST',
     dataType: 'JSON',
     success: function(data){
-
+      console.log();
       for(var i = 0; i < data.length; i++){
-        month.push(data[i]['month']);
-        monthlyorder.push(data[i]['monthlyscore']);
+
+        month[i] = monthName[data[i]['month']-1];
+
+        monthlyorders[i] = data[i]['monthlyscore'];
       }
 
       var ctx = document.getElementById('myLineChart').getContext('2d');
@@ -1513,8 +1550,8 @@ if(title == 'vendordashboard'){
         data: {
           labels: month,
           datasets: [{
-            label: 'Daily Orders',
-            data: monthlyorder,
+            label: 'Completed Orders',
+            data: monthlyorders,
              backgroundColor: [
                       'rgba(193, 66, 66, 0.2)'
                   ]

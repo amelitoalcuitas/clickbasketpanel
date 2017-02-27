@@ -1,3 +1,9 @@
+  <?php
+    if($this->session->flashdata('success') == true){
+      echo "<script> swal('Success!','Inventory has been updated!','success'); </script>";
+    }
+  ?>
+
  <div class="container-fluid">
             <div class="block-header">
                 <!-- Basic Examples -->
@@ -16,7 +22,7 @@
                                         <th >PRODUCT NAME</th>
                                         <th width="115px">CATEGORY</th>
                                         <th width="115px">SUB-CATEGORY</th>
-                                        <th width="30px">QTY</th>
+                                        <th width="80px">QTY</th>
                                         <th width="80px">PRICE</th>
                                         <th width="130px">EDIT</th>
                                     </tr>
@@ -30,7 +36,9 @@
                                           <td><?php echo $row->prod_name; ?></td>
                                           <td id="selectedcat_<?php echo $row->prod_id; ?>" value="<?php echo $row->category_id;?>"><?php echo $row->category_name;?></td>
                                           <td id="selectedsubcat_<?php echo $row->prod_id; ?>" value="<?php echo $row->subcategory_id;?>"><?php echo $row->subcategory_name;?></td>
-                                          <td><?php echo $row->balance;?></td>
+                                          <td>
+                                            <?php echo $row->balance;?> <button onclick="editQty(<?php echo $row->storeprod_id;  ?>,<?php echo $row->balance;?>)" name="<?php echo $row->prod_id; ?>" class="btn btn-primary btn-circle pull-right"><i class="material-icons">add</i></button> 
+                                          </td>
                                           <td>Php <?php echo $row->storeprod_price;?></td>
                                           <td>
                                               <input type="hidden" id="desc_<?php echo $row->prod_id; ?>" value="<?php echo $row->prod_desc;?>">

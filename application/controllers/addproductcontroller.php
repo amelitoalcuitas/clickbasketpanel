@@ -103,6 +103,15 @@ class AddProductController extends CI_Controller {
 		$this->product->add_discount($prodid,$data);
 	}
 
+	public function addQty(){
+		$id = $this->input->post('id');
+		$qty = $this->input->post('qty');
+		$newbal = $this->input->post('newbal');
+
+		$this->product->add_qty($id, $qty, $newbal);
+		$this->session->set_flashdata('success',true);
+	}
+
 	public function getDiscountById(){
 		$id = $this->input->post('id');
 		$this->product->get_DiscountById($id);

@@ -86,11 +86,16 @@ class Order extends CI_Model{
 
 	public function get_monthly_order()
 	{
-	  $this->db->select('date(date_created) as month, count(1) as monthlyscore')
+	  $this->db->select('MONTH(date_created) as month, count(1) as monthlyscore')
 						 ->from('orders')
+						 ->join('orders_store_products', 'orders_store_products.order_id = orders.order_id')
+						 ->join('store_products_subcategory','store_products_subcategory.storeprodsub_id
+						  = orders_store_products.storeprodsub_id')
+						 ->where('store_products_subcategory.store_id',$this->session->userdata('store_id'))
+						 ->where('order_status','completed')
 						 ->group_by('1');
 						 $query = $this->db->get();
-		 				return $query->result();
+		 				return $query->result();	
 	}
 
 }

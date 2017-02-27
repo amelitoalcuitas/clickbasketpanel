@@ -11,6 +11,10 @@ class OrderController extends CI_Controller{
     $id = $this->input->post('id');
     $stat = $this->input->post('stat');
     $decline = $this->input->post('inputValue');
+
+    if(!$stat){
+      $stat = 'Order has been completed';
+    }
     
     $this->order->change_order_status($id,$stat,$decline);
   }

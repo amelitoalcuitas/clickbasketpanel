@@ -61,6 +61,16 @@
      <script src="<?php echo base_url().'assets/plugins/chartjs/chart/chart.bundle.js';?>"></script>
 
    <style media="screen">
+    .btn-circle {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      padding: 7px 0;
+      font-size: 12px;
+      line-height: 1.42;
+      border-radius: 50%;
+    }
+
     .dtp-select-year-before, .dtp-select-year-after, .dtp-select-month-before, .dtp-select-month-after{
       color: white !important;
     }

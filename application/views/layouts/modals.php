@@ -103,10 +103,6 @@
       <div class="modal-body">
 
         <p id="currDiscount" style="font-size:20px"></p>
-        <div id="discButton" style="display:none;" >
-          <button class="btn btn-block btn-sm btn-danger waves-effect">Remove Discount</button>
-          <br><br>
-        </div>
 
         <form id="discountForm">
 
@@ -163,6 +159,41 @@
   </div>
 </div>
 <!-- Add Product Discount END -->
+
+<!-- ADD QUANTITY -->
+<div id="editQuantity" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"> Edit Quantity </h4>
+      </div>
+      <div class="modal-body">
+        <label style="font-weight: bold; font-size:15px;">Current Quantity: </label>
+        <label id='curqty' style="color: red; font-size: 16px"></label>
+        <br> <br>
+        <form id="qtyForm">
+        <label style="font-weight: bold; font-size:15px;">Quantity</label>
+        <div class="input-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="number" id="mQty" min="0" class="form-control" placeholder="e.g., 50, -150" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorQty">
+            <br>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" name="button">Submit</button>
+      </div>
+      </form>
+    </div>
+        <!-- Modal content-->
+  </div>
+</div>
+<!-- ADD QUANTITY END -->
+
 
 <!-- CHANGE DESCRIPTION -->
 <div id="changeDesc" class="modal fade" role="dialog">

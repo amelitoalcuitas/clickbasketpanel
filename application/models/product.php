@@ -182,6 +182,27 @@ class Product extends CI_Model {
 		}
 	}
 
+	public function add_qty($id,$qty,$newbal){
+		if($qty > 0){
+			$data = array(
+					'inventorytrans_type' => 'replenish',
+					'trans_quantity' => $qty,
+					'storeprod_id' => $id,
+					'inventory_balance' => $newbal
+				);
+		}else{
+			$data = array(
+					'inventorytrans_type' => 'deplete',
+					'trans_quantity' => $qty,
+					'storeprod_id' => $id,
+					'inventory_balance' => $newbal
+				);
+		}
+		
+
+		$this->db->insert('store_products_inventory', $data);
+	}
+
 	public function updateProduct($sprodid,$prodid,$products,$storeprod,$subcategory){
 		$error = 1;
 
