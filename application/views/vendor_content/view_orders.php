@@ -29,7 +29,7 @@
                                         <td><?php echo $row->consumer_fname. ' ' .$row->consumer_lname; ?></td>
                                         <td><button type="button" name="vieworders" onclick="viewOrders(<?php echo $row->order_id ?>);" class="btn btn-success"><i class="material-icons">list</i> PRODUCT LIST</button></td>
                                         <td><?php echo $row->order_date; ?></td>
-                                        <td>Php <?php echo $row->order_total;?></td>
+                                        <td>Php <?php echo $row->grandtotal;?></td>
                                         <?php if($row->order_status == 'pending'){
                                           $buttcolor = 'warning';
                                         }else if($row->order_status == 'processing'){

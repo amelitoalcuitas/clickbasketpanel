@@ -60,6 +60,13 @@
                         </ul>
                     </li>
 
+                    <li <?php if ($page == 'report') { echo 'class = "active"';} ?> >
+                        <a  href="<?php echo site_url('admin/viewreport');?>">
+                            <i class="material-icons">view_module</i>
+                            <span>Report</span>
+                        </a>
+                    </li>
+
                     <?php }?>
 
                 </ul>

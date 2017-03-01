@@ -1,52 +1,109 @@
 
-<body class="theme-red">
-    <!-- Page Loader -->
-    <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="preloader">
-                <div class="spinner-layer pl-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
+<div class="container-fluid">
+
+
+<?php 
+    $store = 0;
+    $vendor = 0;
+    if(isset($stores)){
+        foreach($stores as $row){
+            ++$store;
+            $num1 = $store;
+        }
+    }else{
+        $num1 = 0;
+    }
+
+    if(isset($vendorlist)){
+        foreach($vendorlist as $row){
+            ++$vendor;
+            $num2 = $vendor;
+        }
+    }else{
+        $num2 = 0;
+    }
+
+    $storenum = $num1;
+    $vendornum = $num2;
+?>
+
+    <div class="row clearfix">
+
+        <a href="<?= base_url('admin/viewstores'); ?>">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box hover-zoom-effect">
+                    <div class="icon bg-blue">
+                        <i class="material-icons">store</i>
                     </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
+                    <div class="content">
+                        <div class="text">STORE/s</div>
+                        <div class="number"><?= $storenum; ?></div>
                     </div>
                 </div>
+
             </div>
-            <p>Please wait...</p>
+        </a>
+
+        <a href="<?= base_url('admin/viewstores'); ?>">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box hover-zoom-effect">
+                    <div class="icon bg-green">
+                        <i class="material-icons">people</i>
+                    </div>
+                    <div class="content">
+                        <div class="text">VENDOR/s</div>
+                        <div class="number"><?= $vendornum; ?></div>
+                    </div>
+                </div>
+
+            </div>
+        </a>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <div class="icon bg-indigo">
+                    <i class="material-icons">person</i>
+                </div>
+                <div class="content">
+                    <div class="text">CONSUMER/s</div>
+                    <div class="number"><?= $consumernum->consumernum ?></div>
+                </div>
+            </div>
+
         </div>
+
     </div>
-    <!-- #END# Page Loader -->
-    <!-- Overlay For Sidebars -->
-    <div class="overlay"></div>
-    <!-- #END# Overlay For Sidebars -->
-    <!-- Search Bar -->
-    <div class="search-bar">
-        <div class="search-icon">
-            <i class="material-icons">search</i>
-        </div>
-        <input type="text" placeholder="START TYPING...">
-        <div class="close-search">
-            <i class="material-icons">close</i>
-        </div>
-    </div>
-    <!-- #END# Search Bar -->
+    
+    <div class="row clearfix">
 
-    <!-- TOP NAVIGATION BAR-->
-    <?php $this->load->view('blocks/TopNav');?>
-    <!-- END OF TOP BAR NAV-->
-
-    <section>
-        <!-- Left Sidebar -->
-
-        <!-- #END# Left Sidebar -->
-
-
-    </section>
-
-    <section class="content">
-        <div class="container-fluid">
-            <div class="block-header">
+        <a href="<?= base_url('admin/addstore'); ?>">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box-3 bg-blue hover-zoom-effect">
+                <div class="icon">
+                    <i class="material-icons">add</i>
+                </div>
+                <div class="content">
+                    <div class="text">MARKET</div>
+                    <div class="number">Add Store</div>
+                </div>
             </div>
         </div>
-    </section>
+        </a>
+
+        <a href="<?= base_url('admin/register'); ?>">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box-3 bg-green hover-zoom-effect">
+                <div class="icon">
+                    <i class="material-icons">add</i>
+                </div>
+                <div class="content">
+                    <div class="text">VENDOR</div>
+                    <div class="number">Add Vendor</div>
+                </div>
+            </div>
+        </div>
+        </a>
+
+    </div>  
+
+</div>

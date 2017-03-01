@@ -12,11 +12,21 @@ class OrderController extends CI_Controller{
     $stat = $this->input->post('stat');
     $decline = $this->input->post('inputValue');
 
-    if(!$stat){
-      $stat = 'Order has been completed';
+    if($stat == 'completed'){
+      $decline = 'Order has been completed';
+    }else if($stat == 'pending'){
+      $decline = 'Order is still pending';
+    }else if($stat == 'processing'){
+      $decline = 'Order is still processing';
     }
     
     $this->order->change_order_status($id,$stat,$decline);
+  }
+
+  public function restoreQty(){
+    $id = $this->input->post('id');
+
+    $this->order->restore_qty($id);
   }
 
   public function getOrdersById(){
@@ -29,7 +39,8 @@ class OrderController extends CI_Controller{
     print_r(json_encode($this->order->get_order_products()));
   }
 
-  public function getMonthlyOrdersbyStore(){
-    print_r(json_encode($this->order->get_monthly_order()));
+  public function getMonthlyOrdersbyStore(){    
+    $month = $this->input->post('getmonth');
+    print_r(json_encode($this->order->get_monthly_order($month)));
   }
 }

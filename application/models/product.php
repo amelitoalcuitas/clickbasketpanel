@@ -115,6 +115,20 @@ class Product extends CI_Model {
 		}
 	}
 
+	public function getprodnum(){
+		$this->db->select('COUNT(products.prod_id) AS prodnum');
+		$this->db->from('store_products');
+		$this->db->join('products', 'products.prod_id = store_products.prod_id', 'left');
+		$this->db->join('store_products_subcategory', 'store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left');
+		$this->db->join('store', 'store.store_id = store_products_subcategory.store_id', 'left');
+		$this->db->where('store_products.storeprod_deleted','false');
+		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
+
+		$query = $this->db->get();
+
+		return $query->row();
+	}
+
 	public function viewdeletedproducts(){
 		$this->db->select('*, SUM(trans_quantity) AS balance');
 		$this->db->from('store_products');
@@ -245,11 +259,40 @@ class Product extends CI_Model {
 		}
 	}
 
-
 	public function update_prodimage($filename,$prodid){
 		$this->db->where('storeprod_id', $prodid);
 
 		$this->db->update('store_products',array('storeprod_image' => $filename));
+	}
+
+	public function get_coupons(){
+		$this->db->select('coupons.*,COUNT(store_coupons_discounts.coupons_id) AS uses');
+		$this->db->join('store_coupons_discounts','store_coupons_discounts.coupons_id = coupons.coupons_id','left');
+		$this->db->group_by('coupons.coupons_id');
+
+		$query = $this->db->get('coupons');
+		return $query->result();
+	}
+
+	public function add_coupon($code,$data){
+		$this->db->select('*');
+		$this->db->where('coupons_id',$code);
+		$query = $this->db->get('coupons');
+
+		if($query->num_rows() > 0){
+			echo 'exist';
+		}else{
+			$this->db->insert('coupons', $data);
+			echo 'success';
+			$this->session->set_flashdata('success',true);
+		}	
+	}
+
+	public function edit_coupon($id,$data){
+		$this->db->where('coupons_id',$id);
+		$this->db->update('coupons', $data);
+		echo 'success';
+		$this->session->set_flashdata('success',true);	
 	}
 
 }

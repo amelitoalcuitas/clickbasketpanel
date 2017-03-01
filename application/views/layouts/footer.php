@@ -59,19 +59,28 @@
         }
   });
 
+  $('#adminReport').DataTable({
+        dom: 'Bfrtip',
+        buttons: [ {
+            extend: 'excelHtml5',
+             title: 'ClickBasket Superadmin Report_'+ (new Date().getMonth()+1) + '-' + new Date().getDate() + '-' + new Date().getFullYear()
+        } ]
+  });
+
+  
   // TABLE PRIORITIES END
 
 
   var reloadPrompt = true;
-  // DISALLOW SPECIAL CHARACTERS TO ALL INPUTS
-  $('input').on('keypress', function (event){
-    var regex = new RegExp("^[a-zA-Z0-9;'%!#@&*,.-=() ]+$");
-    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    if (!regex.test(key)) {
-       event.preventDefault();
-       return false;
-    }
-  });
+  // // DISALLOW SPECIAL CHARACTERS TO ALL INPUTS
+  // $('input').on('keypress', function (event){
+  //   var regex = new RegExp("^[a-zA-Z0-9;'%!#@&*,.-=() ]+$");
+  //   var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+  //   if (!regex.test(key)) {
+  //      event.preventDefault();
+  //      return false;
+  //   }
+  // });
 
   // <!-- TAB CLOSE ALERT SCRIPT START -->
     window.onbeforeunload = function () {
@@ -344,7 +353,7 @@
       closeOnConfirm: false
       },
       function(){
-      
+
       $.ajax({
         type: 'post',
         data: {productid:id},
@@ -412,6 +421,8 @@
     curqty = parseInt($('#curqty').html());
     newbal = curqty + qty;
 
+    $('#qtybutton').attr('disabled','disabled');
+
     if(qty == 0){
       $('#errorQty').html('Quantity should not be zero.')
     }else{
@@ -424,7 +435,7 @@
         }
       });
     }
-  });  
+  });
 
   $('#mCategory').on('changed.bs.select',function(){
     var catid = $("#mCategory>option:selected").attr('value');
@@ -511,6 +522,16 @@
    }
  });
 
+  $('#isCoupon').click(function() {
+   if($('#coupon_1').is(':checked')) {
+     $('#couponCode').attr('disabled','disabled');
+     $('#couponCode').attr('placeholder','Disabled');
+   }else if($('#coupon_2').is(':checked')){
+     $('#couponCode').removeAttr('disabled');
+     $('#couponCode').attr('placeholder','Enter coupon code');
+   }
+  });
+
   $('#discountForm').submit(function(event){
     event.preventDefault();
     var dType = '';
@@ -546,6 +567,123 @@
   $(document).ready(function(){
     $('#dateEnd').bootstrapMaterialDatePicker({ weekStart : 0, time: false, minDate: new Date() });
     $('#dateStart').bootstrapMaterialDatePicker({ weekStart : 0, time: false, minDate: new Date()});
+    $('#cdateEnd').bootstrapMaterialDatePicker({ weekStart : 0, time: false, minDate: new Date() });
+    $('#cdateStart').bootstrapMaterialDatePicker({ weekStart : 0, time: false, minDate: new Date()});
+  });
+
+  function editCoupon(id){
+    var table = $('#couponTable').DataTable();
+    $('#editCoupon').modal('show');
+    $('#editCoupon').attr('data-id',id);
+
+    tData = table.row($('#coupon_'+id)).data();
+
+    $('#ecouponDesc').attr('value',tData[0]);
+    $('#ecouponCode').attr('value',tData[1]);
+    $('#ecDiscount').attr('value',$('#cdisc_'+id).val());
+    $('#ecMax').attr('value',$('#cmax_'+id).val());
+    $('#ecdateStart').attr('value',tData[4]);
+    $('#ecdateEnd').attr('value',tData[5]);
+  }
+
+  $('#ecouponType').click(function() {
+   if($('#ecType_1').is(':checked')) {
+     $('#ecSign').html('%');
+     $('#ecDiscount').attr('max',100);
+     $('#ecDiscount').attr('value','');
+   }else if($('#ecType_2').is(':checked')){
+     $('#ecSign').html('Php');
+     $('#ecDiscount').removeAttr('max');
+     $('#ecDiscount').attr('value','');
+   }
+ });
+
+ $('#couponType').click(function() {
+   if($('#cType_1').is(':checked')) {
+     $('#cSign').html('%');
+     $('#cDiscount').attr('max',100);
+     $('#cDiscount').attr('value','');
+   }else if($('#cType_2').is(':checked')){
+     $('#cSign').html('Php');
+     $('#cDiscount').removeAttr('max');
+     $('#cDiscount').attr('value','');
+   }
+ });
+
+ $('#couponForm').submit(function(event){
+    event.preventDefault();
+    var cType = '';
+    var couponDesc = $('#couponDesc').val();
+    var couponCode = $('#couponCode').val();
+    var discount = $('#cDiscount').val();
+    var maxuses = $('#cMax').val();
+    var dateStart = $('#cdateStart').val();
+    var dateEnd = $('#cdateEnd').val();
+
+    if($('#cType_1').is(':checked')) {
+      cType = 'percentage';
+    }else if($('#cType_2').is(':checked')){
+      cType = 'amount';
+    }
+
+    $('#errordiscount').html('<br>');
+
+    if(discount.length > 0){
+      $.ajax({
+        type: 'post',
+        data: {discount:discount, couponDesc:couponDesc, couponCode:couponCode, maxuses:maxuses, dateStart:dateStart, dateEnd:dateEnd, cType:cType},
+        url: '<?php echo base_url("addproductcontroller/addCoupon"); ?>',
+        success: function(result){
+          if(result == 'success'){
+            $('#addCoupon').modal('hide');
+            location.reload();
+          }else{
+            $('#errorCode').html('Code already exist!');
+          }
+        }
+      });
+    }else{
+      $('#errordiscount').html('Discount field is empty!');
+    }
+
+  });
+
+  $('#ecouponForm').submit(function(event){
+    event.preventDefault();
+    var cType = '';
+    var couponDesc = $('#ecouponDesc').val();
+    var couponCode = $('#ecouponCode').val();
+    var discount = $('#ecDiscount').val();
+    var maxuses = $('#ecMax').val();
+    var dateStart = $('#ecdateStart').val();
+    var dateEnd = $('#ecdateEnd').val();
+
+    if($('#ecType_1').is(':checked')) {
+      cType = 'percentage';
+    }else if($('#ecType_2').is(':checked')){
+      cType = 'amount';
+    }
+
+    $('#errordiscount').html('<br>');
+
+    if(discount.length > 0){
+      $.ajax({
+        type: 'post',
+        data: {discount:discount, couponDesc:couponDesc, couponCode:couponCode, maxuses:maxuses, dateStart:dateStart, dateEnd:dateEnd, cType:cType},
+        url: '<?php echo base_url("addproductcontroller/editCoupon"); ?>',
+        success: function(result){
+          if(result == 'success'){
+            $('#editCoupon').modal('hide');
+            location.reload();
+          }else{
+            $('#errorCode1').html('Code already exist!');
+          }
+        }
+      });
+    }else{
+      $('#errordiscount').html('Discount field is empty!');
+    }
+
   });
 
 
@@ -676,7 +814,7 @@
       showLoaderOnConfirm: true
       },
       function(){
-      
+
       $.ajax({
         type: 'post',
         data: {categoryid:id},
@@ -1326,8 +1464,8 @@
       function(inputValue){
         if (inputValue === false){
           return false;
-        } 
-        
+        }
+
         if (inputValue === "") {
           swal.showInputError("You need to write something!");
           return false
@@ -1339,8 +1477,18 @@
           data: {id:id, stat:stat, inputValue:inputValue},
           success: function(){
             $('#butt_'+id).removeClass();
-            $('#butt_'+id).addClass('btn btn-danger dropdown-toggle');  
+            $('#butt_'+id).addClass('btn btn-danger dropdown-toggle');
             $('#butt_'+id).html(stat.toUpperCase() + " <span class='caret'>");
+
+            $.ajax({
+              type: "POST",
+              url: "<?php echo base_url('OrderController/restoreQty'); ?>",
+              data: {id:id},
+              success: function(){
+          
+              }
+            });
+
           }
         });
         swal("Order Declined!", "The order has been declined for this reason: " + inputValue, "success");
@@ -1357,7 +1505,7 @@
         }
       });
     }
-    
+
   }
 
   function viewOrders(id){
@@ -1526,43 +1674,15 @@ $(document).ready(function(){
   }
 
 if(title == 'vendordashboard'){
+  var currentmonth = new Date().getMonth() + 1;
 
-  var month = [];
-  var monthName = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var monthlyorders = [];
+  $('#monthlyOrdersId').val(currentmonth);
 
-  $.ajax({
-    url: '<?php echo base_url('ordercontroller/getMonthlyOrdersbyStore');?>',
-    type: 'POST',
-    dataType: 'JSON',
-    success: function(data){
-      console.log();
-      for(var i = 0; i < data.length; i++){
+  showChart();
 
-        month[i] = monthName[data[i]['month']-1];
-
-        monthlyorders[i] = data[i]['monthlyscore'];
-      }
-
-      var ctx = document.getElementById('myLineChart').getContext('2d');
-      var myLineChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: month,
-          datasets: [{
-            label: 'Completed Orders',
-            data: monthlyorders,
-             backgroundColor: [
-                      'rgba(193, 66, 66, 0.2)'
-                  ]
-          }]
-        }
-      });
-    }
+  $("#monthlyOrdersId").on('change',function(){
+    showChart();
   });
-
-
-
 
     var product_name = [];
     var order_qty = [];
@@ -1611,9 +1731,71 @@ if(title == 'vendordashboard'){
   }
 });
 
+
+
+function showChart(){
+    var getmonth = $("#monthlyOrdersId option:selected").val();
+  
+    var month = [];
+    var monthlyorders = [];
+
+  $.ajax({
+
+    url: '<?php echo base_url('ordercontroller/getMonthlyOrdersbyStore');?>',
+    type: 'POST',
+    data: {getmonth:getmonth},
+    dataType: 'JSON',
+    success: function(data){
+      for(var i = 0; i < data.length; i++){
+        
+        month[i] = data[i]['month'];
+
+        monthlyorders[i] = data[i]['monthlyscore'];
+      }
+
+      var ctx = document.getElementById('myLineChart').getContext('2d');
+      var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: month,
+          datasets: [{
+            label: 'Completed Orders',
+            data: monthlyorders,
+             backgroundColor: [
+                      'rgba(193, 66, 66, 0.2)'
+                  ]
+          }]
+        }
+      });
+    }
+  });
+}
+
 </script>
 <!--CHART JS END-->
 
+
+<!-- REPORT -->
+<script>
+  <?php if($this->input->get('month')){ ?>
+    var currentDate = <?php echo $this->input->get('month') ?>;
+  <?php }else{ ?>
+    var currentDate = new Date().getMonth() + 1
+  <?php } ?>
+
+  $('#changeMonth').val(currentDate);
+  var cUrl = "<?php echo base_url('vendor/vendorreport'); ?>";
+
+  $("#changeMonth").on('change',function(){
+    var selmonth = $("#changeMonth option:selected").val();
+    cUrl = "<?php echo base_url('vendor/vendorreport'); ?>" + "?month=" + selmonth;
+  });
+
+  $('#monthbutton').click(function(){
+    window.location = cUrl;
+  });
+</script>
+<!-- REPORT END -->
 
 </body>
 

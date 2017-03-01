@@ -103,6 +103,54 @@ class AddProductController extends CI_Controller {
 		$this->product->add_discount($prodid,$data);
 	}
 
+	public function addCoupon(){
+		$desc = $this->input->post('couponDesc');
+		$code = $this->input->post('couponCode');
+		$discount = $this->input->post('discount');
+		$maxuses = $this->input->post('maxuses');
+		$dateStart = $this->input->post('dateStart');
+		$dateEnd = $this->input->post('dateEnd');
+		$cType = $this->input->post('cType');
+		$id = $this->input->post('id');
+
+		$data = array(
+			'coupondiscount_type' => $cType,
+			'coupons_discount' => $discount,
+			'coupons_description' => $desc,
+			'coupons_max' => $maxuses,
+			'coupons_id' => $code,
+			'date_start' => $dateStart,
+			'date_end' => $dateEnd,
+			'store_id' => $this->session->userdata('store_id')
+		);
+
+		$this->product->add_coupon($code,$data);
+	}
+
+	public function editCoupon(){
+		$desc = $this->input->post('couponDesc');
+		$code = $this->input->post('couponCode');
+		$discount = $this->input->post('discount');
+		$maxuses = $this->input->post('maxuses');
+		$dateStart = $this->input->post('dateStart');
+		$dateEnd = $this->input->post('dateEnd');
+		$cType = $this->input->post('cType');
+		$id = $this->input->post('id');
+
+		$data = array(
+			'coupondiscount_type' => $cType,
+			'coupons_discount' => $discount,
+			'coupons_description' => $desc,
+			'coupons_max' => $maxuses,
+			'coupons_id' => $code,
+			'date_start' => $dateStart,
+			'date_end' => $dateEnd,
+			'store_id' => $this->session->userdata('store_id')
+		);
+
+		$this->product->edit_coupon($id,$data);
+	}
+
 	public function addQty(){
 		$id = $this->input->post('id');
 		$qty = $this->input->post('qty');

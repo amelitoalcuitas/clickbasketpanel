@@ -25,6 +25,9 @@ if($this->session->userdata('logged_in')==TRUE){
 			if ($title == 'removedstores'){
 				$this->load->view('content/removedstores_content');
 			}
+			if ($title == 'viewreport'){
+				$this->load->view('content/report');
+			}
 	 }
 
 	 if($this->session->userdata('restriction') == 'vendor' && $this->session->userdata('restriction')!='superadmin'){
@@ -51,6 +54,12 @@ if($this->session->userdata('logged_in')==TRUE){
 			}
 			if($title == 'orderhistory'){
 				 $this->load->view('vendor_content/order_history');
+			}
+			if ($title == 'vendorreport'){
+				$this->load->view('vendor_content/report');
+			}
+			if ($title == 'vendorcoupons'){
+				$this->load->view('vendor_content/view_coupons');
 			}
 			if($title == 'profile'){
 				 $this->load->view('vendor_content/profile');

@@ -41,8 +41,11 @@ class StoreRegisterController extends CI_Controller {
         $this->load->view('layouts/footer');
 	  	} else {
 
-	  		$data = array('store_name' => $this->input->post('sName'),
+	  		$data = array(
+          'store_name' => $this->input->post('sName'),
 	  			'store_address' => $this->input->post('sAddress'),
+          'store_days' => $this->input->post('sDays'),
+          'store_branch' => $this->input->post('sBranch'),
 	  			'time_open' => date("H:i", strtotime($this->input->post('sHourStart'))),
           'time_close' => date("H:i", strtotime($this->input->post('sHourClose')))
 	  			);

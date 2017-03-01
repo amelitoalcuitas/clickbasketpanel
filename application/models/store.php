@@ -31,9 +31,16 @@ class Store extends CI_Model {
 	//end of check_name_if_available
 
 	public function viewStores(){
+		// $this->db->select('*,COUNT(store_id) AS storenum');
 		$this->db->where('store_deleted', 'false');
 		$query = $this->db->get('store');
 		return $query->result();
+	}
+
+	public function getConsumerCount(){
+		$this->db->select('COUNT(consumer_id) AS consumernum');
+		$query = $this->db->get('consumers');
+		return $query->row();
 	}
 
 	public function viewStoresByID($id){

@@ -64,6 +64,20 @@
                         </ul>
                     </li>
 
+                    <li <?php if ($page == 'coupon') { echo 'class = "active"';} ?> >
+                        <a  href="<?php echo site_url('vendor/viewcoupons');?>">
+                            <i class="material-icons">monetization_on</i>
+                            <span>Coupons</span>
+                        </a>
+                    </li>
+
+                    <li <?php if ($page == 'report') { echo 'class = "active"';} ?> >
+                        <a  href="<?php echo site_url('vendor/vendorreport');?>">
+                            <i class="material-icons">view_module</i>
+                            <span>Report</span>
+                        </a>
+                    </li>
+
                     <?php }?>
 
                 </ul>

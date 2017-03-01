@@ -119,7 +119,7 @@
         <label style="font-weight: bold; font-size:15px;">Discount</label>
         <div class="input-group" style="margin-bottom:0px;">
             <span class="input-group-addon" id="mSign">
-                
+
             </span>
           <div class="form-line">
             <input type="number" id="mDiscount" min="0" max="100" class="form-control" value="" required>
@@ -160,6 +160,213 @@
 </div>
 <!-- Add Product Discount END -->
 
+
+<!-- Add Coupon List -->
+<div id="addCoupon" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modalcoupontitle">ADD COUPON</h4>
+      </div>
+      <div class="modal-body">
+
+        <form id="couponForm">
+
+        <label style="font-weight: bold; font-size:15px;">Coupon Name</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="form-control" id="couponDesc" name="couponDesc" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorcName">
+            <br>
+          </div>
+        </div>
+
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;">Coupon Code</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="form-control" id="couponCode" name="couponCode" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCode">
+            <br>
+          </div>
+        </div>
+
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;" for="cType">Discount Type</label>
+        <div id="couponType" class="demo-radio-button">
+            <input name="cType" type="radio" class="with-gap radio-col-red" id="cType_1" required />
+            <label for="cType_1">Percentage</label>
+            <input name="cType" type="radio" class="with-gap radio-col-red" id="cType_2" required />
+            <label for="cType_2">Amount</label>
+        </div>
+
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;">Discount</label>
+        <div class="input-group" style="margin-bottom:0px;">
+            <span class="input-group-addon" id="cSign">
+
+            </span>
+          <div class="form-line">
+            <input type="number" id="cDiscount" min="0" max="" class="form-control" value="" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errordiscount">
+            <br>
+          </div>
+        </div>
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;">Max Uses</label>
+        <div class="input-group" style="margin-bottom:0px;">
+            <span class="input-group-addon" id="cSign">
+
+            </span>
+          <div class="form-line">
+            <input type="number" id="cMax" min="0" class="form-control" value="" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errormax">
+            <br>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Date Start</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="datepicker form-control" id="cdateStart" name="cdateStart" placeholder="Choose a starting date" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCat">
+            <br>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Date End</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="datepicker form-control" id="cdateEnd" name="cdateEnd" placeholder="Choose an ending date" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCat">
+            <br>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="couponSubmit" class="btn btn-success" name="button">Set Discount</button>
+      </div>
+      </form>
+    </div>
+        <!-- Modal content-->
+  </div>
+</div>
+<!-- Add Coupon END -->
+
+<!-- EDIT Coupon List -->
+<div id="editCoupon" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="editcoupontitle">EDIT COUPON</h4>
+      </div>
+      <div class="modal-body">
+
+        <form id="ecouponForm">
+
+        <label style="font-weight: bold; font-size:15px;">Coupon Name</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="form-control" id="ecouponDesc" name="ecouponDesc" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorcName1">
+            <br>
+          </div>
+        </div>
+
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;">Coupon Code</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="form-control" id="ecouponCode" name="ecouponCode" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCode">
+            <br>
+          </div>
+        </div>
+
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;" for="ecType">Discount Type</label>
+        <div id="ecouponType" class="demo-radio-button">
+            <input name="ecType" type="radio" class="with-gap radio-col-red" id="ecType_1" required />
+            <label for="ecType_1">Percentage</label>
+            <input name="ecType" type="radio" class="with-gap radio-col-red" id="ecType_2" required />
+            <label for="ecType_2">Amount</label>
+        </div>
+
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;">Discount</label>
+        <div class="input-group" style="margin-bottom:0px;">
+            <span class="input-group-addon" id="ecSign">
+
+            </span>
+          <div class="form-line">
+            <input type="number" id="ecDiscount" min="0" max="" class="form-control" value="" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errordiscount">
+            <br>
+          </div>
+        </div>
+        <br>
+
+        <label style="font-weight: bold; font-size:15px;">Max Uses</label>
+        <div class="input-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="number" id="ecMax" min="0" class="form-control" value="" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errormax">
+            <br>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Date Start</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="datepicker form-control" id="ecdateStart" name="ecdateStart" placeholder="Choose a starting date" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCat">
+            <br>
+          </div>
+        </div>
+        <br>
+        <label style="font-weight: bold; font-size:15px;">Date End</label>
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="form-line">
+            <input type="text" class="datepicker form-control" id="ecdateEnd" name="ecdateEnd" placeholder="Choose an ending date" required>
+          </div>
+          <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="errorCat">
+            <br>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="ecouponSubmit" class="btn btn-success" name="button">Set Discount</button>
+      </div>
+      </form>
+    </div>
+        <!-- Modal content-->
+  </div>
+</div>
+<!-- EDIT Coupon END -->
+
+
 <!-- ADD QUANTITY -->
 <div id="editQuantity" class="modal fade" role="dialog">
   <div class="modal-dialog modal-sm">
@@ -185,7 +392,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success" name="button">Submit</button>
+        <button type="submit" id="qtybutton" class="btn btn-success" name="button">Submit</button>
       </div>
       </form>
     </div>

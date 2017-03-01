@@ -5,6 +5,8 @@ class PagesController extends CI_Controller {
 	protected $removedvendorslistdata;
 	protected $vendorlistdata;
 	protected $storelistdata;
+	protected $consumer;
+	var $adminreport;
 
 	public function __construct(){
 		parent::__construct();
@@ -19,11 +21,19 @@ class PagesController extends CI_Controller {
 			$this->removedvendorslistdata = $query;
 		}
 
+		if($report = $this->vendor->admin_report()){
+			$this->adminreport = $report;
+		}
+
 		$this->load->model('store');
 
-	  if($query = $this->store->viewStores()) {
-    	$this->storelistdata = $query;
-    }
+	  	if($query = $this->store->viewStores()) {
+    		$this->storelistdata = $query;
+		}
+
+		if($query = $this->store->getConsumerCount()) {
+    		$this->consumer = $query;
+		}
 
 		if ($query = $this->store->viewRemovedStores()) {
 			$this->removedstorelistdata = $query;
@@ -41,6 +51,9 @@ class PagesController extends CI_Controller {
 	public function index(){
 			$data['page'] = 'one';
 			$data['title'] = 'dashboard';
+			$data['stores'] = $this->storelistdata;
+			$data['vendorlist'] = $this->vendorlistdata;
+			$data['consumernum'] = $this->consumer;
 
 			$this->load->view('layouts/header');
 			$this->load->view('blocks/SideNav',$data);
@@ -93,29 +106,40 @@ class PagesController extends CI_Controller {
 	 }
 
 	 public function storeregister(){
- 	       $data['page'] = 'five';
- 	       $data['title'] = 'storeregister';
+		$data['page'] = 'five';
+		$data['title'] = 'storeregister';
 
-	       $this->load->view('layouts/header');
-	       $this->load->view('blocks/sidenav',$data);
-	       $this->load->view('clickbasket',$data);
-	       $this->load->view('layouts/footer');
-		}
+		$this->load->view('layouts/header');
+		$this->load->view('blocks/sidenav',$data);
+		$this->load->view('clickbasket',$data);
+		$this->load->view('layouts/footer');
+	}
 
-		public function viewremovedstores(){
- 	        $data['page'] = 'remStor';
- 	        $data['stores'] = $this->removedstorelistdata;
- 	        $data['title'] = 'removedstores';
+	public function viewremovedstores(){
+		$data['page'] = 'remStor';
+		$data['stores'] = $this->removedstorelistdata;
+		$data['title'] = 'removedstores';
 
- 	        $this->load->view('layouts/header');
- 	        $this->load->view('blocks/sidenav',$data);
- 	        $this->load->view('clickbasket',$data);
- 	        $this->load->view('layouts/footer');
+		$this->load->view('layouts/header');
+		$this->load->view('blocks/sidenav',$data);
+		$this->load->view('clickbasket',$data);
+		$this->load->view('layouts/footer');
+ 	 }
+
+	public function viewreport(){
+		$data['page'] = 'report';
+		$data['title'] = 'viewreport';
+		$data['adminreport'] = $this->adminreport;
+
+		$this->load->view('layouts/header');
+		$this->load->view('blocks/sidenav',$data);
+		$this->load->view('clickbasket',$data);
+		$this->load->view('layouts/footer');
  	 }
 
 	public function logout(){
-		   $this->session->sess_destroy();
-		   redirect('login');
+		$this->session->sess_destroy();
+		redirect('login');
 	}
 
 

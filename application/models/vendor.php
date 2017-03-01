@@ -180,4 +180,15 @@ class Vendor extends CI_Model{
     $this->db->update('vendor',array('vendor_image' => $filename));
   }
 
+  public function admin_report(){
+    $this->db->select('*');
+    $this->db->from('store_vendor');
+    $this->db->join('vendor', 'vendor.vendor_id = store_vendor.vendor_id', 'left');
+    $this->db->join('store', 'store.store_id = store_vendor.store_id', 'left');
+    
+    $query = $this->db->get();
+
+    return $query->result();
+  }
+
 }

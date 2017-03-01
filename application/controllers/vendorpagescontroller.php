@@ -11,6 +11,12 @@ class VendorPagesController extends CI_Controller {
 	var $orderlist;
 	var $deliveredorders;
 	var $vendordata;
+	var $ordertoday;
+	var $prodnum;
+	var $ordersmonth;
+	var $vendorreport;
+	var $coupons;
+
 
 	public function __construct(){
 		parent::__construct();
@@ -18,58 +24,83 @@ class VendorPagesController extends CI_Controller {
 		if($this->session->userdata('logged_in') == false){
 			redirect('login');
 		}else if($this->session->userdata('restriction') != 'vendor'){
-    	redirect('login');
-    }
+    		redirect('login');
+    	}	
 
     	$this->load->model('category');
 
-    	if($data = $this->category->get_category()){
-    		$this->categorylist = $data;
-    	}
+		if($data = $this->category->get_category()){
+			$this->categorylist = $data;
+		}
 
-			if($data = $this->category->get_subCategory()){
-    		$this->subcategorylist = $data;
-    	}
+		if($data = $this->category->get_subCategory()){
+			$this->subcategorylist = $data;
+		}
 
-			if($data = $this->category->get_delcategory()){
-				$this->delcategorylist = $data;
-			}
+		if($data = $this->category->get_delcategory()){
+			$this->delcategorylist = $data;
+		}
 
-			if($data = $this->category->get_delsubCategory()){
-				$this->delsubcategorylist = $data;
-			}
+		if($data = $this->category->get_delsubCategory()){
+			$this->delsubcategorylist = $data;
+		}
 
-    	$this->load->model('product');
+		$this->load->model('product');
 
-    	if($products = $this->product->viewproductbystore()){
-    		$this->productlist = $products;
-    	}
+		if($products = $this->product->viewproductbystore()){
+			$this->productlist = $products;
+		}
 
-			if($products1 = $this->product->viewdeletedproducts()){
-    		$this->delproductlist = $products1;
-    	}
+		if($products1 = $this->product->viewdeletedproducts()){
+			$this->delproductlist = $products1;
+		}
 
-			$this->load->model('order');
+		if($products1 = $this->product->getprodnum()){
+			$this->prodnum = $products1;
+		}
 
-			if($orders = $this->order->get_orders()){
-				$this->orderlist = $orders;
-			}
+		if($coupon = $this->product->get_coupons()){
+			$this->coupons = $coupon;
+		}
 
-			if($delivered = $this->order->get_delivered_orders()){
-				$this->deliveredorders = $delivered;
-			}
+		$this->load->model('order');
 
-			$this->load->model('vendor');
+		if($orders = $this->order->get_orders()){
+			$this->orderlist = $orders;
+		}
 
-			if($vendor = $this->vendor->viewVendorByID()){
-				$this->vendordata = $vendor;
-			}
+		if($orders = $this->order->vendor_report()){
+			$this->vendorreport = $orders;
+		}
+
+		if($orders = $this->order->get_orders_today()){
+			$this->ordertoday = $orders;
+		}
+
+		if($orders = $this->order->get_orders_this_month()){
+			$this->ordersmonth = $orders;
+		}
+
+		if($delivered = $this->order->get_delivered_orders()){
+			$this->deliveredorders = $delivered;
+		}
+
+		$this->load->model('vendor');
+
+		if($vendor = $this->vendor->viewVendorByID()){
+			$this->vendordata = $vendor;
+		}
+
+
 	}
 
 	public function index(){
 			$data['page'] = 'one';
 			$data['title'] = 'vendordashboard';
 			$data['vendordata'] = $this->vendordata;
+			$data['orderstoday'] = $this->ordertoday;
+			$data['ordersmonth'] = $this->ordersmonth;
+			$data['prodnum'] = $this->prodnum;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
@@ -174,6 +205,30 @@ class VendorPagesController extends CI_Controller {
 			$data['title'] = 'orderhistory';
 			$data['deliveredorders'] = $this->deliveredorders;
 			$data['vendordata'] = $this->vendordata;
+
+			$this->load->view('layouts/header');
+			$this->load->view('vendor_blocks/SideNav',$data);
+			$this->load->view('clickbasket',$data);
+			$this->load->view('layouts/footer');
+	}
+
+	public function vendorreport(){
+			$data['page'] = 'report';
+			$data['title'] = 'vendorreport';
+			$data['vendordata'] = $this->vendordata;
+			$data['vendorreport'] = $this->vendorreport;
+
+			$this->load->view('layouts/header');
+			$this->load->view('vendor_blocks/SideNav',$data);
+			$this->load->view('clickbasket',$data);
+			$this->load->view('layouts/footer');
+	}
+
+	public function viewcoupons(){
+			$data['page'] = 'coupon';
+			$data['title'] = 'vendorcoupons';
+			$data['vendordata'] = $this->vendordata;
+			$data['coupons'] = $this->coupons;
 
 			$this->load->view('layouts/header');
 			$this->load->view('vendor_blocks/SideNav',$data);
