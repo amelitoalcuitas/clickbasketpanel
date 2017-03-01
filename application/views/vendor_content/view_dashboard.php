@@ -43,7 +43,7 @@
                             <i class="material-icons">shopping_cart</i>
                         </div>
                         <div class="content">
-                            <div class="text">TOTAL ORDERS</div>
+                            <div class="text" style="margin-top:-2px">COMPLETED ORDERS</div>
                             <div class="number count-to" data-from="0" data-to="<?= $ordersmonth->ordernum; ?>" data-speed="1000" data-fresh-interval="20">
                                 <?= $ordersmonth->ordernum; ?>
                             </div>

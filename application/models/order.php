@@ -28,7 +28,7 @@ class Order extends CI_Model{
 	if($this->input->get('month')){
 		$month = $this->input->get('month');
 	}else{
-		$month = date('m') + 1;
+		$month = date('m');
 	}
 	
 	$this->db->select('*, date(orders.date_created) AS order_date, sum(grandtotal) AS dailytotal');
@@ -77,7 +77,7 @@ class Order extends CI_Model{
 		$this->db->join('consumers','consumers.consumer_id = orders.consumer_id');
 		$this->db->join('store','store.store_id = store_products_subcategory.store_id');
 		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
-		$this->db->where('orders.order_status !=','completed');
+		$this->db->where('orders.order_status','completed');
 		$this->db->where('orders.order_status !=','declined');
 		$this->db->where('Date(orders.date_created) >= MONTH(curdate())');
     $query = $this->db->get();
