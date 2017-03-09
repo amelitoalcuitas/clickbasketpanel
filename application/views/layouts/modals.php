@@ -204,6 +204,7 @@
             <input name="cType" type="radio" class="with-gap radio-col-red" id="cType_2" required />
             <label for="cType_2">Amount</label>
         </div>
+        <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="ErrorRadio"><br></div>
 
         <br>
 
@@ -303,11 +304,12 @@
 
         <label style="font-weight: bold; font-size:15px;" for="ecType">Discount Type</label>
         <div id="ecouponType" class="demo-radio-button">
-            <input name="ecType" type="radio" class="with-gap radio-col-red" id="ecType_1" required />
+            <input name="ecType" type="radio" class="with-gap radio-col-red" id="ecType_1" />
             <label for="ecType_1">Percentage</label>
-            <input name="ecType" type="radio" class="with-gap radio-col-red" id="ecType_2" required />
+            <input name="ecType" type="radio" class="with-gap radio-col-red" id="ecType_2" />
             <label for="ecType_2">Amount</label>
         </div>
+        <div style="color:red; font-size:13px; margin:5px 0 -20px 0;" id="eErrorRadio"><br></div>
 
         <br>
 
@@ -677,18 +679,43 @@
             <thead>
               <tr>
                 <th></th>
-                <th width="20px"></th>
+                <th width="30px"></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td> # of Items </td>
-                <td align="center">=</td>
+                <td align="right"> Coupon Used </td>
+                <td align="center">:</td>
+                <td id="coupon" align="right"></td>
+              </tr>
+              <tr id="discountstr">
+                <td align="right"> Discount </td>
+                <td align="center"> </td>
+                <td id="discounts" align="right" style="color:blue;"></td>
+              </tr>
+              <tr>
+                <td align="right"> Total # of Items </td>
+                <td align="center"> </td>
                 <td id="totalitems" align="right"></td>
               </tr>
               <tr>
-                <td> Total Price </td>
+                <td align="right"> Qty * Price Total </td>
+                <td align="center"> </td>
+                <td id="rawprice" align="right"></td>
+              </tr>
+              <tr id="discountamounttr">
+                <td align="right"> Discounted Amount </td>
+                <td align="center"> </td>
+                <td id="discountamount" align="right"></td>
+              </tr>
+              <tr>
+                <td align="right"></td>
+                <td align="center"></td>
+                <td id="minus" align="right" >--------------------------</td>
+              </tr>
+              <tr>
+                <td align="right"> Total Price </td>
                 <td align="center">=</td>
                 <td id="totalprice" align="right" style="color:red;"></td>
               </tr>

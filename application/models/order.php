@@ -16,6 +16,7 @@ class Order extends CI_Model{
 		$this->db->join('consumers','consumers.consumer_id = orders.consumer_id');
 		$this->db->join('store','store.store_id = store_products_subcategory.store_id');
 		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
+		$this->db->where('orders.order_status !=','cancelled');
 		$this->db->where('orders.order_status !=','completed');
 		$this->db->where('orders.order_status !=','declined');
 		$this->db->group_by('orders_store_products.order_id');
@@ -30,7 +31,7 @@ class Order extends CI_Model{
 	}else{
 		$month = date('m');
 	}
-	
+
 	$this->db->select('*, date(orders.date_created) AS order_date, sum(grandtotal) AS dailytotal');
 	$this->db->from('store_products');
 	$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id');
@@ -50,17 +51,16 @@ class Order extends CI_Model{
   }
 
   public function get_orders_today(){
-		$this->db->select('COUNT(orders.order_id) AS ordernum');
+		$this->db->select('COUNT(DISTINCT orders_store_products.order_id) AS ordernum');
 		$this->db->from('store_products');
-		$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id');
-		$this->db->join('products','products.prod_id = store_products.prod_id');
-		$this->db->join('orders_store_products', 'orders_store_products.storeprodsub_id = store_products_subcategory.storeprodsub_id');
-		$this->db->join('orders', 'orders.order_id = orders_store_products.order_id');
-		$this->db->join('consumers','consumers.consumer_id = orders.consumer_id');
-		$this->db->join('store','store.store_id = store_products_subcategory.store_id');
+		$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left');
+		$this->db->join('orders_store_products', 'orders_store_products.storeprodsub_id = store_products_subcategory.storeprodsub_id', 'left');
+		$this->db->join('orders', 'orders.order_id = orders_store_products.order_id', 'left');
+		$this->db->join('store','store.store_id = store_products_subcategory.store_id', 'left');
 		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
 		$this->db->where('orders.order_status !=','completed');
 		$this->db->where('orders.order_status !=','declined');
+		$this->db->where('orders.order_status !=','cancelled');
 		$this->db->where('Date(orders.date_created) >= curdate()');
     $query = $this->db->get();
 
@@ -68,7 +68,7 @@ class Order extends CI_Model{
   }
 
   public function get_orders_this_month(){
-		$this->db->select('COUNT(orders.order_id) AS ordernum');
+		$this->db->select('COUNT(DISTINCT orders.order_id) AS ordernum');
 		$this->db->from('store_products');
 		$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id');
 		$this->db->join('products','products.prod_id = store_products.prod_id');
@@ -86,17 +86,20 @@ class Order extends CI_Model{
   }
 
 	public function get_orders_by_id($id){
-		$this->db->select('*');
+		$this->db->select('*, orders.storecoupon_id AS ordercouponid');
 		$this->db->from('store_products');
-		$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id');
-		$this->db->join('products','products.prod_id = store_products.prod_id');
-		$this->db->join('orders_store_products', 'orders_store_products.storeprodsub_id = store_products_subcategory.storeprodsub_id');
-		$this->db->join('orders', 'orders.order_id = orders_store_products.order_id');
-		$this->db->join('consumers','consumers.consumer_id = orders.consumer_id');
-		$this->db->join('store','store.store_id = store_products_subcategory.store_id');
+		$this->db->join('store_products_subcategory','store_products_subcategory.storeprod_id = store_products.storeprod_id', 'left');
+		$this->db->join('products','products.prod_id = store_products.prod_id', 'left');
+		$this->db->join('orders_store_products', 'orders_store_products.storeprodsub_id = store_products_subcategory.storeprodsub_id', 'left');
+		$this->db->join('orders', 'orders.order_id = orders_store_products.order_id', 'left');
+		$this->db->join('consumers','consumers.consumer_id = orders.consumer_id', 'left');
+		$this->db->join('store','store.store_id = store_products_subcategory.store_id', 'left');
+		$this->db->join('coupons','coupons.coupons_id = orders.storecoupon_id', 'left');
+		$this->db->join('store_coupons','store_coupons.coupons_id = coupons.coupons_id', 'left');
 		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
 		$this->db->where('orders.order_id', $id);
 		$this->db->order_by('orders.date_created ', 'DESC');
+		$this->db->group_by('store_products.storeprod_id');
 
 		$query = $this->db->get();
 		print_r(json_encode($query->result()));
@@ -127,10 +130,10 @@ class Order extends CI_Model{
 					'storeprod_id' => $data[$i]->storeprod_id,
 					'inventory_balance' => $data[$i]->inventory_balance + $data[$i]->order_qty
 					);
-			
-			$this->db->insert('store_products_inventory', $inv);	
+
+			$this->db->insert('store_products_inventory', $inv);
 		}
-		
+
 	}
 
 	public function get_delivered_orders(){
@@ -145,6 +148,7 @@ class Order extends CI_Model{
 		$this->db->where('store_products_subcategory.store_id',$this->session->userdata('store_id'));
 		$this->db->where('orders.order_status','completed');
 		$this->db->or_where('orders.order_status','declined');
+		$this->db->or_where('orders.order_status','cancelled');
 		$this->db->group_by('orders_store_products.order_id');
 		$this->db->order_by('orders.date_modified', 'DESC');
 
@@ -177,7 +181,7 @@ class Order extends CI_Model{
 	}
 
 	public function get_monthly_order($month){
-		$this->db->select('date(date_created) AS month, count(*) AS monthlyscore')
+		$this->db->select('date(date_created) AS month, count(DISTINCT orders.order_id) AS monthlyscore')
 				 ->from('orders')
  				 ->join('orders_store_products', 'orders_store_products.order_id = orders.order_id','left')
 				 ->join('store_products_subcategory','store_products_subcategory.storeprodsub_id = orders_store_products.storeprodsub_id','left')
@@ -187,7 +191,7 @@ class Order extends CI_Model{
 	 		     ->group_by('month');
 
 			 $query = $this->db->get();
-			return $query->result();	
+			return $query->result();
 	}
 
 }

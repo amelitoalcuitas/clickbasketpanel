@@ -22,7 +22,7 @@ class Product extends CI_Model {
 
 				$this->db->insert('products',$query_prod);
 
-				$query = $this->db->query("SELECT prod_id FROM products WHERE prod_name = '".$product_name[$x]."' ORDER BY prod_id DESC LIMIT 1");
+				$query = $this->db->query('SELECT prod_id FROM products WHERE prod_name = "'.$product_name[$x].'" ORDER BY prod_id DESC LIMIT 1');
 				$row = $query->row();
 				if (isset($row)){
 					$query_storeprod = array(
@@ -160,7 +160,7 @@ class Product extends CI_Model {
 			echo 'success';
 		}else if($state == 'restore'){
 			$this->db->select('*');
-			$this->db->join('store_products_subcategory','store_products_subcategory.subcategory_id = subcategory.subcategory_id','left');			
+			$this->db->join('store_products_subcategory','store_products_subcategory.subcategory_id = subcategory.subcategory_id','left');
 			$this->db->join('store_products','store_products.storeprod_id = store_products_subcategory.storeprod_id','left');
 			$this->db->where('store_products.prod_id', $prodid);
 			$this->db->where('subcategory.subcategory_deleted','false');
@@ -212,7 +212,7 @@ class Product extends CI_Model {
 					'inventory_balance' => $newbal
 				);
 		}
-		
+
 
 		$this->db->insert('store_products_inventory', $data);
 	}
@@ -260,21 +260,35 @@ class Product extends CI_Model {
 	}
 
 	public function update_prodimage($filename,$prodid){
-		$this->db->where('storeprod_id', $prodid);
+		$this->db->where('prod_id', $prodid);
 
 		$this->db->update('store_products',array('storeprod_image' => $filename));
 	}
 
 	public function get_coupons(){
-		$this->db->select('coupons.*,COUNT(store_coupons_discounts.coupons_id) AS uses');
-		$this->db->join('store_coupons_discounts','store_coupons_discounts.coupons_id = coupons.coupons_id','left');
-		$this->db->group_by('coupons.coupons_id');
+		// $this->db->select('coupons.*,store_coupons.*,COUNT(store_coupons_discounts.storecoupon_id) AS uses');
+		// $this->db->join('store_coupons', 'store_coupons.coupons_id = coupons.coupons_id', 'left');
+		// $this->db->join('store_coupons_discounts', 'store_coupons_discounts.storecoupon_id = coupons.coupons_id', 'left');
+		// $this->db->where('store_coupons.store_id', $this->session->userdata('store_id'));
+		// $this->db->order_by('store_coupons.storecoupon_id','DESC');
+		// $query = $this->db->get('coupons');
 
-		$query = $this->db->get('coupons');
+		$query = $this->db->query('SELECT coupons.*,store_coupons.*, COUNT(store_coupons_discounts.storecoupon_id) AS uses
+													FROM coupons
+													LEFT JOIN store_coupons ON store_coupons.coupons_id = coupons.coupons_id
+														AND store_coupons.storecoupon_id =
+															(SELECT MAX(storecoupon_id)
+															 FROM store_coupons a
+															 WHERE a.coupons_id = coupons.coupons_id)
+												  LEFT JOIN store_coupons_discounts ON store_coupons_discounts.storecoupon_id = store_coupons.coupons_id
+													WHERE store_coupons.store_id = '.$this->session->userdata("store_id").'
+													GROUP BY coupons.coupons_id
+													ORDER BY store_coupons.storecoupon_id DESC');
+
 		return $query->result();
 	}
 
-	public function add_coupon($code,$data){
+	public function add_coupon($code,$coupons,$storecoupons){
 		$this->db->select('*');
 		$this->db->where('coupons_id',$code);
 		$query = $this->db->get('coupons');
@@ -282,17 +296,49 @@ class Product extends CI_Model {
 		if($query->num_rows() > 0){
 			echo 'exist';
 		}else{
-			$this->db->insert('coupons', $data);
+			$this->db->insert('coupons', $coupons);
+
+			$query = $this->db->query('SELECT coupons_id FROM coupons WHERE coupons_code = "'.$code.'" ORDER BY coupons_id DESC LIMIT 1');
+			$row = $query->row();
+
+			if(isset($row)){
+				$scoupon = array(
+					'coupondiscount_type' => $storecoupons['coupondiscount_type'],
+					'coupons_discount' => $storecoupons['coupons_discount'],
+					'coupons_max' => $storecoupons['coupons_max'],
+					'date_start' => $storecoupons['date_start'],
+					'date_end' => $storecoupons['date_end'],
+					'coupons_id' => $row->coupons_id,
+					'coupons_status' => 'new',
+					'store_id' => $this->session->userdata('store_id')
+				);
+			}
+
+			$this->db->insert('store_coupons', $scoupon);
+
 			echo 'success';
 			$this->session->set_flashdata('success',true);
-		}	
+		}
 	}
 
-	public function edit_coupon($id,$data){
-		$this->db->where('coupons_id',$id);
-		$this->db->update('coupons', $data);
-		echo 'success';
-		$this->session->set_flashdata('success',true);	
+	public function edit_coupon($id,$storecouponid,$coupon,$scoupon){
+		$error = 1;
+
+		if($coupon){
+			$this->db->where('coupons_id', $id);
+			$this->db->update('coupons', $coupon);
+			$error = 0;
+		}
+		if($scoupon){
+			$this->db->insert('store_coupons', $scoupon);
+			$error = 0;
+		}
+
+		if($error == 0){
+			$this->session->set_flashdata('success',true);
+			return true;
+		}
+
 	}
 
 }

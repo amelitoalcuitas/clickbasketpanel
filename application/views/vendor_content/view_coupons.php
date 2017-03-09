@@ -3,7 +3,7 @@
       echo "<script> swal('Success!','Coupon successfully set!','success'); </script>";
     }
   ?>
- 
+
  <div class="container-fluid">
             <div class="block-header">
                 <!-- Basic Examples -->
@@ -39,7 +39,7 @@
                                           { ?>
                                           <tr id="coupon_<?php echo $row->coupons_id; ?>" name="<?php echo $row->coupons_description; ?>">
                                             <td><?= $row->coupons_description ?></td>
-                                            <td><?= $row->coupons_id ?></td>
+                                            <td><?= $row->coupons_code ?></td>
                                             <td><?= $row->uses ?> / <?= $row->coupons_max ?></td>
                                             <td><?= ($row->coupondiscount_type == 'percentage' ? floor($row->coupons_discount).' %' :'Php '.$row->coupons_discount) ?></td>
                                             <td><?= $row->date_start ?></td>
@@ -48,7 +48,8 @@
                                                 <input type="hidden" id="ctype_<?php echo $row->coupons_id; ?>" value="<?= $row->coupondiscount_type ?>">
                                                 <input type="hidden" id="cdisc_<?php echo $row->coupons_id; ?>" value="<?= $row->coupons_discount ?>">
                                                 <input type="hidden" id="cmax_<?php echo $row->coupons_id; ?>" value="<?= $row->coupons_max ?>">
-                                                <button onclick="editCoupon('<?php echo $row->coupons_id; ?>')" name="<?php echo $row->coupons_id; ?>" class="btn btn-success"><i class="material-icons">edit</i></button>
+                                                <input type="hidden" id="scouponid_<?php echo $row->coupons_id; ?>" value="<?= $row->storecoupon_id ?>">
+                                                <button onclick="editCoupon(<?php echo $row->coupons_id; ?>)" name="<?php echo $row->coupons_id; ?>" class="btn btn-success"><i class="material-icons">edit</i></button>
                                             </td>
                                           </tr>
                                     <?php }

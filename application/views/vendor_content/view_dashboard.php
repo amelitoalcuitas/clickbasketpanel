@@ -56,6 +56,20 @@
 
         <div class="row clearfix">
 
+          <a href="<?= base_url('vendor/viewcategories'); ?>">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box-3 bg-green hover-zoom-effect">
+                  <div class="icon">
+                      <i class="material-icons">add</i>
+                  </div>
+                  <div class="content">
+                      <div class="text">Category</div>
+                      <div class="number">Add Category</div>
+                  </div>
+              </div>
+          </div>
+          </a>
+
             <a href="<?= base_url('vendor/addproduct'); ?>">
             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box-3 bg-blue hover-zoom-effect">
@@ -70,7 +84,7 @@
             </div>
             </a>
 
-        </div>  
+        </div>
 
            <div class="row clearfix">
                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -105,7 +119,7 @@
                                         <option value="12">December</option>
                                     </select>
                                 </div>
-                                <div class="col-md-8" style=""> 
+                                <div class="col-md-8" style="">
                                 <canvas id="myLineChart"></canvas>
                                 </div>
                            </div>

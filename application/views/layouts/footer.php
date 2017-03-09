@@ -67,7 +67,7 @@
         } ]
   });
 
-  
+
   // TABLE PRIORITIES END
 
 
@@ -212,6 +212,7 @@
                   });
 
                 }else if(result == "success"){
+                  $('#submitProduct').prop('disabled',true);
                   reloadPrompt = false;
                   location.reload();
                 }
@@ -522,16 +523,6 @@
    }
  });
 
-  $('#isCoupon').click(function() {
-   if($('#coupon_1').is(':checked')) {
-     $('#couponCode').attr('disabled','disabled');
-     $('#couponCode').attr('placeholder','Disabled');
-   }else if($('#coupon_2').is(':checked')){
-     $('#couponCode').removeAttr('disabled');
-     $('#couponCode').attr('placeholder','Enter coupon code');
-   }
-  });
-
   $('#discountForm').submit(function(event){
     event.preventDefault();
     var dType = '';
@@ -590,11 +581,9 @@
    if($('#ecType_1').is(':checked')) {
      $('#ecSign').html('%');
      $('#ecDiscount').attr('max',100);
-     $('#ecDiscount').attr('value','');
    }else if($('#ecType_2').is(':checked')){
      $('#ecSign').html('Php');
      $('#ecDiscount').removeAttr('max');
-     $('#ecDiscount').attr('value','');
    }
  });
 
@@ -602,11 +591,9 @@
    if($('#cType_1').is(':checked')) {
      $('#cSign').html('%');
      $('#cDiscount').attr('max',100);
-     $('#cDiscount').attr('value','');
    }else if($('#cType_2').is(':checked')){
      $('#cSign').html('Php');
      $('#cDiscount').removeAttr('max');
-     $('#cDiscount').attr('value','');
    }
  });
 
@@ -619,6 +606,7 @@
     var maxuses = $('#cMax').val();
     var dateStart = $('#cdateStart').val();
     var dateEnd = $('#cdateEnd').val();
+    $('#ErrorRadio').html('<br>');
 
     if($('#cType_1').is(':checked')) {
       cType = 'percentage';
@@ -628,24 +616,27 @@
 
     $('#errordiscount').html('<br>');
 
-    if(discount.length > 0){
-      $.ajax({
-        type: 'post',
-        data: {discount:discount, couponDesc:couponDesc, couponCode:couponCode, maxuses:maxuses, dateStart:dateStart, dateEnd:dateEnd, cType:cType},
-        url: '<?php echo base_url("addproductcontroller/addCoupon"); ?>',
-        success: function(result){
-          if(result == 'success'){
-            $('#addCoupon').modal('hide');
-            location.reload();
-          }else{
-            $('#errorCode').html('Code already exist!');
-          }
-        }
-      });
+    if ( !$("input[name='cType']:checked").val() ){
+      $('#ErrorRadio').html('Please select discount type!');
     }else{
-      $('#errordiscount').html('Discount field is empty!');
+      if(discount.length > 0){
+        $.ajax({
+          type: 'post',
+          data: {discount:discount, couponDesc:couponDesc, couponCode:couponCode, maxuses:maxuses, dateStart:dateStart, dateEnd:dateEnd, cType:cType},
+          url: '<?php echo base_url("addproductcontroller/addCoupon"); ?>',
+          success: function(result){
+            if(result == 'success'){
+              $('#addCoupon').modal('hide');
+              location.reload();
+            }else{
+              $('#errorCode').html('Code already exist!');
+            }
+          }
+        });
+      }else{
+        $('#errordiscount').html('Discount field is empty!');
+      }
     }
-
   });
 
   $('#ecouponForm').submit(function(event){
@@ -657,6 +648,9 @@
     var maxuses = $('#ecMax').val();
     var dateStart = $('#ecdateStart').val();
     var dateEnd = $('#ecdateEnd').val();
+    var id = $('#editCoupon').attr('data-id');
+    var storecouponid = $('#scouponid_'+id).val();
+    $('#eErrorRadio').html('<br>');
 
     if($('#ecType_1').is(':checked')) {
       cType = 'percentage';
@@ -666,22 +660,26 @@
 
     $('#errordiscount').html('<br>');
 
-    if(discount.length > 0){
-      $.ajax({
-        type: 'post',
-        data: {discount:discount, couponDesc:couponDesc, couponCode:couponCode, maxuses:maxuses, dateStart:dateStart, dateEnd:dateEnd, cType:cType},
-        url: '<?php echo base_url("addproductcontroller/editCoupon"); ?>',
-        success: function(result){
-          if(result == 'success'){
-            $('#editCoupon').modal('hide');
-            location.reload();
-          }else{
-            $('#errorCode1').html('Code already exist!');
-          }
-        }
-      });
+    if ( !$("input[name='ecType']:checked").val() ){
+      $('#eErrorRadio').html('Please select discount type!');
     }else{
-      $('#errordiscount').html('Discount field is empty!');
+      if(discount.length > 0){
+        $.ajax({
+          type: 'post',
+          data: {id:id, storecouponid:storecouponid, discount:discount, couponDesc:couponDesc, couponCode:couponCode, maxuses:maxuses, dateStart:dateStart, dateEnd:dateEnd, cType:cType},
+          url: '<?php echo base_url("addproductcontroller/editCoupon"); ?>',
+          success: function(result){
+            if(result == 'success'){
+              $('#editCoupon').modal('hide');
+              location.reload();
+            }else{
+              $('#errorCode1').html('Code already exist!');
+            }
+          }
+        });
+      }else{
+        $('#errordiscount').html('Discount field is empty!');
+      }
     }
 
   });
@@ -1387,54 +1385,54 @@
 
 <!-- NOTIFICATION SCRIPT START -->
 <script>
-  $(document).ready(function(){
-    var restriction = "<?php echo $this->session->userdata('restriction') ?>";
-    if(restriction == 'vendor'){
-      notifLoop();
-    }
-  });
-
-  function notifLoop(){
-    $.ajax({
-      type: "POST",
-      url: "<?php echo base_url('notificationcontroller/get_notification'); ?>",
-      timeout:50000,
-      async: 'true',
-      cache: 'false',
-      success: function(data){
-        $('#notif_li').html(data);
-        $('.timeago').timeago();
-        setTimeout(
-          notifLoop,
-          3000
-        );
-      }
-    });
-
-    $.ajax({
-      type: "POST",
-      url: "<?php echo base_url('notificationcontroller/get_count'); ?>",
-      dataType: 'JSON',
-      success: function(count){
-        $('#notif_count').html(count.length);
-        if(count.length == 0){
-          $('#titleUpdate').html('ClickBasket Panel');
-        }else{
-          $('#titleUpdate').html('ClickBasket Panel (' + count.length +')');
-        }
-      }
-    });
-  }
-
-  function notifRead(id){
-    $.ajax({
-      type: "POST",
-      url: "<?php echo base_url('notificationcontroller/notif_read'); ?>",
-      data: {notifid:id},
-      success: function(){
-      }
-    });
-  }
+  // $(document).ready(function(){
+  //   var restriction = "<?php echo $this->session->userdata('restriction') ?>";
+  //   if(restriction == 'vendor'){
+  //     notifLoop();
+  //   }
+  // });
+  //
+  // function notifLoop(){
+  //   $.ajax({
+  //     type: "POST",
+  //     url: "<?php echo base_url('notificationcontroller/get_notification'); ?>",
+  //     timeout:50000,
+  //     async: 'true',
+  //     cache: 'false',
+  //     success: function(data){
+  //       $('#notif_li').html(data);
+  //       $('.timeago').timeago();
+  //       setTimeout(
+  //         notifLoop,
+  //         3000
+  //       );
+  //     }
+  //   });
+  //
+  //   $.ajax({
+  //     type: "POST",
+  //     url: "<?php echo base_url('notificationcontroller/get_count'); ?>",
+  //     dataType: 'JSON',
+  //     success: function(count){
+  //       $('#notif_count').html(count.length);
+  //       if(count.length == 0){
+  //         $('#titleUpdate').html('ClickBasket Panel');
+  //       }else{
+  //         $('#titleUpdate').html('ClickBasket Panel (' + count.length +')');
+  //       }
+  //     }
+  //   });
+  // }
+  //
+  // function notifRead(id){
+  //   $.ajax({
+  //     type: "POST",
+  //     url: "<?php echo base_url('notificationcontroller/notif_read'); ?>",
+  //     data: {notifid:id},
+  //     success: function(){
+  //     }
+  //   });
+  // }
 </script>
 <!-- NOTIFICATION SCRIPT END -->
 
@@ -1485,7 +1483,7 @@
               url: "<?php echo base_url('OrderController/restoreQty'); ?>",
               data: {id:id},
               success: function(){
-          
+
               }
             });
 
@@ -1515,6 +1513,11 @@
     var totalprice = 0;
     var qty = 0;
     var orderProdTable = $('#orderProductsTable').DataTable();
+    var coupon = 'NO COUPON';
+    var discount = 0;
+    var discounttype = '';
+    var discounttotal = 0;
+    var rawprice = 0;
 
     $.ajax({
       type: 'post',
@@ -1524,14 +1527,40 @@
       success: function(res){
         for (var i = 0; i < res.length; i++) {
           orderProdTable.row.add([res[i].prod_name,res[i].order_qty,"Php "+res[i].product_total]).draw();
-          totalprice += parseInt(res[i].order_qty) * parseFloat(res[i].product_price);
+          rawprice += parseInt(res[i].order_qty) * parseFloat(res[i].product_price);
           qty += parseInt(res[i].order_qty);
+
+          if(res[i].coupons_description){
+            coupon = res[i].coupons_description;
+          }
+
+          if(res[i].coupons_discount){
+            discount = res[i].coupons_discount;
+            $('#discountstr').show();
+            $('#discountamounttr').show();
+          }else{
+            $('#discountstr').hide();
+            $('#discountamounttr').hide();
+          }
+
+          discounttype = res[i].coupondiscount_type;
         }
 
-        total = qty * totalprice;
+        total = qty * rawprice;
 
-        $('#totalprice').html('Php ' + parseFloat(totalprice).toFixed(2));
+        $('#rawprice').html('Php ' + parseFloat(rawprice).toFixed(2));
+        $('#coupon').html(coupon);
+        if(discounttype == 'percentage'){
+          discounttotal = rawprice * (parseInt(discount) / 100);
+          $('#discounts').html(parseInt(discount) + '% OFF!');
+        }else{
+          discounttotal = discount;
+          $('#discounts').html('Php ' + discount + ' OFF!');
+        }
+        totalprice = rawprice - discounttotal;
+        $('#discountamount').html('- Php ' + parseFloat(discounttotal).toFixed(2));
         $('#totalitems').html(qty);
+        $('#totalprice').html('Php ' + parseFloat(totalprice).toFixed(2));
       }
     });
   }
@@ -1735,7 +1764,7 @@ if(title == 'vendordashboard'){
 
 function showChart(){
     var getmonth = $("#monthlyOrdersId option:selected").val();
-  
+
     var month = [];
     var monthlyorders = [];
 
@@ -1747,7 +1776,7 @@ function showChart(){
     dataType: 'JSON',
     success: function(data){
       for(var i = 0; i < data.length; i++){
-        
+
         month[i] = data[i]['month'];
 
         monthlyorders[i] = data[i]['monthlyscore'];

@@ -26,11 +26,11 @@ class AddProductController extends CI_Controller {
 	public function check_product_credentials(){
 
 		$product_name = $this->input->post('pname');
-	  	$product_price = $this->input->post('pprice');
+  	$product_price = $this->input->post('pprice');
 		$product_desc = $this->input->post('pdesc');
 		$product_quantity = $this->input->post('pqty');
 		$product_subcat = $this->input->post('pscat');
-	  	$counter = $this->input->post('count');
+  	$counter = $this->input->post('count');
 
 		if($this->check_if_thisproduct_exist($product_name,$counter) == true) {
 			if($this->product->addProduct($product_name,$product_desc,$product_price,$product_quantity,$product_subcat,$counter) == true)	{
@@ -113,18 +113,20 @@ class AddProductController extends CI_Controller {
 		$cType = $this->input->post('cType');
 		$id = $this->input->post('id');
 
-		$data = array(
-			'coupondiscount_type' => $cType,
-			'coupons_discount' => $discount,
+		$coupons = array(
 			'coupons_description' => $desc,
-			'coupons_max' => $maxuses,
-			'coupons_id' => $code,
-			'date_start' => $dateStart,
-			'date_end' => $dateEnd,
-			'store_id' => $this->session->userdata('store_id')
+			'coupons_code' => $code,
 		);
 
-		$this->product->add_coupon($code,$data);
+		$storecoupons = array(
+			'coupondiscount_type' => $cType,
+			'coupons_discount' => $discount,
+			'coupons_max' => $maxuses,
+			'date_start' => $dateStart,
+			'date_end' => $dateEnd
+		);
+
+		$this->product->add_coupon($code,$coupons, $storecoupons);
 	}
 
 	public function editCoupon(){
@@ -136,19 +138,27 @@ class AddProductController extends CI_Controller {
 		$dateEnd = $this->input->post('dateEnd');
 		$cType = $this->input->post('cType');
 		$id = $this->input->post('id');
+		$storecouponid = $this->input->post('storecouponid');
 
-		$data = array(
+		$coupon = array(
+			'coupons_description' => $desc,
+			'coupons_code' => $code
+		);
+
+		$scoupon = array(
 			'coupondiscount_type' => $cType,
 			'coupons_discount' => $discount,
-			'coupons_description' => $desc,
 			'coupons_max' => $maxuses,
-			'coupons_id' => $code,
 			'date_start' => $dateStart,
 			'date_end' => $dateEnd,
+			'coupons_status' => 'add',
+			'coupons_id' => $id,
 			'store_id' => $this->session->userdata('store_id')
 		);
 
-		$this->product->edit_coupon($id,$data);
+		if($this->product->edit_coupon($id,$storecouponid,$coupon,$scoupon) == true){
+			echo "success";
+		}
 	}
 
 	public function addQty(){
